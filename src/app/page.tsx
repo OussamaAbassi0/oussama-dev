@@ -3,7 +3,8 @@ import { useState } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/sections/HeroSection";
-import LeadHunterSection from "@/components/sections/LeadHunterSection";
+import LeadHunterSection  from "@/components/sections/LeadHunterSection";
+import ProjectsSection    from "@/components/sections/ProjectsSection";
 import WorkflowSection from "@/components/sections/WorkflowSection";
 import ROICalculatorSection  from "@/components/sections/ROICalculatorSection";
 import BlueprintGenerator   from "@/components/sections/BlueprintGenerator";
@@ -38,6 +39,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         <HeroSection />
+        <ProjectsSection />
         <LeadHunterSection />
         <WorkflowSection />
         <ROICalculatorSection onOpenBrief={() => setBriefOpen(true)} />
