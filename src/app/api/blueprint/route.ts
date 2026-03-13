@@ -74,11 +74,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Prompt requis" }, { status: 400 });
     }
 
-    const { OpenAI } = await import("openai");
-    const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY! });
+    const { default: OpenAI } = await import("openai");
+    const client = new OpenAI({
+      baseURL: "https://api.groq.com/openai/v1",
+      apiKey:  process.env.GROQ_API_KEY!,
+    });
 
     const completion = await client.chat.completions.create({
-      model:       "gpt-4o",
+      model:       "llama-3.3-70b-versatile",
       max_tokens:  500,
       temperature: 0.2,   // Bas = syntaxe plus fiable, moins créatif sur la forme
       messages: [
