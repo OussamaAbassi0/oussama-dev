@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/sections/HeroSection";
 import LeadHunterSection  from "@/components/sections/LeadHunterSection";
 import ProjectsSection    from "@/components/sections/ProjectsSection";
+import AboutSection       from "@/components/sections/AboutSection";
 import WorkflowSection from "@/components/sections/WorkflowSection";
 import ROICalculatorSection  from "@/components/sections/ROICalculatorSection";
 import BlueprintGenerator   from "@/components/sections/BlueprintGenerator";
@@ -39,6 +40,7 @@ export default function HomePage() {
       <Navbar />
       <main>
         <HeroSection />
+        <AboutSection />
         <ProjectsSection />
         <LeadHunterSection />
         <WorkflowSection />
