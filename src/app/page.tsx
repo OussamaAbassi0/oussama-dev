@@ -1,43 +1,62 @@
 "use client";
 import { useState } from "react";
-import Navbar               from "@/components/layout/Navbar";
-import Footer               from "@/components/layout/Footer";
-import HeroSection          from "@/components/sections/HeroSection";
-import HowItWorksSection    from "@/components/sections/HowItWorksSection";
-import ProjectsSection      from "@/components/sections/ProjectsSection";
-import LeadHunterSection    from "@/components/sections/LeadHunterSection";
-import WorkflowSection      from "@/components/sections/WorkflowSection";
-import ROICalculatorSection from "@/components/sections/ROICalculatorSection";
-import PersonalizedROI      from "@/components/sections/PersonalizedROI";
-import BlueprintGenerator   from "@/components/sections/BlueprintGenerator";
-import AuditSection         from "@/components/sections/AuditSection";
-import WorkflowGallery      from "@/components/sections/WorkflowGallery";
-import MaturityQuiz         from "@/components/sections/MaturityQuiz";
-import StackSection         from "@/components/sections/StackSection";
-import TestimonialsSection  from "@/components/sections/TestimonialsSection";
-import FAQSection           from "@/components/sections/FAQSection";
-import AboutSection         from "@/components/sections/AboutSection";
-import CTASection           from "@/components/sections/CTASection";
-import AIClone              from "@/components/ui/AIClone";
-import LiveActivityFeed     from "@/components/ui/LiveActivityFeed";
-import WelcomeBanner        from "@/components/ui/WelcomeBanner";
-import ScrollProgressBar    from "@/components/ui/ScrollProgressBar";
-import LiveStatsCounter     from "@/components/ui/LiveStatsCounter";
 
+/* ── Layout ─────────────────────────────────────────────── */
+import Navbar            from "@/components/layout/Navbar";
+import Footer            from "@/components/layout/Footer";
+
+/* ── Sections principales ───────────────────────────────── */
+import HeroSection           from "@/components/sections/HeroSection";
+import HowItWorksSection     from "@/components/sections/HowItWorksSection";
+import BeforeAfterSection    from "@/components/sections/BeforeAfterSection";
+import ProjectsSection       from "@/components/sections/ProjectsSection";
+import CaseStudiesSection    from "@/components/sections/CaseStudiesSection";
+import DeliveryTimeline      from "@/components/sections/DeliveryTimeline";
+
+/* ── Outils interactifs (Lab) ────────────────────────────── */
+import LeadHunterSection     from "@/components/sections/LeadHunterSection";
+import WorkflowSection       from "@/components/sections/WorkflowSection";
+import ROICalculatorSection  from "@/components/sections/ROICalculatorSection";
+import PersonalizedROI       from "@/components/sections/PersonalizedROI";
+import BlueprintGenerator    from "@/components/sections/BlueprintGenerator";
+import AuditSection          from "@/components/sections/AuditSection";
+
+/* ── Conversion & confiance ──────────────────────────────── */
+import WorkflowGallery       from "@/components/sections/WorkflowGallery";
+import MaturityQuiz          from "@/components/sections/MaturityQuiz";
+import StackSection          from "@/components/sections/StackSection";
+import TestimonialsSection   from "@/components/sections/TestimonialsSection";
+import FAQSection            from "@/components/sections/FAQSection";
+import AboutSection          from "@/components/sections/AboutSection";
+import CTASection            from "@/components/sections/CTASection";
+
+/* ── UI globale (fixed / overlay) ───────────────────────── */
+import ScrollProgressBar  from "@/components/ui/ScrollProgressBar";
+import WelcomeBanner      from "@/components/ui/WelcomeBanner";
+import LiveStatsCounter   from "@/components/ui/LiveStatsCounter";
+import LiveActivityFeed   from "@/components/ui/LiveActivityFeed";
+import ProactiveChat      from "@/components/ui/ProactiveChat";
+
+/* ══════════════════════════════════════════════════════════
+   SCANLINE décorative
+══════════════════════════════════════════════════════════ */
 function Scanline() {
   return (
     <div aria-hidden style={{
-      position: "fixed", top: 0, left: 0, right: 0,
-      height: "2px", zIndex: 100, opacity: 0.15, pointerEvents: "none",
-      background: "linear-gradient(90deg, transparent, #00ffc8, transparent)",
-      animation: "scanline 6s linear infinite",
+      position:"fixed", top:0, left:0, right:0, height:"2px",
+      zIndex:100, opacity:.12, pointerEvents:"none",
+      background:"linear-gradient(90deg,transparent,#00ffc8,transparent)",
+      animation:"scanline 6s linear infinite",
     }} />
   );
 }
 
+/* ══════════════════════════════════════════════════════════
+   PAGE PRINCIPALE
+══════════════════════════════════════════════════════════ */
 export default function HomePage() {
   const [briefOpen,    setBriefOpen   ] = useState(false);
-  const [prefillBrief, setPrefillBrief] = useState<string | undefined>();
+  const [prefillBrief, setPrefillBrief] = useState<string|undefined>();
 
   const openBrief = (prefill?: string) => {
     if (prefill) setPrefillBrief(prefill);
@@ -46,66 +65,88 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ── UI globale fixed ── */}
+      {/* ════════════════════════════════════════
+          UI GLOBALE — fixed, toujours visible
+      ════════════════════════════════════════ */}
       <ScrollProgressBar />
       <Scanline />
       <Navbar />
       <WelcomeBanner />
       <LiveStatsCounter />
+      <LiveActivityFeed />
+      <ProactiveChat />
 
+      {/* ════════════════════════════════════════
+          CONTENU PRINCIPAL
+      ════════════════════════════════════════ */}
       <main>
-        {/* 1. Hero */}
+
+        {/* ── BLOC 1 : ACCROCHE ───────────────────
+            Capturer l'attention immédiatement.
+            Qui est Oussama, pourquoi venir ici.
+        ─────────────────────────────────────── */}
         <HeroSection />
 
-        {/* 2. Comment ça marche — 3 étapes claires */}
+        {/* ── BLOC 2 : COMPRENDRE ─────────────────
+            Expliquer le processus simplement.
+            Réduire l'anxiété du "comment ça marche".
+        ─────────────────────────────────────── */}
         <HowItWorksSection />
 
-        {/* 3. Projets SaaS — preuves */}
+        {/* ── BLOC 3 : CONVAINCRE VISUELLEMENT ───
+            Montrer la différence avant/après.
+            Preuves sociales et cas clients.
+        ─────────────────────────────────────── */}
+        <BeforeAfterSection />
+        <CaseStudiesSection />
         <ProjectsSection />
 
-        {/* 4. Outils interactifs */}
+        {/* ── BLOC 4 : TESTER (le Lab) ─────────────
+            Laisser le visiteur expérimenter.
+            La preuve par l'action.
+        ─────────────────────────────────────── */}
         <LeadHunterSection />
         <WorkflowSection />
-
-        {/* 5. ROI Calculator générique */}
         <ROICalculatorSection onOpenBrief={() => openBrief()} />
-
-        {/* 6. Simulateur ROI personnalisé par profil */}
-        <PersonalizedROI onOpenBrief={() => openBrief()} />
-
-        {/* 7. Blueprint + Audit */}
+        <PersonalizedROI     onOpenBrief={() => openBrief()} />
         <BlueprintGenerator />
         <AuditSection />
 
-        {/* 8. Galerie workflows — pré-remplissage brief */}
+        {/* ── BLOC 5 : CHOISIR & PLANIFIER ────────
+            Galerie de workflows prêts.
+            Quiz de maturité et roadmap.
+        ─────────────────────────────────────── */}
         <WorkflowGallery onOpenBrief={openBrief} />
+        <MaturityQuiz    onOpenBrief={() => openBrief()} />
 
-        {/* 9. Quiz de maturité + Roadmap */}
-        <MaturityQuiz onOpenBrief={() => openBrief()} />
-
-        {/* 10. Stack tech */}
+        {/* ── BLOC 6 : RASSURER ────────────────────
+            Timeline de livraison claire.
+            Stack technique.
+        ─────────────────────────────────────── */}
+        <DeliveryTimeline />
         <StackSection />
 
-        {/* 11. Témoignages */}
+        {/* ── BLOC 7 : VALIDER ─────────────────────
+            Témoignages clients.
+            FAQ pour lever les dernières objections.
+        ─────────────────────────────────────── */}
         <TestimonialsSection />
-
-        {/* 12. FAQ */}
         <FAQSection />
 
-        {/* 13. À propos */}
+        {/* ── BLOC 8 : CONTACT ─────────────────────
+            Qui est Oussama (humain).
+            Formulaire de brief.
+        ─────────────────────────────────────── */}
         <AboutSection />
-
-        {/* 14. CTA final */}
         <CTASection
           briefOpen={briefOpen}
           onBriefOpenChange={setBriefOpen}
           prefillProblem={prefillBrief}
         />
+
       </main>
 
       <Footer />
-      <AIClone />
-      <LiveActivityFeed />
     </>
   );
 }
