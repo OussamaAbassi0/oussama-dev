@@ -302,9 +302,11 @@ export { ProjectBriefModal as ProjectBriefModalExport };
 export default function CTASection({
   briefOpen,
   onBriefOpenChange,
+  prefillProblem,
 }: {
   briefOpen?: boolean;
   onBriefOpenChange?: (v: boolean) => void;
+  prefillProblem?: string;
 }) {
   const ref = useFadeIn<HTMLDivElement>();
   const [_modalOpen, _setModalOpen] = useState(false);

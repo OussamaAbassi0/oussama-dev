@@ -8,8 +8,11 @@ import ProjectsSection      from "@/components/sections/ProjectsSection";
 import LeadHunterSection    from "@/components/sections/LeadHunterSection";
 import WorkflowSection      from "@/components/sections/WorkflowSection";
 import ROICalculatorSection from "@/components/sections/ROICalculatorSection";
+import PersonalizedROI      from "@/components/sections/PersonalizedROI";
 import BlueprintGenerator   from "@/components/sections/BlueprintGenerator";
 import AuditSection         from "@/components/sections/AuditSection";
+import WorkflowGallery      from "@/components/sections/WorkflowGallery";
+import MaturityQuiz         from "@/components/sections/MaturityQuiz";
 import StackSection         from "@/components/sections/StackSection";
 import TestimonialsSection  from "@/components/sections/TestimonialsSection";
 import FAQSection           from "@/components/sections/FAQSection";
@@ -19,6 +22,7 @@ import AIClone              from "@/components/ui/AIClone";
 import LiveActivityFeed     from "@/components/ui/LiveActivityFeed";
 import WelcomeBanner        from "@/components/ui/WelcomeBanner";
 import ScrollProgressBar    from "@/components/ui/ScrollProgressBar";
+import LiveStatsCounter     from "@/components/ui/LiveStatsCounter";
 
 function Scanline() {
   return (
@@ -32,47 +36,71 @@ function Scanline() {
 }
 
 export default function HomePage() {
-  const [briefOpen, setBriefOpen] = useState(false);
+  const [briefOpen,    setBriefOpen   ] = useState(false);
+  const [prefillBrief, setPrefillBrief] = useState<string | undefined>();
+
+  const openBrief = (prefill?: string) => {
+    if (prefill) setPrefillBrief(prefill);
+    setBriefOpen(true);
+  };
 
   return (
     <>
-      {/* UI globale */}
+      {/* ── UI globale fixed ── */}
       <ScrollProgressBar />
       <Scanline />
       <Navbar />
       <WelcomeBanner />
+      <LiveStatsCounter />
 
       <main>
-        {/* 1. Hero — accroche */}
+        {/* 1. Hero */}
         <HeroSection />
 
-        {/* 2. Comment ça marche — guide non-tech */}
+        {/* 2. Comment ça marche — 3 étapes claires */}
         <HowItWorksSection />
 
-        {/* 3. Projets SaaS — preuve de compétence */}
+        {/* 3. Projets SaaS — preuves */}
         <ProjectsSection />
 
-        {/* 4–7. Outils interactifs (lab) */}
+        {/* 4. Outils interactifs */}
         <LeadHunterSection />
         <WorkflowSection />
-        <ROICalculatorSection onOpenBrief={() => setBriefOpen(true)} />
+
+        {/* 5. ROI Calculator générique */}
+        <ROICalculatorSection onOpenBrief={() => openBrief()} />
+
+        {/* 6. Simulateur ROI personnalisé par profil */}
+        <PersonalizedROI onOpenBrief={() => openBrief()} />
+
+        {/* 7. Blueprint + Audit */}
         <BlueprintGenerator />
         <AuditSection />
 
-        {/* 8. Stack tech */}
+        {/* 8. Galerie workflows — pré-remplissage brief */}
+        <WorkflowGallery onOpenBrief={openBrief} />
+
+        {/* 9. Quiz de maturité + Roadmap */}
+        <MaturityQuiz onOpenBrief={() => openBrief()} />
+
+        {/* 10. Stack tech */}
         <StackSection />
 
-        {/* 9. Témoignages */}
+        {/* 11. Témoignages */}
         <TestimonialsSection />
 
-        {/* 10. FAQ — rassure les non-tech */}
+        {/* 12. FAQ */}
         <FAQSection />
 
-        {/* 11. À propos */}
+        {/* 13. À propos */}
         <AboutSection />
 
-        {/* 12. CTA final */}
-        <CTASection briefOpen={briefOpen} onBriefOpenChange={setBriefOpen} />
+        {/* 14. CTA final */}
+        <CTASection
+          briefOpen={briefOpen}
+          onBriefOpenChange={setBriefOpen}
+          prefillProblem={prefillBrief}
+        />
       </main>
 
       <Footer />
