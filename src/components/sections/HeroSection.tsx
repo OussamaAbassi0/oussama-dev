@@ -63,9 +63,9 @@ export default function HeroSection() {
           fontFamily: "var(--mono)", fontSize: "14px", color: "var(--text-dim)",
           maxWidth: "520px", lineHeight: 1.7, marginBottom: "40px", marginTop: "24px",
         }}>
-          Je suis Oussama — Full-Stack Dev & Expert IA. Testez mes automatisations{" "}
+          Je suis Oussama — développeur spécialisé IA. Testez mes outils{" "}
           <span style={{ color: "var(--cyan)" }}>en temps réel ci-dessous</span>.
-          Pas de screenshots. Pas de promesses. Juste des résultats.
+          Pas de jargon. Pas de promesses. Juste des résultats concrets pour votre business.
         </p>
 
         {/* CTAs */}
