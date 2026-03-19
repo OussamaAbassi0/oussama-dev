@@ -40,7 +40,6 @@ export default function HomePage() {
       <Navbar />
       <main>
         <HeroSection />
-        <AboutSection />
         <ProjectsSection />
         <LeadHunterSection />
         <WorkflowSection />
@@ -49,6 +48,7 @@ export default function HomePage() {
         <AuditSection />
         <StackSection />
         <TestimonialsSection />
+        <AboutSection />
         <CTASection briefOpen={briefOpen} onBriefOpenChange={setBriefOpen} />
       </main>
       <Footer />
