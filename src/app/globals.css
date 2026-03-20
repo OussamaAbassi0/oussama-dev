@@ -106,9 +106,29 @@ body {
   animation: blink 0.8s step-end infinite;
 }
 
-/* FADE IN ON SCROLL */
-.fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+/* ══════════════════════════════════════════════════════
+   FADE IN — animations d'entrée au scroll
+══════════════════════════════════════════════════════ */
+.fade-in {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+}
 .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* Variantes directionnelles */
+.fade-in-left  { opacity:0; transform:translateX(-32px); transition:opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); }
+.fade-in-right { opacity:0; transform:translateX(32px);  transition:opacity .7s cubic-bezier(.4,0,.2,1), transform .7s cubic-bezier(.4,0,.2,1); }
+.fade-in-scale { opacity:0; transform:scale(.94);        transition:opacity .6s cubic-bezier(.4,0,.2,1), transform .6s cubic-bezier(.4,0,.2,1); }
+.fade-in-left.visible, .fade-in-right.visible, .fade-in-scale.visible { opacity:1; transform:translateX(0) scale(1); }
+
+/* Délais en cascade pour les grilles */
+.stagger-1 { transition-delay: .05s !important; }
+.stagger-2 { transition-delay: .12s !important; }
+.stagger-3 { transition-delay: .19s !important; }
+.stagger-4 { transition-delay: .26s !important; }
+.stagger-5 { transition-delay: .33s !important; }
+.stagger-6 { transition-delay: .40s !important; }
 
 /* LEAD CARD ENTRANCE */
 .lead-card { animation: slideIn 0.4s ease forwards; opacity: 0; }
