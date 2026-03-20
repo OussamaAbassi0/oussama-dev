@@ -159,6 +159,63 @@ body {
   to { opacity: 1; transform: translateX(0); }
 }
 
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE MOBILE
+══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Sections — padding réduit */
+  section { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Grilles 3 colonnes → 1 colonne */
+  [style*="grid-template-columns: repeat(3"],
+  [style*="gridTemplateColumns: \"repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Grilles 2 colonnes → 1 colonne */
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="gridTemplateColumns: \"1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Grilles 1fr + autre → 1 colonne */
+  [style*="gridTemplateColumns: \"1fr 1."],
+  [style*="gridTemplateColumns: \"1fr 2"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stats card — colonne verticale */
+  .stats-row { flex-direction: column !important; gap: 16px !important; }
+
+  /* Overflow sur mobile */
+  .overflow-mobile { overflow-x: auto; }
+
+  /* Taille typo hero */
+  h1 { font-size: clamp(32px, 10vw, 56px) !important; }
+  .section-title { font-size: clamp(22px, 6vw, 36px) !important; }
+
+  /* Masquer particules canvas sur mobile pour les perfs */
+  canvas { display: none !important; }
+
+  /* Command palette — pleine largeur */
+  [style*="min(560px"] { width: calc(100vw - 24px) !important; left: 12px !important; transform: none !important; }
+
+  /* Chat — largeur adaptée */
+  [style*="width:\"340px"] { width: calc(100vw - 24px) !important; }
+
+  /* Cacher hints Ctrl+K sur mobile */
+  [style*="Ctrl + K"] { display: none !important; }
+
+  /* Footer widget — réduit */
+  footer { padding: 24px 16px 20px !important; }
+}
+
+@media (max-width: 480px) {
+  /* Très petit écran */
+  h1 { font-size: clamp(28px, 9vw, 44px) !important; }
+  [style*="padding:\"100px"] { padding-top: 60px !important; padding-bottom: 60px !important; }
+}
+
 /* SECTION UTILITIES */
 .section-label {
   font-family: var(--mono); font-size: 11px;
