@@ -20,9 +20,9 @@ export default function CustomCursor() {
       posRef.current = { x: e.clientX, y: e.clientY };
       if (!visible) setVisible(true);
 
-      /* Hover sur éléments interactifs */
+          /* Hover sur éléments interactifs */
       const target = e.target as HTMLElement;
-      const isHover = !!(target.closest("a,button,[role='button'],input,textarea,select"));
+      const isHover = !!(target.closest("a,button,[role='button'],input,textarea,select,[tabindex]"));
       setHovered(isHover);
     };
 
@@ -40,9 +40,9 @@ export default function CustomCursor() {
         /* Dot — suit instantanément */
         dot.style.transform = `translate(${posRef.current.x - 4}px, ${posRef.current.y - 4}px)`;
 
-        /* Ring — suit avec friction */
-        ringPos.current.x += (posRef.current.x - ringPos.current.x) * 0.12;
-        ringPos.current.y += (posRef.current.y - ringPos.current.y) * 0.12;
+        /* Ring — suit avec légère friction (0.35 = rapide, 0.1 = lent) */
+        ringPos.current.x += (posRef.current.x - ringPos.current.x) * 0.35;
+        ringPos.current.y += (posRef.current.y - ringPos.current.y) * 0.35;
         ring.style.transform = `translate(${ringPos.current.x - 16}px, ${ringPos.current.y - 16}px)`;
       }
 
