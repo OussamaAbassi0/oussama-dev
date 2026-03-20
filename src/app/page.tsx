@@ -26,7 +26,6 @@ import LoadingScreen    from "@/components/ui/LoadingScreen";
 import CustomCursor     from "@/components/ui/CustomCursor";
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
 import WelcomeBanner    from "@/components/ui/WelcomeBanner";
-import LiveStatsCounter from "@/components/ui/LiveStatsCounter";
 import LiveActivityFeed from "@/components/ui/LiveActivityFeed";
 import ProactiveChat    from "@/components/ui/ProactiveChat";
 
@@ -67,7 +66,6 @@ export default function HomePage() {
       <ScrollProgressBar />
       <Navbar />
       {!loading && <WelcomeBanner />}
-      <LiveStatsCounter />
       <LiveActivityFeed />
       <ProactiveChat />
 

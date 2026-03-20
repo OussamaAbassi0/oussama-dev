@@ -16,7 +16,7 @@ const CONTEXT_MESSAGES: Record<string, string> = {
   "default":          "Bonjour 👋 Je suis l'Agent IA d'Oussama. Une question sur l'automatisation de votre business ?",
 };
 
-const DELAY_FIRST = 45000; // 45s avant le premier message proactif
+const DELAY_FIRST = 90000; // 90s — laisse le visiteur explorer tranquillement
 
 export default function ProactiveChat() {
   const [open,       setOpen      ] = useState(false);
@@ -56,8 +56,8 @@ export default function ProactiveChat() {
       if (!open) {
         setBubble(CONTEXT_MESSAGES[section] ?? CONTEXT_MESSAGES.default);
         setBubbleShown(true);
-        /* Auto-hide après 8s */
-        setTimeout(() => setBubble(null), 8000);
+        /* Auto-hide après 5s */
+        setTimeout(() => setBubble(null), 5000);
       }
     }, DELAY_FIRST);
     return () => { if (timerRef.current) clearTimeout(timerRef.current); };

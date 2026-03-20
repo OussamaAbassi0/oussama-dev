@@ -289,7 +289,7 @@ export default function HeroSection() {
           <strong style={{ color:"#00ffc8" }}>Mon but est de vous faire gagner du temps et de l&apos;argent.</strong>
         </p>
 
-        {/* CTAs */}
+        {/* CTA — 1 principal + 1 secondaire discret */}
         <div style={{
           display:"flex", gap:"14px", flexWrap:"wrap", alignItems:"center",
           marginBottom:"24px",
@@ -297,47 +297,33 @@ export default function HeroSection() {
           animation:   mounted ? "heroFadeUp .7s .45s ease forwards" : "none",
           animationFillMode:"both",
         }}>
-          {/* CTA principal */}
+          {/* CTA unique — clair et fort */}
           <a href="#roi" style={{
-            padding:"14px 34px",
+            padding:"15px 38px",
             background:"linear-gradient(135deg,#00ffc8,#00b4d8)",
             color:"#050810",
-            fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"14px",
+            fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"15px",
             borderRadius:"8px", textDecoration:"none", letterSpacing:".04em",
             boxShadow:"0 0 30px rgba(0,255,200,.35)",
             transition:"all .25s",
             display:"inline-flex", alignItems:"center", gap:"8px",
           }}
-            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 50px rgba(0,255,200,.6)"; el.style.transform="translateY(-2px)"; }}
-            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 30px rgba(0,255,200,.35)"; el.style.transform="translateY(0)"; }}
+            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 50px rgba(0,255,200,.6)"; el.style.transform="translateY(-2px) scale(1.02)"; }}
+            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 30px rgba(0,255,200,.35)"; el.style.transform="translateY(0) scale(1)"; }}
           >
-            💰 Calculer mon ROI gratuit
+            Voir ce que je peux faire pour vous →
           </a>
 
-          <a href="#lead-hunter" style={{
-            padding:"12px 26px", background:"rgba(255,255,255,.05)",
-            color:"rgba(255,255,255,.8)",
-            fontFamily:"'Courier New',monospace", fontSize:"13px",
-            border:"1px solid rgba(255,255,255,.15)", borderRadius:"8px",
-            textDecoration:"none", transition:"all .25s",
-          }}
-            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.background="rgba(0,255,200,.08)"; el.style.borderColor="rgba(0,255,200,.4)"; el.style.color="white"; }}
-            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.background="rgba(255,255,255,.05)"; el.style.borderColor="rgba(255,255,255,.15)"; el.style.color="rgba(255,255,255,.8)"; }}
-          >
-            ⚡ Tester les outils
-          </a>
-
+          {/* Lien discret secondaire */}
           <a href="#cta" style={{
-            padding:"12px 26px", background:"transparent",
-            color:"rgba(255,255,255,.4)",
-            fontFamily:"'Courier New',monospace", fontSize:"13px",
-            border:"1px solid rgba(255,255,255,.08)", borderRadius:"8px",
-            textDecoration:"none", transition:"all .25s",
+            fontFamily:"'Courier New',monospace", fontSize:"12px",
+            color:"rgba(255,255,255,.35)",
+            textDecoration:"none", transition:"color .2s",
           }}
-            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.borderColor="rgba(255,255,255,.2)"; el.style.color="rgba(255,255,255,.65)"; }}
-            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.borderColor="rgba(255,255,255,.08)"; el.style.color="rgba(255,255,255,.4)"; }}
+            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color="rgba(255,255,255,.65)")}
+            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color="rgba(255,255,255,.35)")}
           >
-            🚀 Démarrer un projet
+            ou démarrer un projet directement →
           </a>
         </div>
 
