@@ -7,14 +7,14 @@ import Navbar from "@/components/layout/Navbar";
 
 const validLangs: Lang[] = ["fr","en","ar","es"];
 
-const READ_MORE: Record<Lang, string> = {
+const READ_MORE: Record<string, string> = {
   fr: "Lire l'article →",
   en: "Read article →",
   ar: "← اقرأ المقال",
   es: "Leer el artículo →",
 };
 
-const HEADER: Record<Lang, { title: string; accent: string; sub: string; back: string }> = {
+const HEADER: Record<string, { title: string; accent: string; sub: string; back: string }> = {
   fr: {
     title: "Automatisation, IA",
     accent: "& résultats concrets.",
