@@ -49,6 +49,8 @@ export default function ArticleClient({
   const articleLang = (["fr","en","ar","es"].includes(lang) ? lang : "fr") as Lang;
   const t     = article[articleLang] ?? article.fr;
   const isRTL = lang === "ar";
+  /* Pour les Records typés Lang (fr/en/ar/es uniquement) */
+  const ctaLang: Lang = articleLang;
 
   const CTA_TEXT: Record<Lang, string> = {
     fr: "Vous voulez que je construise ça pour vous ?",
@@ -152,10 +154,10 @@ export default function ArticleClient({
           textAlign: isRTL ? "right" : "left",
         }}>
           <p style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:"18px", color:"white", marginBottom:"8px" }}>
-            {CTA_TEXT[lang]}
+            {CTA_TEXT[ctaLang]}
           </p>
           <p style={{ fontFamily:"Arial,sans-serif", fontSize:"14px", color:"rgba(255,255,255,.5)", marginBottom:"20px" }}>
-            {CTA_SUB[lang]}
+            {CTA_SUB[ctaLang]}
           </p>
           <Link href="/#cta" style={{
             display:"inline-flex", alignItems:"center", gap:"8px",
@@ -163,7 +165,7 @@ export default function ArticleClient({
             fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"13px",
             borderRadius:"8px", textDecoration:"none", letterSpacing:".04em",
           }}>
-            {CTA_BTN[lang]}
+            {CTA_BTN[ctaLang]}
           </Link>
         </div>
       </article>
