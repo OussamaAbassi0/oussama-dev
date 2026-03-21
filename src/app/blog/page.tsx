@@ -1,9 +1,9 @@
 "use client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ARTICLES, Lang } from "@/lib/articles";
 import Navbar from "@/components/layout/Navbar";
-import { useLang } from "@/lib/LangContext";
 
 const validLangs: Lang[] = ["fr","en","ar","es"];
 
@@ -14,10 +14,83 @@ const READ_MORE: Record<Lang, string> = {
   es: "Leer el artículo →",
 };
 
+const HEADER: Record<Lang, { title: string; accent: string; sub: string; back: string }> = {
+  fr: {
+    title: "Automatisation, IA",
+    accent: "& résultats concrets.",
+    sub: "Des articles pratiques basés sur de vrais projets clients. Pas de théorie — des systèmes qui tournent en production.",
+    back: "← Retour au site",
+  },
+  en: {
+    title: "Automation, AI",
+    accent: "& concrete results.",
+    sub: "Practical articles based on real client projects. No theory — systems running in production.",
+    back: "← Back to site",
+  },
+  ar: {
+    title: "الأتمتة والذكاء الاصطناعي",
+    accent: "& نتائج ملموسة.",
+    sub: "مقالات عملية مبنية على مشاريع عملاء حقيقيين. لا نظرية — أنظمة تعمل في الإنتاج.",
+    back: "العودة إلى الموقع ←",
+  },
+  es: {
+    title: "Automatización, IA",
+    accent: "& resultados concretos.",
+    sub: "Artículos prácticos basados en proyectos reales de clientes. Sin teoría — sistemas en producción.",
+    back: "← Volver al sitio",
+  },
+  nl: {
+    title: "Automatisering, AI",
+    accent: "& concrete resultaten.",
+    sub: "Praktische artikelen gebaseerd op echte projecten. Geen theorie — systemen in productie.",
+    back: "← Terug naar de site",
+  },
+};
+
+function getLangFromStorage(): Lang {
+  if (typeof window === "undefined") return "fr";
+  const saved = localStorage.getItem("oussama_lang");
+  return validLangs.includes(saved as Lang) ? (saved as Lang) : "fr";
+}
+
 function BlogContent() {
-  const { lang: siteLang } = useLang();
-  const activeLang: Lang = validLangs.includes(siteLang as Lang) ? siteLang as Lang : "fr";
+  const [lang, setLang] = useState<Lang>("fr");
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setLang(getLangFromStorage());
+    setMounted(true);
+
+    /* Écoute les changements de langue depuis la Navbar */
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "oussama_lang" && e.newValue) {
+        const newLang = e.newValue as Lang;
+        if (validLangs.includes(newLang)) setLang(newLang);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+
+    /* Event custom depuis LangContext — réponse instantanée */
+    const onLangChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail as Lang;
+      if (detail && validLangs.includes(detail)) setLang(detail);
+    };
+    window.addEventListener("oussama_lang_change", onLangChange);
+
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("oussama_lang_change", onLangChange);
+    };
+  }, []);
+
+  const activeLang: Lang = validLangs.includes(lang) ? lang : "fr";
   const isRTL = activeLang === "ar";
+  const h = HEADER[activeLang] ?? HEADER.fr;
+
+  /* Évite le flash français avant hydratation */
+  if (!mounted) return (
+    <div style={{ minHeight:"100vh", background:"var(--bg)" }} />
+  );
 
   return (
     <div style={{ minHeight:"100vh", background:"var(--bg)", paddingTop:"80px" }}>
@@ -28,7 +101,7 @@ function BlogContent() {
           fontFamily:"'Courier New',monospace", fontSize:"12px",
           color:"rgba(0,229,255,.5)", textDecoration:"none",
         }}>
-          ← Retour au site
+          {h.back}
         </Link>
       </div>
 
@@ -48,38 +121,15 @@ function BlogContent() {
             fontFamily:"'Syne',sans-serif", fontWeight:800,
             fontSize:"clamp(28px,5vw,48px)", color:"white", lineHeight:1.1, marginBottom:"16px",
           }}>
-            {activeLang==="en" ? "Automation, AI" : activeLang==="ar" ? "الأتمتة والذكاء الاصطناعي" : activeLang==="es" ? "Automatización, IA" : "Automatisation, IA"}<br />
-            <span style={{ color:"var(--cyan)" }}>
-              {activeLang==="en" ? "& concrete results." : activeLang==="ar" ? "& نتائج ملموسة." : activeLang==="es" ? "& resultados concretos." : "& résultats concrets."}
-            </span>
+            {h.title}<br />
+            <span style={{ color:"var(--cyan)" }}>{h.accent}</span>
           </h1>
           <p style={{
             fontFamily:"Arial,sans-serif", fontSize:"15px",
             color:"rgba(255,255,255,.5)", maxWidth:"480px", lineHeight:1.65,
           }}>
-            {activeLang==="en"
-              ? "Practical articles based on real client projects. No theory — systems running in production."
-              : activeLang==="ar"
-              ? "مقالات عملية مبنية على مشاريع عملاء حقيقيين. لا نظرية — أنظمة تعمل في الإنتاج."
-              : activeLang==="es"
-              ? "Artículos prácticos basados en proyectos reales de clientes. Sin teoría — sistemas en producción."
-              : "Des articles pratiques basés sur de vrais projets clients. Pas de théorie — des systèmes qui tournent en production."
-            }
+            {h.sub}
           </p>
-        </div>
-
-        {/* Info langue */}
-        <div style={{
-          marginBottom:"32px", padding:"12px 16px",
-          background:"rgba(0,229,255,.04)", border:"1px solid rgba(0,229,255,.1)",
-          borderRadius:"8px",
-          fontFamily:"'Courier New',monospace", fontSize:"11px",
-          color:"rgba(0,229,255,.6)",
-        }}>
-          {activeLang==="en" ? "🌐 Language: change it using the selector in the top navbar ↗"
-           : activeLang==="ar" ? "🌐 اللغة: غيّرها من خلال المحدد في شريط التنقل العلوي ↗"
-           : activeLang==="es" ? "🌐 Idioma: cámbialo usando el selector en la barra de navegación ↗"
-           : "🌐 Langue : changez-la via le sélecteur dans la navbar en haut ↗"}
         </div>
 
         {/* Articles */}
@@ -110,7 +160,6 @@ function BlogContent() {
                   el.style.transform   = "translateY(0)";
                 }}
               >
-                {/* Meta */}
                 <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"14px", flexWrap:"wrap" }}>
                   <span style={{
                     fontFamily:"'Courier New',monospace", fontSize:"10px",
@@ -164,11 +213,7 @@ function BlogContent() {
 export default function BlogPage() {
   return (
     <Suspense fallback={
-      <div style={{ minHeight:"100vh", background:"var(--bg)", display:"flex", alignItems:"center", justifyContent:"center" }}>
-        <div style={{ fontFamily:"'Courier New',monospace", color:"var(--cyan)", fontSize:"13px" }}>
-          Loading...
-        </div>
-      </div>
+      <div style={{ minHeight:"100vh", background:"var(--bg)" }} />
     }>
       <BlogContent />
     </Suspense>

@@ -33,8 +33,10 @@ export function LangProvider({ children }: { children: ReactNode }) {
     setLangState(l);
     localStorage.setItem(STORAGE_KEY, l);
     /* Direction RTL pour l'arabe */
-    document.documentElement.dir = l === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir  = l === "ar" ? "rtl" : "ltr";
     document.documentElement.lang = l;
+    /* Émet un event custom pour que les pages blog réagissent instantanément */
+    window.dispatchEvent(new CustomEvent("oussama_lang_change", { detail: l }));
   };
 
   /* Appliquer la direction au montage */

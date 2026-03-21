@@ -73,10 +73,20 @@ export default function ArticleClient({
   const [lang, setLangState] = useState<Lang>("fr");
 
   useEffect(() => {
+    /* Lecture initiale */
     const saved = localStorage.getItem("oussama_lang") as Lang | null;
-    if (saved && validLangs.includes(saved)) {
-      setLangState(saved);
-    }
+    if (saved && validLangs.includes(saved)) setLangState(saved);
+
+    /* Event custom depuis LangContext — réponse instantanée */
+    const onLangChange = (e: Event) => {
+      const detail = (e as CustomEvent).detail as Lang;
+      if (detail && validLangs.includes(detail)) setLangState(detail);
+    };
+    window.addEventListener("oussama_lang_change", onLangChange);
+
+    return () => {
+      window.removeEventListener("oussama_lang_change", onLangChange);
+    };
   }, []);
 
   const t     = article[lang] ?? article.fr;
