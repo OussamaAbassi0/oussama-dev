@@ -164,8 +164,11 @@ export default function ProactiveChat() {
                 width:"36px", height:"36px", borderRadius:"50%",
                 background:"linear-gradient(135deg,#001a14,#002820)",
                 border:"1.5px solid rgba(0,255,200,.35)",
-                display:"flex", alignItems:"center", justifyContent:"center", fontSize:"16px",
-              }}>🤖</div>
+                display:"flex", alignItems:"center", justifyContent:"center",
+                overflow:"hidden",
+              }}>
+                <img src="/chat-icon.svg" alt="Agent IA" width="36" height="36" style={{ display:"block" }} />
+              </div>
               <div style={{ flex:1 }}>
                 <p style={{ fontFamily:"var(--mono)", fontWeight:700, fontSize:"12px", color:"white", marginBottom:"2px" }}>
                   Agent IA · Oussama HQ
@@ -250,7 +253,9 @@ export default function ProactiveChat() {
             color: open ? "rgba(0,229,255,.6)" : "white",
             transition:"background .25s",
           }}>
-            {open ? "×" : "🤖"}
+            {open ? "×" : (
+              <img src="/chat-icon.svg" alt="Agent IA" width="30" height="30" style={{ display:"block" }} />
+            )}
           </button>
         </div>
       </div>
