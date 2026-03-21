@@ -56,6 +56,7 @@ export default function Navbar() {
           .nav-cmd-btn { display:none !important; }
           .nav-live-badge { display:none !important; }
           .nav-cta-desktop { display:none !important; }
+          .nav-links-desktop { display:none !important; }
         }
         @media (min-width: 769px) {
           .nav-hamburger { display:none !important; }
@@ -80,7 +81,22 @@ export default function Navbar() {
           <span style={{ opacity:0.5 }}>~/</span>oussama.dev
         </Link>
 
-        {/* Centre — barre Ctrl+K (desktop uniquement) */}
+        {/* Centre — liens nav + barre Ctrl+K (desktop) */}
+        <div className="nav-links-desktop" style={{ display:"flex", alignItems:"center", gap:"4px" }}>
+          {[{label:"Lab",href:"#lead-hunter"},{label:"ROI",href:"#roi"},{label:"Blog",href:"/blog"}].map(link => (
+            <a key={link.href} href={link.href} style={{
+              fontFamily:"'Courier New',monospace", fontSize:"12px",
+              color:"rgba(255,255,255,.45)", textDecoration:"none",
+              padding:"6px 12px", borderRadius:"6px",
+              transition:"color .2s, background .2s",
+            }}
+              onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.color="white"; el.style.background="rgba(255,255,255,.06)"; }}
+              onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.color="rgba(255,255,255,.45)"; el.style.background="transparent"; }}
+            >{link.label}</a>
+          ))}
+        </div>
+
+        {/* Barre Ctrl+K */}
         <button
           className="nav-cmd-btn"
           onClick={() => setPaletteOpen(true)}

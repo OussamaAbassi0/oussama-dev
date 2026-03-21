@@ -17,6 +17,7 @@ import WorkflowGallery    from "@/components/sections/WorkflowGallery";
 import MaturityQuiz       from "@/components/sections/MaturityQuiz";
 import DeliveryTimeline   from "@/components/sections/DeliveryTimeline";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
+import BlogPreviewSection  from "@/components/sections/BlogPreviewSection";
 import FAQSection         from "@/components/sections/FAQSection";
 import AboutSection       from "@/components/sections/AboutSection";
 import CTASection         from "@/components/sections/CTASection";
@@ -108,6 +109,7 @@ export default function HomePage() {
             Témoignages. */}
         <CaseStudiesSection />
         <TestimonialsSection />
+        <BlogPreviewSection />
 
         {/* 4 ─ TESTER (le Lab)
             Les outils interactifs gratuits.
