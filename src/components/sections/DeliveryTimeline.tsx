@@ -14,7 +14,7 @@ export default function DeliveryTimeline() {
   const ref = useFadeIn<HTMLDivElement>();
   const { t, lang } = useLang();
 
-  const STEP_TRANS: Record<string, Record<string, {title:string;desc:string;day:string}[]>> = {
+  const STEP_TRANS: Record<string, {title:string;desc:string;day:string}[]> = {
     en: [
       {day:"Day 1",       title:"Needs analysis",        desc:"30-min discovery call. We understand your problem, tools and goals. No jargon."},
       {day:"Day 2–3",     title:"Workflow architecture", desc:"I draw the complete solution: connected tools, decision rules, expected results."},
