@@ -1,6 +1,8 @@
 "use client";
 import Link from "next/link";
 import { Article, Lang } from "@/lib/articles";
+import { useLang } from "@/lib/LangContext";
+import Navbar from "@/components/layout/Navbar";
 
 const LANG_LABELS: Record<Lang, string> = { fr:"🇫🇷 FR", en:"🇬🇧 EN", ar:"🇸🇦 AR", es:"🇪🇸 ES" };
 const validLangs: Lang[] = ["fr","en","ar","es"];
@@ -37,14 +39,15 @@ function renderMarkdown(md: string): string {
 
 export default function ArticleClient({
   article,
-  lang,
   slug,
 }: {
   article: Article;
-  lang: Lang;
   slug: string;
 }) {
-  const t     = article[lang];
+  const { lang } = useLang();
+  /* Fallback fr si la langue n'existe pas dans l'article (ex: nl) */
+  const articleLang = (["fr","en","ar","es"].includes(lang) ? lang : "fr") as Lang;
+  const t     = article[articleLang] ?? article.fr;
   const isRTL = lang === "ar";
 
   const CTA_TEXT: Record<Lang, string> = {
@@ -68,6 +71,7 @@ export default function ArticleClient({
 
   return (
     <div style={{ minHeight:"100vh", background:"var(--bg)", paddingTop:"80px" }}>
+      <Navbar />
 
       {/* Nav top */}
       <div style={{
@@ -82,23 +86,31 @@ export default function ArticleClient({
           ← Tous les articles
         </Link>
 
-        {/* Sélecteur de langue */}
+        {/* Sélecteur de langue — utilise le LangContext global */}
         <div style={{ display:"flex", gap:"6px" }}>
-          {validLangs.map(l => (
-            <Link key={l} href={`/blog/${slug}?lang=${l}`} style={{
-              padding:        "4px 12px",
-              background:     lang===l ? "var(--cyan)" : "rgba(255,255,255,.05)",
-              color:          lang===l ? "var(--bg)"   : "rgba(255,255,255,.4)",
-              border:         `1px solid ${lang===l ? "var(--cyan)" : "rgba(255,255,255,.1)"}`,
-              borderRadius:   "20px",
-              fontFamily:     "'Courier New',monospace", fontSize:"11px",
-              fontWeight:     lang===l ? 700 : 400,
-              textDecoration: "none", transition:"all .2s",
-            }}>
-              {LANG_LABELS[l]}
-            </Link>
-          ))}
+          {validLangs.map(l => {
+            const isActive = articleLang === l;
+            return (
+              <button key={l}
+                onClick={() => { /* La langue est changée via le Navbar dropdown */ }}
+                style={{
+                  padding:      "4px 12px",
+                  background:   isActive ? "var(--cyan)" : "rgba(255,255,255,.05)",
+                  color:        isActive ? "var(--bg)"   : "rgba(255,255,255,.4)",
+                  border:       `1px solid ${isActive ? "var(--cyan)" : "rgba(255,255,255,.1)"}`,
+                  borderRadius: "20px",
+                  fontFamily:   "'Courier New',monospace", fontSize:"11px",
+                  fontWeight:   isActive ? 700 : 400,
+                  cursor:       "default", transition:"all .2s",
+                }}>
+                {LANG_LABELS[l]}
+              </button>
+            );
+          })}
         </div>
+        <p style={{ fontFamily:"'Courier New',monospace", fontSize:"10px", color:"rgba(255,255,255,.2)" }}>
+          Changer la langue via le sélecteur en haut ↗
+        </p>
       </div>
 
       {/* Article */}

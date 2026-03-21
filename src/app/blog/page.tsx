@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { ARTICLES, Lang } from "@/lib/articles";
+import Navbar from "@/components/layout/Navbar";
 
 const LANG_LABELS: Record<Lang, string> = { fr:"FR", en:"EN", ar:"AR", es:"ES" };
 const LANG_FLAGS:  Record<Lang, string> = { fr:"🇫🇷", en:"🇬🇧", ar:"🇸🇦", es:"🇪🇸" };
@@ -15,7 +16,7 @@ function BlogContent() {
 
   return (
     <div style={{ minHeight:"100vh", background:"var(--bg)", paddingTop:"80px" }}>
-
+      <Navbar />
       <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 24px 0" }}>
         <Link href="/" style={{
           fontFamily:"'Courier New',monospace", fontSize:"12px",

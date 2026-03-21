@@ -1,41 +1,37 @@
-import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { ARTICLES, getArticle, Lang } from "@/lib/articles";
+import { notFound } from "next/navigation";
+import { ARTICLES, getArticle } from "@/lib/articles";
 import ArticleClient from "./ArticleClient";
 
+/* ── Génère toutes les routes statiques ─────────────────── */
 export async function generateStaticParams() {
   return ARTICLES.map(a => ({ slug: a.slug }));
 }
 
+/* ── Metadata statique (sans searchParams) ──────────────── */
 export async function generateMetadata({
   params,
-  searchParams,
 }: {
   params: { slug: string };
-  searchParams: { lang?: string };
 }): Promise<Metadata> {
   const article = getArticle(params.slug);
   if (!article) return {};
-  const lang = (["fr","en","ar","es"].includes(searchParams.lang ?? "") ? searchParams.lang : "fr") as Lang;
-  const t    = article[lang] ?? article.fr;
   return {
-    title:       `${t.title} — Oussama Abassi`,
-    description: t.excerpt,
+    title:       `${article.fr.title} — Oussama Abassi`,
+    description: article.fr.excerpt,
   };
 }
 
+/* ── Page — la langue est gérée côté client ─────────────── */
 export default function ArticlePage({
   params,
-  searchParams,
 }: {
   params: { slug: string };
-  searchParams: { lang?: string };
 }) {
   const article = getArticle(params.slug);
   if (!article) notFound();
 
-  const validLangs: Lang[] = ["fr","en","ar","es"];
-  const lang = (validLangs.includes(searchParams.lang as Lang) ? searchParams.lang : "fr") as Lang;
-
-  return <ArticleClient article={article} lang={lang} slug={params.slug} />;
+  /* On passe l'article au client — la langue est lue depuis
+     le LangContext (localStorage) directement dans ArticleClient */
+  return <ArticleClient article={article} slug={params.slug} />;
 }
