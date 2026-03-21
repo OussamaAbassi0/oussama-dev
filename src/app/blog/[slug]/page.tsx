@@ -3,18 +3,17 @@ import { notFound } from "next/navigation";
 import { ARTICLES, getArticle } from "@/lib/articles";
 import ArticleClient from "./ArticleClient";
 
-/* ── Génère toutes les routes statiques ─────────────────── */
-export async function generateStaticParams() {
-  return ARTICLES.map(a => ({ slug: a.slug }));
-}
+/* Force le rendu dynamique — évite les problèmes de cache Vercel */
+export const dynamic = "force-dynamic";
 
-/* ── Metadata statique (sans searchParams) ──────────────── */
+/* ── Metadata ───────────────────────────────────────────── */
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const article = getArticle(params.slug);
+  const { slug } = await params;
+  const article = getArticle(slug);
   if (!article) return {};
   return {
     title:       `${article.fr.title} — Oussama Abassi`,
@@ -22,16 +21,16 @@ export async function generateMetadata({
   };
 }
 
-/* ── Page — la langue est gérée côté client ─────────────── */
-export default function ArticlePage({
+/* ── Page ───────────────────────────────────────────────── */
+export default async function ArticlePage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const article = getArticle(params.slug);
+  const { slug } = await params;
+  const article = getArticle(slug);
+
   if (!article) notFound();
 
-  /* On passe l'article au client — la langue est lue depuis
-     le LangContext (localStorage) directement dans ArticleClient */
-  return <ArticleClient article={article} slug={params.slug} />;
+  return <ArticleClient article={article} slug={slug} />;
 }
