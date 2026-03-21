@@ -103,6 +103,12 @@ export default function CommandPalette({ onOpenBrief, onClose, onHackerMode }: C
       },
     },
     {
+      id: "blog",    group: "Navigation",
+      icon: "📝",    label: "Lire le Blog",
+      sub: "Articles automatisation & IA",
+      action: () => { close(); window.location.href = "/blog"; },
+    },
+    {
       id: "stack",   group: "Navigation",
       icon: "🛠",    label: "Voir le Stack Tech",
       sub: "Scroll → Écosystème",

@@ -75,6 +75,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        {/* Plausible Analytics — remplace 'oussama.dev' par ton vrai domaine */}
+        <script
+          defer
+          data-domain="oussama-hq.vercel.app"
+          src="https://plausible.io/js/script.js"
+        />
       </head>
       <body>{children}</body>
     </html>

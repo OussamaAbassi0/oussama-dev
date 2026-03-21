@@ -40,6 +40,7 @@ export default function Navbar() {
     { label: "Lead Hunter",        href: "#lead-hunter"  },
     { label: "ROI Calculator",     href: "#roi"          },
     { label: "Cas clients",        href: "#case-studies" },
+    { label: "Blog",               href: "/blog"         },
     { label: "FAQ",                href: "#faq"          },
   ];
 
