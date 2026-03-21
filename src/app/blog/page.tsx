@@ -68,7 +68,7 @@ function BlogContent() {
             return (
               <Link
                 key={article.slug}
-                href={`/blog/${article.slug}?lang=${activeLang}`}
+                href={`/blog/${article.slug}`}
                 style={{
                   display:"block", background:"#07090f",
                   border:"1px solid rgba(255,255,255,.07)",
