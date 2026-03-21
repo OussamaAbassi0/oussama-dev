@@ -23,6 +23,7 @@ import CTASection         from "@/components/sections/CTASection";
 
 /* ── UI globale ──────────────────────────────────────────── */
 import LoadingScreen    from "@/components/ui/LoadingScreen";
+import CinematicIntro  from "@/components/ui/CinematicIntro";
 import CustomCursor     from "@/components/ui/CustomCursor";
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
 import WelcomeBanner    from "@/components/ui/WelcomeBanner";
@@ -34,18 +35,24 @@ import ProactiveChat    from "@/components/ui/ProactiveChat";
 ══════════════════════════════════════════════════════════ */
 export default function HomePage() {
   const [loading,      setLoading     ] = useState(true);
+  const [cinematic,    setCinematic   ] = useState(false); // s'active après loading
   const [briefOpen,    setBriefOpen   ] = useState(false);
   const [prefillBrief, setPrefillBrief] = useState<string|undefined>();
 
-  /* Bloque le scroll pendant le loading */
+  /* Bloque le scroll pendant loading ou cinématique */
   useEffect(() => {
-    if (loading) {
+    if (loading || cinematic) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
     return () => { document.body.style.overflow = ""; };
-  }, [loading]);
+  }, [loading, cinematic]);
+
+  /* Vérifie si la cinématique a déjà été vue */
+  const hasSeen = typeof window !== "undefined"
+    ? sessionStorage.getItem("oussama_cinematic_seen") === "1"
+    : true;
 
   const openBrief = (prefill?: string) => {
     if (prefill) setPrefillBrief(prefill);
@@ -57,7 +64,18 @@ export default function HomePage() {
       {/* ─────────────────────────────────────────
           LOADING SCREEN — 3 secondes d'impact
       ───────────────────────────────────────── */}
-      {loading && <LoadingScreen onDone={() => setLoading(false)} />}
+      {loading && (
+        <LoadingScreen onDone={() => {
+          setLoading(false);
+          /* Lance la cinématique uniquement si pas déjà vue */
+          if (!sessionStorage.getItem("oussama_cinematic_seen")) {
+            setCinematic(true);
+          }
+        }} />
+      )}
+      {cinematic && (
+        <CinematicIntro onDone={() => setCinematic(false)} />
+      )}
 
       {/* ─────────────────────────────────────────
           UI GLOBALE — toujours visible
