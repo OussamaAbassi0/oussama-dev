@@ -1,37 +1,25 @@
+"use client";
 import Link from "next/link";
-import type { Metadata } from "next";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { ARTICLES, Lang } from "@/lib/articles";
-
-export const metadata: Metadata = {
-  title: "Blog — Oussama Abassi",
-  description: "Articles sur l'automatisation B2B, l'IA et n8n. Conseils pratiques et cas clients réels.",
-};
 
 const LANG_LABELS: Record<Lang, string> = { fr:"FR", en:"EN", ar:"AR", es:"ES" };
 const LANG_FLAGS:  Record<Lang, string> = { fr:"🇫🇷", en:"🇬🇧", ar:"🇸🇦", es:"🇪🇸" };
+const validLangs: Lang[] = ["fr","en","ar","es"];
 
-export default function BlogPage({
-  searchParams,
-}: {
-  searchParams: { lang?: string };
-}) {
-  const lang = (searchParams.lang ?? "fr") as Lang;
-  const validLangs: Lang[] = ["fr","en","ar","es"];
+function BlogContent() {
+  const searchParams = useSearchParams();
+  const lang = (searchParams.get("lang") ?? "fr") as Lang;
   const activeLang = validLangs.includes(lang) ? lang : "fr";
 
   return (
-    <div style={{
-      minHeight:   "100vh",
-      background:  "var(--bg)",
-      paddingTop:  "80px",
-    }}>
-      {/* Back */}
+    <div style={{ minHeight:"100vh", background:"var(--bg)", paddingTop:"80px" }}>
+
       <div style={{ maxWidth:"900px", margin:"0 auto", padding:"24px 24px 0" }}>
         <Link href="/" style={{
           fontFamily:"'Courier New',monospace", fontSize:"12px",
           color:"rgba(0,229,255,.5)", textDecoration:"none",
-          display:"inline-flex", alignItems:"center", gap:"6px",
-          transition:"color .2s",
         }}>
           ← Retour au site
         </Link>
@@ -41,25 +29,14 @@ export default function BlogPage({
 
         {/* Header */}
         <div style={{ marginBottom:"48px" }}>
-          <p style={{
-            fontFamily:"'Courier New',monospace", fontSize:"11px",
-            color:"var(--cyan)", letterSpacing:".2em", textTransform:"uppercase",
-            marginBottom:"12px",
-          }}>
+          <p style={{ fontFamily:"'Courier New',monospace", fontSize:"11px", color:"var(--cyan)", letterSpacing:".2em", textTransform:"uppercase", marginBottom:"12px" }}>
             // Blog & Ressources
           </p>
-          <h1 style={{
-            fontFamily:"'Syne',sans-serif", fontWeight:800,
-            fontSize:"clamp(28px,5vw,48px)", color:"white",
-            lineHeight:1.1, marginBottom:"16px",
-          }}>
+          <h1 style={{ fontFamily:"'Syne',sans-serif", fontWeight:800, fontSize:"clamp(28px,5vw,48px)", color:"white", lineHeight:1.1, marginBottom:"16px" }}>
             Automatisation, IA<br />
             <span style={{ color:"var(--cyan)" }}>& résultats concrets.</span>
           </h1>
-          <p style={{
-            fontFamily:"Arial,sans-serif", fontSize:"15px",
-            color:"rgba(255,255,255,.5)", maxWidth:"480px", lineHeight:1.65,
-          }}>
+          <p style={{ fontFamily:"Arial,sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", maxWidth:"480px", lineHeight:1.65 }}>
             Des articles pratiques basés sur de vrais projets clients. Pas de théorie — des systèmes qui tournent en production.
           </p>
         </div>
@@ -68,16 +45,14 @@ export default function BlogPage({
         <div style={{ display:"flex", gap:"8px", marginBottom:"40px" }}>
           {validLangs.map(l => (
             <Link key={l} href={`/blog?lang=${l}`} style={{
-              padding:        "6px 16px",
+              padding:"6px 16px",
               background:     activeLang===l ? "var(--cyan)" : "rgba(255,255,255,.05)",
               color:          activeLang===l ? "var(--bg)"   : "rgba(255,255,255,.5)",
               border:         `1px solid ${activeLang===l ? "var(--cyan)" : "rgba(255,255,255,.1)"}`,
               borderRadius:   "20px",
-              fontFamily:     "'Courier New',monospace",
-              fontSize:       "12px",
+              fontFamily:     "'Courier New',monospace", fontSize:"12px",
               fontWeight:     activeLang===l ? 700 : 400,
-              textDecoration: "none",
-              transition:     "all .2s",
+              textDecoration: "none", transition:"all .2s",
             }}>
               {LANG_FLAGS[l]} {LANG_LABELS[l]}
             </Link>
@@ -94,14 +69,11 @@ export default function BlogPage({
                 key={article.slug}
                 href={`/blog/${article.slug}?lang=${activeLang}`}
                 style={{
-                  display:        "block",
-                  background:     "#07090f",
-                  border:         "1px solid rgba(255,255,255,.07)",
-                  borderRadius:   "14px",
-                  padding:        "28px 32px",
-                  textDecoration: "none",
-                  transition:     "border-color .2s, box-shadow .2s, transform .2s",
-                  direction:      isRTL ? "rtl" : "ltr",
+                  display:"block", background:"#07090f",
+                  border:"1px solid rgba(255,255,255,.07)",
+                  borderRadius:"14px", padding:"28px 32px",
+                  textDecoration:"none", transition:"border-color .2s, box-shadow .2s, transform .2s",
+                  direction: isRTL ? "rtl" : "ltr",
                 }}
                 onMouseEnter={e => {
                   const el = e.currentTarget as HTMLElement;
@@ -116,7 +88,6 @@ export default function BlogPage({
                   el.style.transform   = "translateY(0)";
                 }}
               >
-                {/* Meta */}
                 <div style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"14px", flexWrap:"wrap" }}>
                   <span style={{
                     fontFamily:"'Courier New',monospace", fontSize:"10px",
@@ -134,29 +105,15 @@ export default function BlogPage({
                   </span>
                 </div>
 
-                {/* Titre */}
-                <h2 style={{
-                  fontFamily: "'Syne',sans-serif", fontWeight:700,
-                  fontSize:"clamp(16px,2vw,20px)", color:"white",
-                  lineHeight:1.3, marginBottom:"10px",
-                }}>
+                <h2 style={{ fontFamily:"'Syne',sans-serif", fontWeight:700, fontSize:"clamp(16px,2vw,20px)", color:"white", lineHeight:1.3, marginBottom:"10px" }}>
                   {t.title}
                 </h2>
 
-                {/* Excerpt */}
-                <p style={{
-                  fontFamily:"Arial,sans-serif", fontSize:"14px",
-                  color:"rgba(255,255,255,.5)", lineHeight:1.65,
-                }}>
+                <p style={{ fontFamily:"Arial,sans-serif", fontSize:"14px", color:"rgba(255,255,255,.5)", lineHeight:1.65 }}>
                   {t.excerpt}
                 </p>
 
-                {/* Lire */}
-                <div style={{
-                  marginTop:"16px",
-                  fontFamily:"'Courier New',monospace", fontSize:"12px",
-                  color:article.tagColor, opacity:.8,
-                }}>
+                <div style={{ marginTop:"16px", fontFamily:"'Courier New',monospace", fontSize:"12px", color:article.tagColor, opacity:.8 }}>
                   {activeLang==="ar" ? "← اقرأ المقال" : activeLang==="es" ? "Leer el artículo →" : activeLang==="en" ? "Read article →" : "Lire l'article →"}
                 </div>
               </Link>
@@ -165,5 +122,13 @@ export default function BlogPage({
         </div>
       </div>
     </div>
+  );
+}
+
+export default function BlogPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight:"100vh", background:"var(--bg)" }} />}>
+      <BlogContent />
+    </Suspense>
   );
 }
