@@ -1,7 +1,8 @@
 "use client";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
-const STEPS = [
+const STEPS_META = [
   {
     num:   "01",
     icon:  "🧪",
@@ -33,6 +34,13 @@ const STEPS = [
 
 export default function HowItWorksSection() {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t } = useLang();
+
+  const STEPS = [
+    { ...STEPS_META[0], title:t.how.step1Title, desc:t.how.step1Desc, cta:t.how.step1Cta },
+    { ...STEPS_META[1], title:t.how.step2Title, desc:t.how.step2Desc, cta:t.how.step2Cta },
+    { ...STEPS_META[2], title:t.how.step3Title, desc:t.how.step3Desc, cta:t.how.step3Cta },
+  ];
 
   return (
     <section id="how-it-works" style={{ padding: "80px 24px", background: "var(--bg)" }}>
@@ -48,15 +56,15 @@ export default function HowItWorksSection() {
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: "56px" }}>
           <p className="section-label" style={{ justifyContent: "center", display: "flex" }}>
-            // Comment ça marche
+            {t.how.label}
           </p>
           <h2 style={{
             fontFamily: "var(--sans)", fontWeight: 800,
             fontSize:   "clamp(26px, 4vw, 42px)",
             color:      "white", lineHeight: 1.2, marginBottom: "14px",
           }}>
-            3 étapes simples.<br />
-            <span style={{ color: "var(--cyan)" }}>Zéro jargon technique.</span>
+            {t.how.title1}<br />
+            <span style={{ color: "var(--cyan)" }}>{t.how.title2}</span>
           </h2>
           <p style={{
             fontFamily: "Arial, Helvetica, sans-serif",
@@ -66,7 +74,7 @@ export default function HowItWorksSection() {
             margin:     "0 auto",
             lineHeight: 1.65,
           }}>
-            Que vous soyez dirigeant, commercial ou responsable RH — ce processus est fait pour vous.
+            {t.how.subtitle}
           </p>
         </div>
 
@@ -123,7 +131,7 @@ export default function HowItWorksSection() {
                   letterSpacing: ".2em",
                   marginBottom:  "12px",
                 }}>
-                  ÉTAPE {step.num}
+                  {t.how.stepLabel} {step.num}
                 </div>
 
                 {/* Icône */}
@@ -242,10 +250,10 @@ export default function HowItWorksSection() {
           flexWrap:     "wrap",
         }}>
           {[
-            { icon: "🔒", text: "Aucune inscription requise" },
-            { icon: "⚡", text: "Résultats en temps réel" },
-            { icon: "🎯", text: "100% gratuit à tester" },
-            { icon: "💬", text: "Réponse sous 24h garantie" },
+            { icon: "🔒", text: t.how.reassure1 },
+            { icon: "⚡", text: t.how.reassure2 },
+            { icon: "🎯", text: t.how.reassure3 },
+            { icon: "💬", text: t.how.reassure4 },
           ].map(item => (
             <div key={item.text} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <span style={{ fontSize: "16px" }}>{item.icon}</span>

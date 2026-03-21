@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import AvailabilityBadge from "@/components/ui/AvailabilityBadge";
+import { useLang } from "@/lib/LangContext";
 
 /* ══════════════════════════════════════════════════════════
    PARTICLE CANVAS
@@ -122,16 +123,16 @@ function ParticleCanvas() {
 /* ══════════════════════════════════════════════════════════
    TYPEWRITER
 ══════════════════════════════════════════════════════════ */
-const WORDS = ["Automatisez.", "Scalez.", "Dominez."];
 
-function Typewriter() {
+
+function Typewriter({ words }: { words: string[] }) {
   const [wordIdx,  setWordIdx ] = useState(0);
   const [charIdx,  setCharIdx ] = useState(0);
   const [deleting, setDeleting] = useState(false);
   const [shown,    setShown   ] = useState("");
 
   useEffect(() => {
-    const word  = WORDS[wordIdx];
+    const word  = words[wordIdx] ?? words[0];
     let timeout: ReturnType<typeof setTimeout>;
 
     if (!deleting && charIdx <= word.length) {
@@ -144,7 +145,7 @@ function Typewriter() {
       timeout = setTimeout(() => setCharIdx(c => c - 1), 45);
     } else {
       setDeleting(false);
-      setWordIdx(w => (w + 1) % WORDS.length);
+      setWordIdx(w => (w + 1) % words.length);
     }
 
     return () => clearTimeout(timeout);
@@ -170,6 +171,7 @@ function Typewriter() {
 ══════════════════════════════════════════════════════════ */
 export default function HeroSection() {
   const [mounted, setMounted] = useState(false);
+  const { t, dir } = useLang();
   useEffect(() => { setTimeout(() => setMounted(true), 100); }, []);
 
   return (
@@ -246,7 +248,7 @@ export default function HeroSection() {
             color:"#00ffc8", letterSpacing:".06em",
           }}>
             <span style={{ width:"6px", height:"6px", borderRadius:"50%", background:"#ff4d6d", animation:"livePulse 1.5s ease-in-out infinite" }} />
-            Lab interactif · Testez en direct
+            {t.hero.badge}
           </span>
           <AvailabilityBadge />
         </div>
@@ -263,13 +265,13 @@ export default function HeroSection() {
             fontSize:   "clamp(42px,7.5vw,96px)", lineHeight:1.0,
             color:      "white",
           }}>
-            Votre business peut
+            {t.hero.headline1}
           </h1>
           <h1 style={{
             fontFamily: "'Syne',sans-serif", fontWeight:800,
             fontSize:   "clamp(42px,7.5vw,96px)", lineHeight:1.05,
           }}>
-            <Typewriter />
+            <Typewriter words={t.hero.words} />
           </h1>
         </div>
 
@@ -284,9 +286,8 @@ export default function HeroSection() {
           animation:   mounted ? "heroFadeUp .7s .3s ease forwards" : "none",
           animationFillMode:"both",
         }}>
-          Je suis <strong style={{ color:"white" }}>Oussama</strong> — spécialiste IA et automatisation.
-          Mon but n&apos;est pas de vous vendre du code.{" "}
-          <strong style={{ color:"#00ffc8" }}>Mon but est de vous faire gagner du temps et de l&apos;argent.</strong>
+          {t.hero.subtitle}{" "}
+          <strong style={{ color:"#00ffc8" }}>{t.hero.subtitleBold}</strong>
         </p>
 
         {/* CTA — 1 principal + 1 secondaire discret */}
@@ -311,7 +312,7 @@ export default function HeroSection() {
             onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 50px rgba(0,255,200,.6)"; el.style.transform="translateY(-2px) scale(1.02)"; }}
             onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 30px rgba(0,255,200,.35)"; el.style.transform="translateY(0) scale(1)"; }}
           >
-            Voir ce que je peux faire pour vous →
+            {t.hero.cta}
           </a>
 
           {/* Lien discret secondaire */}
@@ -323,7 +324,7 @@ export default function HeroSection() {
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color="rgba(255,255,255,.65)")}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color="rgba(255,255,255,.35)")}
           >
-            ou démarrer un projet directement →
+            {t.hero.ctaSecondary}
           </a>
         </div>
 
@@ -357,9 +358,9 @@ export default function HeroSection() {
           animationFillMode:"both",
         }}>
           {[
-            { val:12000, suffix:"+", label:"Leads générés automatiquement" },
-            { val:340,   suffix:"h", label:"Économisées / mois" },
-            { val:98,    suffix:"%", label:"Satisfaction client" },
+            { val:12000, suffix:"+", label:t.hero.stat1 },
+            { val:340,   suffix:"h", label:t.hero.stat2 },
+            { val:98,    suffix:"%", label:t.hero.stat3 },
           ].map((s, i) => (
             <div key={s.label} style={{
               flex:1, minWidth:"130px", textAlign:"center",

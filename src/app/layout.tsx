@@ -40,6 +40,8 @@ export const viewport: Viewport = {
   themeColor:   "#00ffc8",
 };
 
+import { LangProvider } from "@/lib/LangContext";
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
@@ -52,7 +54,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://plausible.io/js/script.js"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <LangProvider>{children}</LangProvider>
+      </body>
     </html>
   );
 }

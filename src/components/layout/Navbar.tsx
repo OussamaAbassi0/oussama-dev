@@ -3,13 +3,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import CommandPalette from "@/components/ui/CommandPalette";
 import TerminalMode   from "@/components/ui/TerminalMode";
+import { useLang }   from "@/lib/LangContext";
+import { LANGS, SiteLang } from "@/lib/i18n";
 
 export default function Navbar() {
-  const [paletteOpen, setPaletteOpen] = useState(false);
-  const [briefOpen,   setBriefOpen  ] = useState(false);
-  const [hackerMode,  setHackerMode ] = useState(false);
-  const [menuOpen,    setMenuOpen   ] = useState(false);
-  const [isMac,       setIsMac      ] = useState(false);
+  const [paletteOpen,  setPaletteOpen ] = useState(false);
+  const [briefOpen,    setBriefOpen   ] = useState(false);
+  const [hackerMode,   setHackerMode  ] = useState(false);
+  const [menuOpen,     setMenuOpen    ] = useState(false);
+  const [isMac,        setIsMac       ] = useState(false);
+  const [langOpen,     setLangOpen    ] = useState(false);
+  const { lang, setLang, t } = useLang();
 
   useEffect(() => {
     setIsMac(/Mac|iPhone|iPod|iPad/.test(navigator.platform));
@@ -141,6 +145,65 @@ export default function Navbar() {
             LIVE LAB
           </span>
 
+          {/* Sélecteur de langue */}
+          <div style={{ position:"relative" }} className="nav-cta-desktop">
+            <button
+              onClick={() => setLangOpen(o => !o)}
+              style={{
+                display:"flex", alignItems:"center", gap:"6px",
+                padding:"7px 12px",
+                background:"rgba(255,255,255,.05)",
+                border:"1px solid rgba(255,255,255,.12)",
+                borderRadius:"8px", cursor:"pointer",
+                fontFamily:"'Courier New',monospace", fontSize:"12px",
+                color:"rgba(255,255,255,.7)",
+                transition:"all .2s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(0,255,200,.3)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(255,255,255,.12)"; }}
+            >
+              <span>{LANGS.find(l => l.code === lang)?.flag}</span>
+              <span>{lang.toUpperCase()}</span>
+              <span style={{ opacity:.5, fontSize:"9px" }}>{langOpen ? "▲" : "▼"}</span>
+            </button>
+
+            {/* Dropdown */}
+            {langOpen && (
+              <div style={{
+                position:"absolute", top:"calc(100% + 8px)", right:0,
+                background:"#07090f",
+                border:"1px solid rgba(0,229,255,.2)",
+                borderRadius:"10px", overflow:"hidden",
+                boxShadow:"0 16px 40px rgba(0,0,0,.6)",
+                zIndex:200, minWidth:"160px",
+                animation:"mobileMenuIn .2s ease",
+              }}>
+                {LANGS.map(l => (
+                  <button key={l.code}
+                    onClick={() => { setLang(l.code as SiteLang); setLangOpen(false); }}
+                    style={{
+                      display:"flex", alignItems:"center", gap:"10px",
+                      width:"100%", padding:"10px 14px",
+                      background: lang===l.code ? "rgba(0,255,200,.08)" : "transparent",
+                      border:"none", cursor:"pointer",
+                      fontFamily:"Arial,sans-serif", fontSize:"13px",
+                      color: lang===l.code ? "var(--cyan)" : "rgba(255,255,255,.7)",
+                      fontWeight: lang===l.code ? 600 : 400,
+                      textAlign:"left", transition:"background .15s",
+                      borderBottom:"1px solid rgba(255,255,255,.04)",
+                    }}
+                    onMouseEnter={e => { if(lang!==l.code) (e.currentTarget as HTMLElement).style.background="rgba(255,255,255,.05)"; }}
+                    onMouseLeave={e => { if(lang!==l.code) (e.currentTarget as HTMLElement).style.background="transparent"; }}
+                  >
+                    <span style={{ fontSize:"16px" }}>{l.flag}</span>
+                    <span>{l.label}</span>
+                    {lang===l.code && <span style={{ marginLeft:"auto", fontSize:"10px" }}>✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <a href="#cta" className="nav-cta-desktop" style={{
             padding:"8px 18px", background:"var(--cyan)", color:"var(--bg)",
             fontFamily:"var(--mono)", fontWeight:700, fontSize:"12px",
@@ -150,7 +213,7 @@ export default function Navbar() {
             onMouseEnter={e => ((e.currentTarget as HTMLElement).style.boxShadow="0 0 20px rgba(0,255,200,.4)")}
             onMouseLeave={e => ((e.currentTarget as HTMLElement).style.boxShadow="none")}
           >
-            Démarrer →
+            {t.nav.start}
           </a>
 
           {/* Hamburger mobile */}
