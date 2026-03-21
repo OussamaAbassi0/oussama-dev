@@ -204,7 +204,7 @@ export default function Navbar() {
             )}
           </div>
 
-          <a href="#cta" className="nav-cta-desktop" style={{
+          <a href="/#cta" className="nav-cta-desktop" style={{
             padding:"8px 18px", background:"var(--cyan)", color:"var(--bg)",
             fontFamily:"var(--mono)", fontWeight:700, fontSize:"12px",
             borderRadius:"6px", textDecoration:"none", letterSpacing:".04em",
@@ -265,7 +265,7 @@ export default function Navbar() {
               </a>
             ))}
           </div>
-          <a href="#cta" onClick={() => setMenuOpen(false)} style={{
+          <a href="/#cta" onClick={() => setMenuOpen(false)} style={{
             display:"block", textAlign:"center",
             padding:"13px", background:"var(--cyan)", color:"var(--bg)",
             fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"14px",
