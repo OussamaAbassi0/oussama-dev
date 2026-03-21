@@ -1,5 +1,6 @@
 "use client";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 const TESTIMONIALS = [
   {
@@ -42,6 +43,7 @@ function Stars({ count }: { count: number }) {
 
 export default function TestimonialsSection() {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t } = useLang();
 
   return (
     <section style={{ padding: "100px 24px", background: "var(--bg)" }}>
@@ -49,10 +51,10 @@ export default function TestimonialsSection() {
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "56px", flexWrap: "wrap", gap: "16px" }}>
           <div>
-            <p className="section-label">// Social Proof</p>
+            <p className="section-label">{t.testi.label}</p>
             <h2 className="section-title" style={{ marginBottom: 0 }}>
-              Ce que disent<br />
-              <span className="text-cyan">mes clients</span>
+              {t.testi.title1}<br />
+              <span className="text-cyan">{t.testi.title2}</span>
             </h2>
           </div>
           <a
@@ -189,9 +191,9 @@ export default function TestimonialsSection() {
           gap: "32px", flexWrap: "wrap",
         }}>
           {[
-            { icon: "⭐", val: "5/5", label: "Note moyenne Malt" },
-            { icon: "✅", val: "100%", label: "Taux de recommandation" },
-            { icon: "⚡", val: "< 24h", label: "Délai de réponse" },
+            { icon: "⭐", val: "5/5", label: t.nav.liveLab === "LIVE LAB" ? "Average Malt rating" : t.nav.liveLab === "EN VIVO" ? "Nota media Malt" : t.nav.liveLab === "مباشر" ? "متوسط تقييم Malt" : t.nav.liveLab === "LIVE LAB" ? "Gem. Malt-beoordeling" : "Note moyenne Malt" },
+            { icon: "✅", val: "100%", label: t.nav.liveLab === "LIVE LAB" ? "Recommendation rate" : t.nav.liveLab === "EN VIVO" ? "Tasa de recomendación" : t.nav.liveLab === "مباشر" ? "معدل التوصية" : "Taux de recommandation" },
+            { icon: "⚡", val: "< 24h", label: t.nav.liveLab === "LIVE LAB" ? "Response time" : t.nav.liveLab === "EN VIVO" ? "Tiempo de respuesta" : t.nav.liveLab === "مباشر" ? "وقت الاستجابة" : "Délai de réponse" },
           ].map(s => (
             <div key={s.label} style={{ textAlign: "center" }}>
               <div style={{ fontSize: "18px", marginBottom: "4px" }}>{s.icon}</div>

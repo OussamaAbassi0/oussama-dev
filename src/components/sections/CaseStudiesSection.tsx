@@ -1,5 +1,6 @@
 "use client";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 const CASES = [
   {
@@ -63,18 +64,19 @@ const CASES = [
 
 export default function CaseStudiesSection() {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t } = useLang();
 
   return (
     <section id="case-studies" style={{ padding:"100px 24px", background:"var(--bg2)" }}>
       <div ref={ref} className="fade-in" style={{ maxWidth:"1100px", margin:"0 auto" }}>
 
-        <p className="section-label">// Résultats clients réels</p>
+        <p className="section-label">{t.cases.label}</p>
         <h2 className="section-title">
-          Des chiffres vrais.<br />
-          <span className="text-cyan">Des clients satisfaits.</span>
+          {t.cases.title1}<br />
+          <span className="text-cyan">{t.cases.title2}</span>
         </h2>
         <p style={{ fontFamily:"Arial,sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", marginBottom:"56px", maxWidth:"480px", lineHeight:1.65 }}>
-          Pas de témoignages inventés. Voici 3 cas clients avec les chiffres avant et après.
+          {t.cases.subtitle}
         </p>
 
         <div style={{ display:"flex", flexDirection:"column", gap:"32px" }}>
@@ -100,11 +102,11 @@ export default function CaseStudiesSection() {
                 <div style={{ marginLeft:"auto", display:"flex", gap:"16px" }}>
                   <div style={{ textAlign:"center" }}>
                     <p style={{ fontFamily:"var(--mono)", fontWeight:700, fontSize:"14px", color:c.color }}>{c.duration}</p>
-                    <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(255,255,255,.3)" }}>Livraison</p>
+                    <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(255,255,255,.3)" }}>{t.cases.solution}</p>
                   </div>
                   <div style={{ textAlign:"center" }}>
                     <p style={{ fontFamily:"var(--mono)", fontWeight:700, fontSize:"14px", color:"white" }}>{c.invest}</p>
-                    <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(255,255,255,.3)" }}>Investissement</p>
+                    <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(255,255,255,.3)" }}>{t.cases.results}</p>
                   </div>
                 </div>
               </div>
@@ -113,7 +115,7 @@ export default function CaseStudiesSection() {
                 {/* AVANT */}
                 <div style={{ padding:"24px", borderRight:"1px solid rgba(255,255,255,.05)" }}>
                   <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"#ff4d6d", letterSpacing:".2em", marginBottom:"12px" }}>
-                    ❌ AVANT
+                    ❌ {t.cases.before}
                   </p>
                   <p style={{ fontFamily:"Arial,sans-serif", fontSize:"12.5px", color:"rgba(255,255,255,.5)", lineHeight:1.6, marginBottom:"14px" }}>
                     {c.before.problem}
@@ -131,7 +133,7 @@ export default function CaseStudiesSection() {
                 {/* SOLUTION */}
                 <div style={{ padding:"24px", borderRight:"1px solid rgba(255,255,255,.05)", background:`${c.color}04` }}>
                   <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:c.color, letterSpacing:".2em", marginBottom:"12px" }}>
-                    ⚙️ SOLUTION
+                    ⚙️ {t.cases.solution}
                   </p>
                   <p style={{ fontFamily:"Arial,sans-serif", fontSize:"12.5px", color:"rgba(255,255,255,.6)", lineHeight:1.65, marginBottom:"14px" }}>
                     {c.solution}
@@ -151,7 +153,7 @@ export default function CaseStudiesSection() {
                 {/* APRÈS */}
                 <div style={{ padding:"24px" }}>
                   <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"#4ade80", letterSpacing:".2em", marginBottom:"12px" }}>
-                    ✅ RÉSULTATS
+                    ✅ {t.cases.results}
                   </p>
                   <div style={{ display:"flex", flexDirection:"column", gap:"6px", marginBottom:"14px" }}>
                     {c.after.results.map((r, j) => (

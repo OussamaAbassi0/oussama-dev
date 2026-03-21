@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 /* ══════════════════════════════════════════════════════════
    QUESTIONS
@@ -143,6 +144,7 @@ function ProgressBar({ current, total }: { current: number; total: number }) {
 ══════════════════════════════════════════════════════════ */
 export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void }) {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t } = useLang();
 
   const [step,      setStep     ] = useState<"intro" | "quiz" | "result">("intro");
   const [qIdx,      setQIdx     ] = useState(0);
@@ -198,13 +200,13 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
       <div ref={ref} className="fade-in" style={{ maxWidth:"800px", margin:"0 auto" }}>
 
         {/* Header */}
-        <p className="section-label">// Diagnostic personnalisé</p>
+        <p className="section-label">{t.quiz.label}</p>
         <h2 className="section-title">
-          Où en êtes-vous ?<br />
-          <span className="text-cyan">Obtenez votre Roadmap IA</span>
+          {t.quiz.title1}<br />
+          <span className="text-cyan">{t.quiz.title2}</span>
         </h2>
         <p style={{ fontFamily:"Arial, sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", marginBottom:"48px", maxWidth:"480px", lineHeight:1.65 }}>
-          5 questions. 2 minutes. Une roadmap d&apos;automatisation taillée pour votre profil.
+          {t.quiz.subtitle}
         </p>
 
         {/* ── INTRO ─────────────────────────────────────── */}
@@ -226,10 +228,10 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
                 boxShadow:"0 0 24px rgba(0,255,200,.3)", letterSpacing:".04em",
               }}
             >
-              Démarrer le diagnostic →
+              {t.quiz.start}
             </button>
             <p style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"rgba(255,255,255,.2)", marginTop:"16px" }}>
-              ✓ Gratuit · ✓ Sans inscription · ✓ Résultat immédiat
+              {t.quiz.free} · {t.quiz.noSignup} · {t.quiz.instant}
             </p>
           </div>
         )}
@@ -373,7 +375,7 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
                   boxShadow:"0 0 20px rgba(0,255,200,.25)", letterSpacing:".04em",
                 }}
               >
-                Démarrer ma roadmap avec Oussama →
+                {t.quiz.startRoadmap}
               </button>
               <button
                 onClick={reset}
@@ -383,7 +385,7 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
                   border:"1px solid rgba(255,255,255,.1)", borderRadius:"8px", cursor:"pointer",
                 }}
               >
-                ↺ Refaire le quiz
+                {t.quiz.restartCta}
               </button>
             </div>
           </div>

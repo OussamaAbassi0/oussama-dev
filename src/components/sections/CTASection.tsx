@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 /* ── Types ───────────────────────────────────────────────── */
 interface FormData {
@@ -309,6 +310,7 @@ export default function CTASection({
   prefillProblem?: string;
 }) {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t } = useLang();
   const [_modalOpen, _setModalOpen] = useState(false);
   const modalOpen    = briefOpen    ?? _modalOpen;
   const setModalOpen = onBriefOpenChange ?? _setModalOpen;
@@ -317,19 +319,19 @@ export default function CTASection({
     <>
       <section id="cta" style={{ padding: "100px 24px", background: "var(--bg2)", textAlign: "center" }}>
         <div style={{ maxWidth: "680px", margin: "0 auto" }} ref={ref} className="fade-in">
-          <p className="section-label" style={{ textAlign: "center" }}>// Prochaine étape</p>
+          <p className="section-label" style={{ textAlign: "center" }}>{t.cta.label}</p>
           <h2 style={{
             fontFamily: "var(--sans)", fontWeight: 800, color: "white", lineHeight: 1.1,
             fontSize: "clamp(28px, 5vw, 52px)", marginBottom: "20px",
           }}>
-            Prêt à automatiser<br />
-            <span className="text-cyan">votre prochain projet ?</span>
+            {t.cta.title1}<br />
+            <span className="text-cyan">{t.cta.title2}</span>
           </h2>
           <p style={{
             fontFamily: "var(--mono)", fontSize: "13px", color: "var(--text-dim)",
             lineHeight: 1.8, marginBottom: "40px", maxWidth: "480px", margin: "0 auto 40px",
           }}>
-            Décrivez votre besoin en 2 minutes. Je vous réponds avec une analyse personnalisée et une estimation concrète sous 24h. Pas de réunion inutile.
+            {t.cta.subtitle}
           </p>
 
           {/* Primary CTA */}
@@ -352,8 +354,8 @@ export default function CTASection({
               (e.currentTarget as HTMLElement).style.boxShadow = "0 0 30px rgba(0,255,200,0.4), 0 0 60px rgba(0,255,200,0.1)";
             }}
           >
-            📨 Démarrer un projet →
-          </button>
+            📨 {t.cta.send}
+            </button>
 
           {/* Trust signals */}
           <div style={{ marginTop: "32px", display: "flex", justifyContent: "center", gap: "28px", flexWrap: "wrap" }}>
@@ -361,7 +363,7 @@ export default function CTASection({
               { icon: "⚡", text: "Réponse sous 24h" },
               { icon: "🔒", text: "NDA disponible sur demande" },
               { icon: "🎯", text: "Devis gratuit & sans engagement" },
-            ].map(s => (
+            ].map((s: {icon:string;text:string}) => (
               <div key={s.text} style={{
                 display: "flex", alignItems: "center", gap: "6px",
                 fontFamily: "var(--mono)", fontSize: "11px", color: "var(--text-dim)",

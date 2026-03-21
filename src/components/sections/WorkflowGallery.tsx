@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 /* ══════════════════════════════════════════════════════════
    DATA
@@ -86,9 +87,11 @@ const WORKFLOWS = [
 function WorkflowCard({
   wf,
   onSelect,
+  wantThis,
 }: {
   wf: typeof WORKFLOWS[0];
   onSelect: (brief: string) => void;
+  wantThis: string;
 }) {
   const [hovered, setHovered] = useState(false);
   const [animated, setAnimated] = useState(false);
@@ -231,7 +234,7 @@ function WorkflowCard({
           marginTop:    "auto",
         }}
       >
-        Je veux ça →
+        {wantThis}
       </button>
 
       {/* Bottom line */}
@@ -249,6 +252,7 @@ function WorkflowCard({
 ══════════════════════════════════════════════════════════ */
 export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill?: string) => void }) {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t } = useLang();
 
   const handleSelect = (brief: string) => {
     /* Stocke le brief en sessionStorage pour que CTASection le lise */
@@ -261,17 +265,17 @@ export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill
       <div ref={ref} className="fade-in" style={{ maxWidth: "1100px", margin: "0 auto" }}>
 
         {/* Header */}
-        <p className="section-label">// Bibliothèque d&apos;automatisations</p>
+        <p className="section-label">{t.gallery.label}</p>
         <h2 className="section-title">
-          Choisissez votre workflow.<br />
-          <span className="text-cyan">On s&apos;occupe du reste.</span>
+          {t.gallery.title1}<br />
+          <span className="text-cyan">{t.gallery.title2}</span>
         </h2>
         <p style={{
           fontFamily:"Arial, Helvetica, sans-serif", fontSize:"15px",
           color:"rgba(255,255,255,.5)", marginBottom:"48px",
           maxWidth:"520px", lineHeight:1.65,
         }}>
-          6 automatisations prêtes à déployer. Cliquez sur celle qui vous correspond — le formulaire se pré-remplit automatiquement.
+          {t.gallery.subtitle}
         </p>
 
         {/* Grid */}
@@ -281,7 +285,7 @@ export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill
           gap:                 "18px",
         }}>
           {WORKFLOWS.map(wf => (
-            <WorkflowCard key={wf.id} wf={wf} onSelect={handleSelect} />
+            <WorkflowCard key={wf.id} wf={wf} onSelect={handleSelect} wantThis={t.gallery.wantThis} />
           ))}
         </div>
 
@@ -292,7 +296,7 @@ export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill
           borderRadius:"12px",
         }}>
           <p style={{ fontFamily:"Arial, sans-serif", fontSize:"14px", color:"rgba(255,255,255,.5)", marginBottom:"12px" }}>
-            Votre besoin n&apos;est pas dans la liste ?
+            {t.gallery.custom}
           </p>
           <button
             onClick={() => onOpenBrief()}
@@ -302,7 +306,7 @@ export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill
               border:"none", borderRadius:"6px", cursor:"pointer", letterSpacing:".04em",
             }}
           >
-            Décrire mon besoin sur mesure →
+            {t.gallery.customCta}
           </button>
         </div>
       </div>

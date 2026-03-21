@@ -2,9 +2,11 @@
 import Link from "next/link";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { ARTICLES } from "@/lib/articles";
+import { useLang } from "@/lib/LangContext";
 
 export default function BlogPreviewSection() {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t, lang } = useLang();
 
   return (
     <section id="blog" style={{ padding:"100px 24px", background:"var(--bg)" }}>
@@ -13,13 +15,13 @@ export default function BlogPreviewSection() {
         {/* Header */}
         <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between", flexWrap:"wrap", gap:"16px", marginBottom:"48px" }}>
           <div>
-            <p className="section-label">// Blog & Ressources</p>
+            <p className="section-label">{t.blog.label}</p>
             <h2 className="section-title">
-              Conseils concrets.<br />
-              <span className="text-cyan">Résultats prouvés.</span>
+              {t.blog.title1}<br />
+              <span className="text-cyan">{t.blog.title2}</span>
             </h2>
             <p style={{ fontFamily:"Arial,sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", maxWidth:"420px", lineHeight:1.65 }}>
-              Des articles basés sur de vrais projets. Pas de théorie — des systèmes qui tournent en production.
+              {t.blog.subtitle}
             </p>
           </div>
           <Link href="/blog" style={{
@@ -38,7 +40,7 @@ export default function BlogPreviewSection() {
             onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.background="rgba(0,255,200,.08)"; el.style.borderColor="rgba(0,255,200,.5)"; }}
             onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.background="transparent"; el.style.borderColor="rgba(0,255,200,.25)"; }}
           >
-            Voir tous les articles →
+            {t.blog.viewAll}
           </Link>
         </div>
 
@@ -98,7 +100,7 @@ export default function BlogPreviewSection() {
                 fontSize:"16px", color:"white",
                 lineHeight:1.35, marginBottom:"12px", flex:1,
               }}>
-                {article.fr.title}
+                {(article[lang as keyof typeof article] as any)?.title ?? article.fr.title}
               </h3>
 
               {/* Excerpt */}
@@ -111,7 +113,7 @@ export default function BlogPreviewSection() {
                 WebkitBoxOrient:"vertical" as const,
                 overflow:"hidden",
               }}>
-                {article.fr.excerpt}
+                {(article[lang as keyof typeof article] as any)?.excerpt ?? article.fr.excerpt}
               </p>
 
               {/* Lire */}
@@ -121,8 +123,7 @@ export default function BlogPreviewSection() {
                 color:article.tagColor, opacity:.8,
                 marginTop:"auto",
               }}>
-                Lire l&apos;article
-                <span style={{ transition:"transform .2s" }}>→</span>
+                {t.blog.readMore}
               </div>
 
               {/* Ligne décorative bas */}
@@ -141,8 +142,8 @@ export default function BlogPreviewSection() {
           fontFamily:"'Courier New',monospace", fontSize:"11px",
           color:"rgba(255,255,255,.25)",
         }}>
-          📖 Articles disponibles en{" "}
-          {["🇫🇷 Français","🇬🇧 English","🇸🇦 العربية","🇪🇸 Español"].map((l, i, arr) => (
+          📖 {t.blog.available}{" "}
+          {["🇫🇷 Français","🇬🇧 English","🇸🇦 العربية","🇪🇸 Español","🇳🇱 Nederlands"].map((l, i, arr) => (
             <span key={l}>
               <span style={{ color:"rgba(255,255,255,.45)" }}>{l}</span>
               {i < arr.length - 1 ? " · " : ""}
