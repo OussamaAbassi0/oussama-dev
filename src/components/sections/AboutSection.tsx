@@ -5,7 +5,7 @@ import { useLang } from "@/lib/LangContext";
 
 export default function AboutSection() {
   const ref = useFadeIn<HTMLDivElement>();
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const TRAITS = [
     { icon: "⚡", label: "Automatisation B2B",  desc: "n8n, Make, Webhooks" },
@@ -85,7 +85,7 @@ export default function AboutSection() {
                 { icon:"⚡", label:"Automatisation B2B",  desc:"n8n, Make, Webhooks" },
                 { icon:"🧠", label:"IA & Multi-Agents",   desc:"OpenAI, LangGraph, RAG" },
                 { icon:"🚀", label:"Full-Stack Dev",       desc:"Next.js, Python, Prisma" },
-                { icon:"📈", label:"Résultats mesurables", desc:"+340h/mois, +12k leads" },
+                { icon:"📈", label: lang==="en" ? "Measurable results" : lang==="ar" ? "نتائج قابلة للقياس" : lang==="es" ? "Resultados medibles" : lang==="nl" ? "Meetbare resultaten" : "Résultats mesurables", desc:"+340h/mois, +12k leads" },
               ].map(trait => (
                 <div key={trait.label} style={{
                   display: "flex", alignItems: "center", gap: "12px",

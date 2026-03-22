@@ -2,7 +2,7 @@
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
-const CASES = [
+const CASES_FR = [
   {
     emoji:   "🏢",
     client:  "Agence Marketing Digitale",
@@ -62,9 +62,102 @@ const CASES = [
   },
 ];
 
+const CASES_TRANS: Record<string, typeof CASES_FR> = {
+  fr: CASES_FR,
+  nl: CASES_FR, // fallback FR
+  en: [
+    {
+      emoji:"🏢", client:"Digital Marketing Agency", sector:"B2B Marketing", color:"#00ffc8",
+      before:{ problem:"The team spent 3h/day manually sorting LinkedIn leads and sending emails one by one.", pain:["18 qualified leads/week","3h/day manual work","30% leads forgotten","Frustrated team"] },
+      solution:"n8n workflow: LinkedIn scraping → Apollo enrichment → AI scoring → HubSpot CRM → automated email sequence.",
+      tools:["n8n","LinkedIn","Apollo","HubSpot","OpenAI"],
+      after:{ results:["340 qualified leads/week","0h manual work","0% leads forgotten","+285% meetings booked"], roi:"ROI reached in 3 weeks" },
+      quote:'"We multiplied our lead volume by 18 without hiring. It\'s magic."',
+      duration:"5 days", invest:"€2,800",
+    },
+    {
+      emoji:"👥", client:"HR Firm — 45 employees", sector:"Human Resources", color:"#a78bfa",
+      before:{ problem:"Each job posting generated 200+ CVs. Sorting took 2 full days with 3 people mobilized.", pain:["200+ CVs per posting","2 days manual sorting","3 people tied up","Good profiles missed"] },
+      solution:"AI agent: email intake → CV extraction → multi-criteria scoring → auto-ranking → Calendly interview scheduling.",
+      tools:["Gmail","OpenAI GPT-4o","Notion","Calendly","n8n"],
+      after:{ results:["200 CVs sorted in 20 minutes","1 autonomous AI agent","94% reliable scoring","Interviews auto-scheduled"], roi:"ROI reached in 12 days" },
+      quote:'"Our managers only see the top 5 candidates. The rest never reaches them anymore."',
+      duration:"7 days", invest:"€3,500",
+    },
+    {
+      emoji:"🛒", client:"Fashion E-commerce — €2M/year", sector:"E-commerce", color:"#f5a623",
+      before:{ problem:"Customer service handled 150 tickets/day manually. 48h response times, dissatisfied customers.", pain:["150 tickets/day manually","48h response delay","NPS score: 6.2/10","2 FTEs tied up"] },
+      solution:"Shopify AI agent: auto-categorization → personalized replies → complex case escalation → daily report.",
+      tools:["Shopify","OpenAI","Intercom","Slack","n8n"],
+      after:{ results:["Response in < 2 min 24/7","85% tickets resolved without human","NPS score: 8.9/10","+23% revenue (cart recovery)"], roi:"ROI reached in 18 days" },
+      quote:'"My customer service runs alone at night and on weekends. We cut costs by 60% while improving satisfaction."',
+      duration:"10 days", invest:"€4,200",
+    },
+  ],
+  ar: [
+    {
+      emoji:"🏢", client:"وكالة التسويق الرقمي", sector:"تسويق B2B", color:"#00ffc8",
+      before:{ problem:"كان الفريق يقضي 3 ساعات يومياً في فرز عملاء LinkedIn يدوياً وإرسال رسائل البريد واحدة تلو الأخرى.", pain:["18 عميل مؤهل/أسبوع","3 ساعات عمل يدوي/يوم","30% من العملاء منسيون","فريق محبط"] },
+      solution:"سير عمل n8n: استخراج LinkedIn ← إثراء Apollo ← تسجيل نقاط IA ← CRM HubSpot ← تسلسل بريد إلكتروني تلقائي.",
+      tools:["n8n","LinkedIn","Apollo","HubSpot","OpenAI"],
+      after:{ results:["340 عميل مؤهل/أسبوع","0 ساعة عمل يدوي","0% عملاء منسيون","+285% من الاجتماعات"], roi:"تم تحقيق العائد في 3 أسابيع" },
+      quote:'"ضاعفنا حجم العملاء 18 مرة دون توظيف. إنه سحر."',
+      duration:"5 أيام", invest:"2,800 €",
+    },
+    {
+      emoji:"👥", client:"شركة الموارد البشرية — 45 موظف", sector:"موارد بشرية", color:"#a78bfa",
+      before:{ problem:"كل إعلان وظيفة يولد أكثر من 200 سيرة ذاتية. الفرز يستغرق يومين كاملين مع 3 أشخاص.", pain:["200+ سيرة ذاتية/إعلان","يومان من الفرز اليدوي","3 أشخاص مشغولون","مرشحون جيدون ضائعون"] },
+      solution:"وكيل ذكاء اصطناعي: استقبال البريد ← استخراج السيرة ← تسجيل نقاط متعدد المعايير ← ترتيب تلقائي ← جدولة مقابلات Calendly.",
+      tools:["Gmail","OpenAI GPT-4o","Notion","Calendly","n8n"],
+      after:{ results:["200 سيرة ذاتية في 20 دقيقة","وكيل ذكاء اصطناعي مستقل","دقة التسجيل 94%","مقابلات مجدولة تلقائياً"], roi:"تم تحقيق العائد في 12 يوماً" },
+      quote:'"مديرونا يرون فقط أفضل 5 مرشحين. الباقي لا يصلهم أبداً."',
+      duration:"7 أيام", invest:"3,500 €",
+    },
+    {
+      emoji:"🛒", client:"تجارة إلكترونية — 2 مليون €/سنة", sector:"تجارة إلكترونية", color:"#f5a623",
+      before:{ problem:"كانت خدمة العملاء تدير 150 تذكرة/يوم يدوياً. أوقات استجابة 48 ساعة، عملاء غير راضين.", pain:["150 تذكرة/يوم يدوياً","تأخر 48 ساعة في الرد","نقاط NPS: 6.2/10","موظفان مشغولان"] },
+      solution:"وكيل Shopify: تصنيف تلقائي ← ردود مخصصة ← تصعيد الحالات المعقدة ← تقرير يومي.",
+      tools:["Shopify","OpenAI","Intercom","Slack","n8n"],
+      after:{ results:["رد خلال < 2 دقيقة 24/7","85% تذاكر محلولة بدون بشر","نقاط NPS: 8.9/10","+23% مبيعات (استرداد السلة)"], roi:"تم تحقيق العائد في 18 يوماً" },
+      quote:'"خدمة العملاء تعمل وحدها ليلاً وعطل نهاية الأسبوع. خفضنا التكاليف 60% مع تحسين الرضا."',
+      duration:"10 أيام", invest:"4,200 €",
+    },
+  ],
+  es: [
+    {
+      emoji:"🏢", client:"Agencia de Marketing Digital", sector:"Marketing B2B", color:"#00ffc8",
+      before:{ problem:"El equipo pasaba 3h/día clasificando leads de LinkedIn manualmente y enviando emails uno a uno.", pain:["18 leads calificados/semana","3h/día de trabajo manual","30% de leads olvidados","Equipo frustrado"] },
+      solution:"Workflow n8n: scraping LinkedIn → enriquecimiento Apollo → puntuación IA → CRM HubSpot → secuencia email automática.",
+      tools:["n8n","LinkedIn","Apollo","HubSpot","OpenAI"],
+      after:{ results:["340 leads calificados/semana","0h trabajo manual","0% leads olvidados","+285% reuniones"], roi:"ROI alcanzado en 3 semanas" },
+      quote:'"Multiplicamos por 18 nuestro volumen de leads sin contratar. Es magia."',
+      duration:"5 días", invest:"2.800 €",
+    },
+    {
+      emoji:"👥", client:"Empresa RRHH — 45 empleados", sector:"Recursos Humanos", color:"#a78bfa",
+      before:{ problem:"Cada oferta generaba 200+ CVs. La clasificación tardaba 2 días con 3 personas.", pain:["200+ CVs por oferta","2 días de clasificación manual","3 personas ocupadas","Buenos perfiles perdidos"] },
+      solution:"Agente IA: recepción email → extracción CV → puntuación multicritério → clasificación automática → programación entrevistas Calendly.",
+      tools:["Gmail","OpenAI GPT-4o","Notion","Calendly","n8n"],
+      after:{ results:["200 CVs clasificados en 20 min","1 agente IA autónomo","Puntuación 94% fiable","Entrevistas programadas automáticamente"], roi:"ROI alcanzado en 12 días" },
+      quote:'"Nuestros managers solo ven los 5 mejores candidatos. El resto ya no les llega."',
+      duration:"7 días", invest:"3.500 €",
+    },
+    {
+      emoji:"🛒", client:"E-commerce Moda — 2M€/año", sector:"E-commerce", color:"#f5a623",
+      before:{ problem:"El SAV gestionaba 150 tickets/día manualmente. Tiempos de respuesta de 48h, clientes insatisfechos.", pain:["150 tickets/día manuales","48h de tiempo de respuesta","NPS: 6.2/10","2 FTEs ocupados"] },
+      solution:"Agente IA Shopify: categorización automática → respuestas personalizadas → escalada casos complejos → informe diario.",
+      tools:["Shopify","OpenAI","Intercom","Slack","n8n"],
+      after:{ results:["Respuesta en < 2 min 24/7","85% tickets resueltos sin humano","NPS: 8.9/10","+23% ventas (recuperación carrito)"], roi:"ROI alcanzado en 18 días" },
+      quote:'"Mi SAV funciona solo de noche y los fines de semana. Redujimos costes un 60% mejorando la satisfacción."',
+      duration:"10 días", invest:"4.200 €",
+    },
+  ],
+};
+
 export default function CaseStudiesSection() {
   const ref = useFadeIn<HTMLDivElement>();
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const CASES = CASES_TRANS[lang] ?? CASES_FR;
 
   return (
     <section id="case-studies" style={{ padding:"100px 24px", background:"var(--bg2)" }}>

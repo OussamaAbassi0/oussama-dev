@@ -250,9 +250,38 @@ function WorkflowCard({
 /* ══════════════════════════════════════════════════════════
    MAIN SECTION
 ══════════════════════════════════════════════════════════ */
+const WORKFLOW_TRANS: Record<string, { desc: string; brief: string }[]> = {
+  fr: WORKFLOWS.map(w => ({ desc: w.desc, brief: w.brief })),
+  nl: WORKFLOWS.map(w => ({ desc: w.desc, brief: w.brief })),
+  en: [
+    { desc:"Each Stripe payment automatically creates a Jira ticket and notifies the team on Slack in real time.", brief:"I want to automate: when I receive a Stripe payment, create a Jira ticket and notify my team on Slack automatically." },
+    { desc:"Targeted LinkedIn scraping, profile enrichment and automatic injection into your CRM with sequenced follow-up.", brief:"I want to automate: scraping prospects on LinkedIn, enriching their data and injecting them into my CRM with an automated follow-up sequence." },
+    { desc:"Automatic consolidation of your KPIs from Google Analytics, Stripe and your CRM into a PDF report sent every Monday.", brief:"I want to automate: generating a weekly report consolidating my KPIs (analytics, revenue, leads) sent automatically every Monday." },
+    { desc:"CVs received by email are analyzed by AI, scored according to your criteria and the best ones are automatically scheduled.", brief:"I want to automate: sorting CVs received by email, AI scoring according to my HR criteria and automatic interview scheduling for the best candidates." },
+    { desc:"AI agent that answers customer questions, handles returns and escalates only complex cases to your team.", brief:"I want to automate: customer support for my e-commerce store with an AI agent that responds 24/7 and only escalates complex cases to my team." },
+    { desc:"Each incoming lead is AI-scored, segmented and receives a personalized email sequence based on their profile and actions.", brief:"I want to automate: AI scoring of my incoming leads, their automatic segmentation and sending personalized email sequences based on their profile." },
+  ],
+  ar: [
+    { desc:"كل دفعة Stripe تنشئ تلقائياً تذكرة Jira وتُخطر الفريق على Slack في الوقت الفعلي.", brief:"أريد أتمتة: عند تلقي دفعة Stripe، إنشاء تذكرة Jira وإخطار فريقي على Slack تلقائياً." },
+    { desc:"استخراج LinkedIn مستهدف، إثراء الملفات وحقنها تلقائياً في CRM مع متابعة متسلسلة.", brief:"أريد أتمتة: استخراج مرشحين على LinkedIn وإثراء بياناتهم وحقنهم في CRM مع تسلسل متابعة تلقائي." },
+    { desc:"توحيد تلقائي لمؤشرات KPI من Analytics وStripe وCRM في تقرير PDF يُرسل كل اثنين.", brief:"أريد أتمتة: توليد تقرير أسبوعي يجمع مؤشراتي يُرسل تلقائياً كل اثنين." },
+    { desc:"السير الذاتية الواردة بالبريد تُحلّل بالذكاء الاصطناعي وتُسجّل نقاط وتُجدول أفضلها تلقائياً.", brief:"أريد أتمتة: فرز السير الواردة وتسجيل نقاط بالذكاء الاصطناعي وجدولة المقابلات تلقائياً." },
+    { desc:"وكيل ذكاء اصطناعي يرد على استفسارات العملاء ويدير المرتجعات ويصعّد فقط الحالات المعقدة.", brief:"أريد أتمتة: دعم عملاء متجرتي الإلكترونية بوكيل ذكاء اصطناعي يعمل 24/7." },
+    { desc:"كل عميل وارد يُسجّل نقاطاً بالذكاء الاصطناعي ويُقسّم ويتلقى تسلسلاً بريدياً مخصصاً.", brief:"أريد أتمتة: تسجيل نقاط عملائي الواردين وتقسيمهم وإرسال تسلسلات بريدية مخصصة." },
+  ],
+  es: [
+    { desc:"Cada pago de Stripe crea automáticamente un ticket en Jira y notifica al equipo en Slack en tiempo real.", brief:"Quiero automatizar: cuando recibo un pago de Stripe, crear un ticket en Jira y notificar a mi equipo en Slack automáticamente." },
+    { desc:"Scraping de LinkedIn dirigido, enriquecimiento de perfiles e inyección automática en tu CRM con seguimiento secuenciado.", brief:"Quiero automatizar: extraer prospectos de LinkedIn, enriquecer sus datos e inyectarlos en mi CRM con una secuencia de seguimiento automático." },
+    { desc:"Consolidación automática de tus KPIs de Google Analytics, Stripe y tu CRM en un informe PDF enviado cada lunes.", brief:"Quiero automatizar: generar un informe semanal consolidando mis KPIs enviado automáticamente cada lunes." },
+    { desc:"Los CVs recibidos por email son analizados por IA, puntuados según tus criterios y los mejores se programan automáticamente.", brief:"Quiero automatizar: clasificar CVs recibidos por email, puntuación IA y programación automática de entrevistas." },
+    { desc:"Agente IA que responde preguntas de clientes, gestiona devoluciones y escala solo los casos complejos a tu equipo.", brief:"Quiero automatizar: el soporte al cliente de mi tienda e-commerce con un agente IA que responde 24/7." },
+    { desc:"Cada lead entrante es puntuado por IA, segmentado y recibe una secuencia de email personalizada según su perfil.", brief:"Quiero automatizar: puntuación IA de mis leads entrantes y envío de secuencias email personalizadas." },
+  ],
+};
+
 export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill?: string) => void }) {
   const ref = useFadeIn<HTMLDivElement>();
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const handleSelect = (brief: string) => {
     /* Stocke le brief en sessionStorage pour que CTASection le lise */
@@ -284,9 +313,12 @@ export default function WorkflowGallery({ onOpenBrief }: { onOpenBrief: (prefill
           gridTemplateColumns: "repeat(3, 1fr)",
           gap:                 "18px",
         }}>
-          {WORKFLOWS.map(wf => (
-            <WorkflowCard key={wf.id} wf={wf} onSelect={handleSelect} wantThis={t.gallery.wantThis} />
-          ))}
+          {WORKFLOWS.map((wf, i) => {
+            const trans = (WORKFLOW_TRANS[lang] ?? WORKFLOW_TRANS.fr)[i];
+            return (
+            <WorkflowCard key={wf.id} wf={{ ...wf, desc: trans.desc, brief: trans.brief }} onSelect={handleSelect} wantThis={t.gallery.wantThis} />
+            );
+          })}
         </div>
 
         {/* CTA personnalisé */}

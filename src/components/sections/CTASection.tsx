@@ -312,7 +312,7 @@ export default function CTASection({
   prefillProblem?: string;
 }) {
   const ref = useFadeIn<HTMLDivElement>();
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [_modalOpen, _setModalOpen] = useState(false);
   const modalOpen    = briefOpen    ?? _modalOpen;
   const setModalOpen = onBriefOpenChange ?? _setModalOpen;
@@ -362,9 +362,9 @@ export default function CTASection({
           {/* Trust signals */}
           <div style={{ marginTop: "32px", display: "flex", justifyContent: "center", gap: "28px", flexWrap: "wrap" }}>
             {[
-              { icon: "⚡", text: "Réponse sous 24h" },
-              { icon: "🔒", text: "NDA disponible sur demande" },
-              { icon: "🎯", text: "Devis gratuit & sans engagement" },
+              { icon: "⚡", text: lang==="en" ? "Reply within 24h" : lang==="ar" ? "رد خلال 24 ساعة" : lang==="es" ? "Respuesta en 24h" : lang==="nl" ? "Reactie binnen 24u" : "Réponse sous 24h" },
+              { icon: "🔒", text: lang==="en" ? "NDA available on request" : lang==="ar" ? "اتفاقية سرية متاحة" : lang==="es" ? "NDA disponible bajo petición" : lang==="nl" ? "NDA beschikbaar op aanvraag" : "NDA disponible sur demande" },
+              { icon: "🎯", text: lang==="en" ? "Free & no-commitment quote" : lang==="ar" ? "عرض سعر مجاني بدون التزام" : lang==="es" ? "Presupuesto gratuito sin compromiso" : lang==="nl" ? "Gratis offerte zonder verplichting" : "Devis gratuit & sans engagement" },
             ].map((s: {icon:string;text:string}) => (
               <div key={s.text} style={{
                 display: "flex", alignItems: "center", gap: "6px",
