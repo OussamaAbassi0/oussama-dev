@@ -55,13 +55,15 @@ export default function ExitIntentPopup() {
   const show = () => {
     if (shown.current) return;
     shown.current = true;
-    sessionStorage.setItem("exit_shown", "1");
+    /* Stocke avec expiration 24h */
+    localStorage.setItem("exit_shown", String(Date.now() + 24 * 60 * 60 * 1000));
     setVisible(true);
   };
 
   useEffect(() => {
-    /* Déjà vu cette session */
-    if (sessionStorage.getItem("exit_shown")) return;
+    /* Vérifie si déjà vu ET pas expiré */
+    const expiry = Number(localStorage.getItem("exit_shown") ?? 0);
+    if (expiry && Date.now() < expiry) return;
 
     /* ── Desktop : souris qui sort par le haut de la fenêtre ── */
     const onMouseMove = (e: MouseEvent) => {
@@ -169,8 +171,7 @@ export default function ExitIntentPopup() {
           color: "#ff4d6d", fontWeight: 700, letterSpacing: ".06em",
           marginBottom: "20px",
           animation: "badgeShake 1s ease .3s both",
-          display: "inline-flex",
-        } as React.CSSProperties}>
+        }}>
           ⚠️ {tx.badge}
         </div>
 
