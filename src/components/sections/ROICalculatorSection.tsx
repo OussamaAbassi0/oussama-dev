@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 /* ══════════════════════════════════════════════════════════
    ANIMATED COUNTER HOOK
@@ -169,6 +170,7 @@ const INVEST = 3000; // coût estimé one-off de la solution n8n
 
 export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () => void }) {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t, lang } = useLang();
 
   const [team,     setTeam    ] = useState(3);
   const [hours,    setHours   ] = useState(10);
@@ -205,13 +207,13 @@ export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () 
       <div style={{ maxWidth: "1100px", margin: "0 auto" }} ref={ref} className="fade-in">
 
         {/* ── Header ──────────────────────────────────────── */}
-        <p className="section-label">// Playground #03 — Smart ROI Calculator</p>
+        <p className="section-label">{t.lab.roiLabel}</p>
         <h2 className="section-title">
-          Combien vous coûte<br />
-          <span style={{ color: "var(--red)" }}>l&apos;absence d&apos;automatisation ?</span>
+          {t.lab.roiTitle}<br />
+          <span style={{ color: "var(--red)" }}>{lang==="ar" ? "غياب الأتمتة ؟" : lang==="en" ? "the absence of automation?" : lang==="es" ? "¿la ausencia de automatización?" : lang==="nl" ? "het ontbreken van automatisering?" : "l’absence d’automatisation ?"}</span>
         </h2>
         <p style={{ fontFamily: "var(--mono)", fontSize: "13px", color: "var(--text-dim)", marginBottom: "48px", maxWidth: "520px", lineHeight: 1.7 }}>
-          Ajustez les paramètres. Le coût réel de l&apos;inaction apparaît en temps réel.
+          {t.lab.roiSub}
         </p>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "40px", alignItems: "start" }}>
@@ -223,19 +225,19 @@ export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () 
             </p>
 
             <RoiSlider
-              label="Taille de l'équipe concernée"
+              label={lang==="ar" ? "حجم الفريق" : lang==="en" ? "Team size" : lang==="es" ? "Tamaño del equipo" : lang==="nl" ? "Teamgrootte" : "Taille de l'équipe concernée"}
               value={team} min={1} max={50}
-              format={v => `${v} pers.`}
+              format={v => `${v} ${lang==="ar" ? "شخص" : lang==="en" ? "pers." : lang==="es" ? "pers." : lang==="nl" ? "pers." : "pers."}`}
               onChange={setTeam}
             />
             <RoiSlider
-              label="Heures perdues / personne / semaine"
+              label={lang==="ar" ? "ساعات ضائعة / شخص / أسبوع" : lang==="en" ? "Hours lost / person / week" : lang==="es" ? "Horas perdidas / persona / semana" : lang==="nl" ? "Verloren uren / persoon / week" : "Heures perdues / personne / semaine"}
               value={hours} min={1} max={20}
               format={v => `${v}h`}
               onChange={setHours}
             />
             <RoiSlider
-              label="Taux horaire moyen chargé"
+              label={lang==="ar" ? "متوسط الأجر بالساعة" : lang==="en" ? "Average hourly rate" : lang==="es" ? "Tarifa horaria media" : lang==="nl" ? "Gemiddeld uurtarief" : "Taux horaire moyen chargé"}
               value={rate} min={20} max={150}
               format={v => `${v} €/h`}
               onChange={setRate}
@@ -262,11 +264,11 @@ export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () 
 
             {/* Heures perdues */}
             <MetricCard
-              label="Heures productives perdues / an"
+              label={lang==="ar" ? "ساعات إنتاجية ضائعة / سنة" : lang==="en" ? "Productive hours lost / year" : lang==="es" ? "Horas productivas perdidas / año" : lang==="nl" ? "Verloren productieve uren / jaar" : "Heures productives perdues / an"}
               value={fmtNum(animHours)}
               unit="h"
               color="#f5a623"
-              sub={`${fmtNum(Math.round(animHours / 47))} h perdues cette semaine`}
+              sub={`${fmtNum(Math.round(animHours / 47))} h ${lang==="ar" ? "مفقودة هذا الأسبوع" : lang==="en" ? "lost this week" : lang==="es" ? "perdidas esta semana" : lang==="nl" ? "verloren deze week" : "perdues cette semaine"}`}
             />
 
             {/* Coût de l'inaction — card principale */}
@@ -278,13 +280,13 @@ export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () 
               animation: "roiBlink 3s ease-in-out infinite",
             }}>
               <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "#ff4d6d", letterSpacing: ".2em", textTransform: "uppercase", marginBottom: "10px" }}>
-                // Coût financier de l&apos;inaction / an
+                {lang==="ar" ? "// التكلفة السنوية لعدم الأتمتة" : lang==="en" ? "// Annual cost of inaction" : lang==="es" ? "// Coste financiero anual de la inacción" : lang==="nl" ? "// Jäarlijkse kosten van inactie" : "// Coût financier de l'inaction / an"}
               </p>
               <p style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "36px", color: "white", lineHeight: 1, marginBottom: "6px" }}>
                 {fmtEur(animCost)}
               </p>
               <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "rgba(255,77,109,.7)" }}>
-                ≈ {fmtEur(Math.round(costMonth))} / mois d&apos;hémorragie silencieuse
+                ≈ {fmtEur(Math.round(costMonth))} {lang==="ar" ? "/ شهر نزيف صامت" : lang==="en" ? "/ month of silent bleeding" : lang==="es" ? "/ mes de hemorragia silenciosa" : lang==="nl" ? "/ maand stil verlies" : "/ mois d'hémorragie silencieuse"}
               </p>
             </div>
 
@@ -363,7 +365,7 @@ export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () 
                   (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                 }}
               >
-                Arrêter l&apos;hémorragie financière →
+                {lang==="ar" ? "← أوقف النزيف المالي" : lang==="en" ? "Stop the financial bleeding →" : lang==="es" ? "Detener la hemorragia financiera →" : lang==="nl" ? "Stop het financiële bloeden →" : "Arrêter l'hémorragie financière →"}
               </button>
             </div>
           </div>

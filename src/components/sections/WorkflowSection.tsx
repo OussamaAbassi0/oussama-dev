@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 
 /* ══════════════════════════════════════════════════════════
    TYPES
@@ -308,6 +309,7 @@ function TerminalOutput({ lines, emailLines }: { lines: string[]; emailLines: { 
 export default function WorkflowSection() {
   const sectionRef  = useFadeIn<HTMLDivElement>();
   const canvasRef   = useRef<HTMLDivElement>(null);
+  const { t, lang } = useLang();
 
   const [selected,      setSelected     ] = useState<string | null>(null);
   const [connections,   setConnections  ] = useState<Connection[]>([]);
@@ -427,13 +429,12 @@ export default function WorkflowSection() {
       <div style={{ maxWidth: "1100px", margin: "0 auto" }} ref={sectionRef} className="fade-in">
 
         {/* Header */}
-        <p className="section-label">// Playground #02 — Interactive Builder</p>
+        <p className="section-label">{t.lab.workflowLabel}</p>
         <h2 className="section-title">
-          The n8n Magic<br /><span className="text-cyan">Workflow</span>
+          {t.lab.workflowTitle}<br /><span className="text-cyan">Workflow</span>
         </h2>
         <p style={{ fontFamily: "var(--mono)", fontSize: "13px", color: "var(--text-dim)", marginBottom: "16px", maxWidth: "520px", lineHeight: 1.7 }}>
-          Construisez l&apos;automatisation vous-même. Connectez les nœuds dans l&apos;ordre,{" "}
-          <span style={{ color: "var(--cyan)" }}>regardez l&apos;IA travailler</span> en temps réel.
+          {t.lab.workflowSub}
         </p>
 
         {/* Hint bar — FIXE, pas de scroll */}
@@ -532,7 +533,7 @@ export default function WorkflowSection() {
                   animation:  allConnected && phase === "build" ? "glowPulse 2s ease-in-out infinite" : "none",
                 }}
               >
-                {phase === "running" ? "⏳ Exécution..." : phase === "done" ? "✅ Workflow complété" : "▶ Lancer le workflow"}
+                {phase === "running" ? (lang==="ar" ? "⏳ جاري التنفيذ..." : lang==="en" ? "⏳ Running..." : lang==="es" ? "⏳ Ejecutando..." : lang==="nl" ? "⏳ Uitvoeren..." : "⏳ Exécution...") : phase === "done" ? (lang==="ar" ? "✅ سير العمل مكتمل" : lang==="en" ? "✅ Workflow completed" : lang==="es" ? "✅ Workflow completado" : lang==="nl" ? "✅ Workflow voltooid" : "✅ Workflow complété") : (lang==="ar" ? "▶ تشغيل سير العمل" : lang==="en" ? "▶ Launch workflow" : lang==="es" ? "▶ Lanzar workflow" : lang==="nl" ? "▶ Workflow starten" : "▶ Lancer le workflow")}
               </button>
 
               {(connections.length > 0 || phase !== "build") && (

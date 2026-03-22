@@ -361,7 +361,7 @@ export default function LeadHunterSection() {
               transition: "opacity 0.2s",
             }}
           >
-            {phase === "scanning" ? "⏳ Scanning..." : "⚡ Hunter Mode"}
+            {phase === "scanning" ? (lang==="ar" ? "⏳ جاري البحث..." : lang==="en" ? "⏳ Scanning..." : lang==="es" ? "⏳ Buscando..." : lang==="nl" ? "⏳ Zoeken..." : "⏳ Scanning...") : (lang==="ar" ? "⚡ وضع الصياد" : lang==="en" ? "⚡ Hunter Mode" : lang==="es" ? "⚡ Modo Cazador" : lang==="nl" ? "⚡ Jager Modus" : "⚡ Hunter Mode")}
           </button>
         </div>
 
@@ -370,8 +370,8 @@ export default function LeadHunterSection() {
           fontFamily: "var(--mono)", fontSize: "12px",
           color: "rgba(0,255,200,0.75)", marginBottom: "10px", letterSpacing: "0.03em",
         }}>
-          ⚡ Voir la magie en direct{" "}
-          <span style={{ color: "rgba(0,255,200,0.45)" }}>(Démos gratuites) :</span>
+          {lang==="ar" ? "⚡ شاهد السحر مباشرة" : lang==="en" ? "⚡ See the magic live" : lang==="es" ? "⚡ Ver la magia en directo" : lang==="nl" ? "⚡ Zie de magie live" : "⚡ Voir la magie en direct"}{" "}
+          <span style={{ color: "rgba(0,255,200,0.45)" }}>{lang==="ar" ? "(عروض مجانية) :" : lang==="en" ? "(Free demos):" : lang==="es" ? "(Demos gratuitas):" : lang==="nl" ? "(Gratis demo's):" : "(Démos gratuites) :"}</span>
         </p>
         <style>{`
           @keyframes demoButtonPulse {
