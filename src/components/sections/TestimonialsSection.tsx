@@ -14,6 +14,8 @@ const TESTIMONIALS = [
     rating: 5,
     text: "Oussama est un freelance réactif, professionnel et très agréable dans la collaboration. Il a su réaliser les workflows demandés avec sérieux et efficacité, tout en prenant le temps d'expliquer clairement les étapes. Je recommande vivement son travail.",
     tags: ["n8n", "Automatisation", "Workflows"],
+    source: "malt",
+    sourceUrl: "https://www.malt.fr/profile/oussamaabassi1",
   },
   {
     name: "Mounaa",
@@ -24,8 +26,25 @@ const TESTIMONIALS = [
     sector: "Transports",
     date: "27/02/2026",
     rating: 5,
-    text: "Je ne peux que le recommander à 100 %. C'est une personne exceptionnelle, à l'écoute et extrêmement professionnelle. Il comprend rapidement les enjeux business et techniques. Il ne se contente pas d'exécuter : il réfléchit et apporte une réelle valeur ajoutée.",
+    text: "Je ne peux que le recommander à 100 %. C'est une personne exceptionnelle, à l'écoute et extrêmement professionnelle. Il comprend rapidement les enjeux business et techniques. Il ne se contente pas d'exécuter : il réfléchit et apporte une réelle valeur ajoutée.",
     tags: ["Python", "Algorithmique", "Conseil"],
+    source: "malt",
+    sourceUrl: "https://www.malt.fr/profile/oussamaabassi1",
+  },
+  {
+    name: "Matys",
+    handle: "PLATINUMAAA",
+    avatar: "M",
+    avatarBg: "#1a2a3a",
+    project: "Automatisation n8n — MVP Ordonnances PDF",
+    sector: "Secteur Médical",
+    date: "20/03/2026",
+    rating: 5,
+    text: "Oussama a été très efficace, sérieux et professionnel tout au long de la mission. Il a su comprendre rapidement le besoin, proposer une solution adaptée et avancer avec réactivité. La communication a été fluide, le travail bien exécuté, et l’ensemble de la collaboration s’est très bien passé. Je recommande vivement Oussama pour son implication, sa fiabilité et sa capacité à livrer un travail de qualité.",
+    tags: ["Fiable", "Collaboratif", "Solution Orientée", "Communication claire"],
+    source: "upwork",
+    sourceUrl: "https://www.upwork.com/freelancers/~01e9d7e582881baac8",
+    earned: "$228",
   },
 ];
 
@@ -57,30 +76,36 @@ export default function TestimonialsSection() {
               <span className="text-cyan">{t.testi.title2}</span>
             </h2>
           </div>
-          <a
-            href="https://www.malt.fr/profile/oussamaabassi1"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "8px",
-              padding: "8px 16px", borderRadius: "8px",
-              border: "1px solid rgba(0,255,200,0.15)",
-              background: "rgba(0,255,200,0.04)",
-              fontFamily: "var(--mono)", fontSize: "11px", color: "var(--text-dim)",
-              textDecoration: "none", transition: "all 0.2s",
-            }}
-            onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,0.4)";
-              (e.currentTarget as HTMLElement).style.color = "var(--cyan)";
-            }}
-            onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,0.15)";
-              (e.currentTarget as HTMLElement).style.color = "var(--text-dim)";
-            }}
-          >
-            <span style={{ fontSize: "14px" }}>⭐</span>
-            Voir sur Malt →
-          </a>
+          <div style={{ display:"flex", gap:"8px" }}>
+            <a href="https://www.malt.fr/profile/oussamaabassi1" target="_blank" rel="noopener noreferrer"
+              style={{
+                display:"inline-flex", alignItems:"center", gap:"6px",
+                padding:"7px 14px", borderRadius:"8px",
+                border:"1px solid rgba(255,100,50,.2)",
+                background:"rgba(255,100,50,.06)",
+                fontFamily:"var(--mono)", fontSize:"11px", color:"#ff6432",
+                textDecoration:"none", transition:"all .2s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(255,100,50,.5)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(255,100,50,.2)"; }}
+            >
+              ⭐ Malt →
+            </a>
+            <a href="https://www.upwork.com/freelancers/~01e9d7e582881baac8" target="_blank" rel="noopener noreferrer"
+              style={{
+                display:"inline-flex", alignItems:"center", gap:"6px",
+                padding:"7px 14px", borderRadius:"8px",
+                border:"1px solid rgba(20,179,78,.2)",
+                background:"rgba(20,179,78,.06)",
+                fontFamily:"var(--mono)", fontSize:"11px", color:"#14b34e",
+                textDecoration:"none", transition:"all .2s",
+              }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(20,179,78,.5)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(20,179,78,.2)"; }}
+            >
+              ★ Upwork →
+            </a>
+          </div>
         </div>
 
         {/* Cards */}
@@ -104,6 +129,36 @@ export default function TestimonialsSection() {
                 userSelect: "none",
               }}>
                 "
+              </div>
+
+              {/* Badge source Malt / Upwork */}
+              <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"16px" }}>
+                <a
+                  href={(t as any).sourceUrl}
+                  target="_blank" rel="noopener noreferrer"
+                  style={{
+                    display:"inline-flex", alignItems:"center", gap:"5px",
+                    padding:"3px 10px", borderRadius:"20px",
+                    background: (t as any).source === "upwork" ? "rgba(20,179,78,.12)" : "rgba(255,100,50,.1)",
+                    border: (t as any).source === "upwork" ? "1px solid rgba(20,179,78,.3)" : "1px solid rgba(255,100,50,.25)",
+                    fontFamily:"var(--mono)", fontSize:"10px", fontWeight:700,
+                    color: (t as any).source === "upwork" ? "#14b34e" : "#ff6432",
+                    textDecoration:"none", letterSpacing:".05em",
+                    transition:"opacity .2s",
+                  }}
+                  onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity=".75")}
+                  onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity="1")}
+                >
+                  {(t as any).source === "upwork" ? "★ Upwork" : "⭐ Malt"}
+                </a>
+                {(t as any).earned && (
+                  <span style={{
+                    fontFamily:"var(--mono)", fontSize:"11px",
+                    color:"rgba(0,255,200,.5)", letterSpacing:".04em",
+                  }}>
+                    {(t as any).earned} earned
+                  </span>
+                )}
               </div>
 
               {/* Top row: avatar + name + stars */}
