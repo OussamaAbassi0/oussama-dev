@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Article, Lang } from "@/lib/articles";
 import Navbar from "@/components/layout/Navbar";
+import NewsletterBanner from "@/components/ui/NewsletterBanner";
 
 const validLangs: Lang[] = ["fr","en","ar","es"];
 
@@ -150,6 +151,9 @@ export default function ArticleClient({
 
         {/* Contenu Markdown */}
         <div dangerouslySetInnerHTML={{ __html: renderMarkdown(t.content) }} />
+
+        {/* Newsletter */}
+        <NewsletterBanner lang={lang} />
 
         {/* CTA bas d'article */}
         <div style={{

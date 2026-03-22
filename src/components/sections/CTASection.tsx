@@ -135,6 +135,8 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Erreur inconnue");
       setPhase("success");
+      /* Redirection vers la page de confirmation */
+      setTimeout(() => { window.location.href = "/merci"; }, 1200);
     } catch (e: unknown) {
       setSubmitError(e instanceof Error ? e.message : "Erreur d'envoi");
       setPhase("form");

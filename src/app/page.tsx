@@ -30,6 +30,7 @@ import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
 import WelcomeBanner    from "@/components/ui/WelcomeBanner";
 import LiveActivityFeed from "@/components/ui/LiveActivityFeed";
 import ProactiveChat    from "@/components/ui/ProactiveChat";
+import ExitIntentPopup from "@/components/ui/ExitIntentPopup";
 
 /* ══════════════════════════════════════════════════════════
    PAGE
@@ -87,6 +88,7 @@ export default function HomePage() {
       {!loading && <WelcomeBanner />}
       <LiveActivityFeed />
       <ProactiveChat />
+      <ExitIntentPopup />
 
       {/* ─────────────────────────────────────────
           CONTENU — 8 blocs logiques
