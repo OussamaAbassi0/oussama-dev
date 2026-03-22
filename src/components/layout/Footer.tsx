@@ -63,6 +63,8 @@ export default function Footer() {
         <a href="#cta" style={{ color:"var(--cyan)", textDecoration:"none", opacity:.6 }}>{t.footer.start}</a>
         <span style={{ opacity:.3 }}>·</span>
         <a href="https://www.malt.fr/profile/oussamaabassi1" target="_blank" rel="noopener noreferrer" style={{ color:"var(--text-dim)", textDecoration:"none", opacity:.6 }}>Malt</a>
+        <span style={{ opacity:.3 }}>·</span>
+        <a href="https://www.upwork.com/freelancers/~01e9d7e582881baac8" target="_blank" rel="noopener noreferrer" style={{ color:"var(--text-dim)", textDecoration:"none", opacity:.6 }}>Upwork</a>
       </div>
     </footer>
   );
