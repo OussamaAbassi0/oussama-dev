@@ -7,6 +7,8 @@ import { useLang } from "@/lib/LangContext";
 export default function BlogPreviewSection() {
   const ref = useFadeIn<HTMLDivElement>();
   const { t, lang } = useLang();
+  const validLangs = ["fr","en","ar","es"];
+  const activeLang = validLangs.includes(lang) ? lang : "fr";
 
   return (
     <section id="blog" style={{ padding:"100px 24px", background:"var(--bg)" }}>
@@ -87,7 +89,7 @@ export default function BlogPreviewSection() {
                   border:`1px solid ${article.tagColor}25`,
                   borderRadius:"20px", padding:"3px 10px", letterSpacing:".06em",
                 }}>
-                  {article.tag}
+                  {article.tagI18n?.[activeLang] ?? article.tag}
                 </span>
                 <span style={{ fontFamily:"'Courier New',monospace", fontSize:"10px", color:"rgba(255,255,255,.25)" }}>
                   {article.readTime}

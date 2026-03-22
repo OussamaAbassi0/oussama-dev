@@ -136,7 +136,7 @@ export default function ArticleClient({
             border:`1px solid ${article.tagColor}25`,
             borderRadius:"20px", padding:"3px 10px", letterSpacing:".06em",
           }}>
-            {article.tag}
+            {article.tagI18n?.[lang] ?? article.tag}
           </span>
           <span style={{ fontFamily:"'Courier New',monospace", fontSize:"10px", color:"rgba(255,255,255,.3)" }}>
             {new Date(article.date).toLocaleDateString(

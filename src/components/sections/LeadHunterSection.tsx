@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { useLang } from "@/lib/LangContext";
 import { MOCK_LEADS, QUICK_TARGETS } from "@/lib/mock-leads";
 import type { Lead } from "@/lib/types";
 
@@ -277,6 +278,7 @@ function TerminalBlock({ logs, label }: { logs: string[]; label: string }) {
 /* ── Main Section ─────────────────────────────────────────── */
 export default function LeadHunterSection() {
   const ref = useFadeIn<HTMLDivElement>();
+  const { t, lang } = useLang();
 
   const [query,         setQuery        ] = useState("");
   const [phase,         setPhase        ] = useState<"idle" | "scanning" | "done">("idle");
@@ -323,13 +325,12 @@ export default function LeadHunterSection() {
     <section id="lead-hunter" style={{ padding: "100px 24px", background: "var(--bg2)" }}>
       <div style={{ maxWidth: "1100px", margin: "0 auto" }} ref={ref} className="fade-in">
 
-        <p className="section-label">// Playground #01 — Smart Lead Engine</p>
+        <p className="section-label">{t.lab.leadLabel}</p>
         <h2 className="section-title">
-          The Live B2B<br /><span className="text-cyan">Lead Hunter</span>
+          {t.lab.leadTitle}<br /><span className="text-cyan">Lead Hunter</span>
         </h2>
         <p style={{ fontFamily: "var(--mono)", fontSize: "13px", color: "var(--text-dim)", marginBottom: "36px", maxWidth: "520px", lineHeight: 1.7 }}>
-          Tapez votre cible ou choisissez un secteur ci-dessous. Le moteur scrape, enrichit et livre{" "}
-          <span style={{ color: "var(--cyan)" }}>3 vrais leads</span> avec signal d&apos;intent en temps réel.
+          {t.lab.leadSub}
         </p>
 
         {/* Search bar */}
@@ -341,7 +342,7 @@ export default function LeadHunterSection() {
               padding: "12px 16px", fontFamily: "var(--mono)", fontSize: "13px",
               borderRadius: "6px", outline: "none", transition: "border-color 0.2s",
             }}
-            placeholder='Tapez votre cible... ou testez un exemple ci-dessous 👇'
+            placeholder={lang==="ar" ? 'اكتب هدفك... أو جرّب مثالاً ⬇️' : lang==="en" ? 'Type your target... or test an example below 👇' : lang==="es" ? 'Escribe tu objetivo... o prueba un ejemplo 👇' : lang==="nl" ? 'Typ uw doel... of probeer een voorbeeld 👇' : 'Tapez votre cible... ou testez un exemple ci-dessous 👇'}
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === "Enter" && run(query)}

@@ -7,6 +7,7 @@ export interface Article {
   date:      string;
   readTime:  string;
   tag:       string;
+  tagI18n?:  Record<string, string>;
   tagColor:  string;
   fr: { title: string; excerpt: string; content: string };
   en: { title: string; excerpt: string; content: string };
@@ -20,6 +21,7 @@ export const ARTICLES: Article[] = [
     date:     "2026-03-10",
     readTime: "7 min",
     tag:      "Automatisation",
+    tagI18n:  { en:"Automation", ar:"أتمتة", es:"Automatización", nl:"Automatisering", fr:"Automatisation" },
     tagColor: "#00ffc8",
     fr: {
       title:   "Comment j'automatise la prospection B2B avec n8n en 5 étapes",
@@ -242,6 +244,7 @@ Los leads en HubSpot activan automáticamente una secuencia de 3 emails espaciad
     date:     "2026-03-03",
     readTime: "5 min",
     tag:      "ROI",
+    tagI18n:  { en:"ROI", ar:"عائد الاستثمار", es:"ROI", nl:"ROI", fr:"ROI" },
     tagColor: "#f5a623",
     fr: {
       title:   "ROI de l'automatisation : comment calculer ce que vous perdez vraiment",
@@ -448,6 +451,7 @@ Usa nuestra [calculadora ROI interactiva](#roi) para obtener tu estimación pers
     date:     "2026-02-24",
     readTime: "9 min",
     tag:      "IA & Agents",
+    tagI18n:  { en:"AI & Agents", ar:"ذكاء اصطناعي", es:"IA & Agentes", nl:"AI & Agents", fr:"IA & Agents" },
     tagColor: "#a78bfa",
     fr: {
       title:   "Systèmes multi-agents IA : l'architecture qui change tout pour les PME",

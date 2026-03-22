@@ -154,7 +154,7 @@ export default function NewsletterBanner({ lang = "fr" }: { lang?: string }) {
         fontFamily: "'Courier New',monospace", fontSize: "10px",
         color: "rgba(255,255,255,.2)", marginTop: "12px",
       }}>
-        🔒 Zéro spam. Désabonnement en 1 clic. {tx.count}.
+        🔒 {lang==="en" ? "Zero spam. Unsubscribe in 1 click." : lang==="ar" ? "صفر بريد مزعج. إلغاء الاشتراك بنقرة." : lang==="es" ? "Cero spam. Darse de baja en 1 clic." : lang==="nl" ? "Nul spam. Afmelden in 1 klik." : "Zéro spam. Désabonnement en 1 clic."} {tx.count}.
       </p>
     </div>
   );
