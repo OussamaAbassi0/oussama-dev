@@ -151,14 +151,7 @@ export default function TestimonialsSection() {
                 >
                   {(t as any).source === "upwork" ? "★ Upwork" : "⭐ Malt"}
                 </a>
-                {(t as any).earned && (
-                  <span style={{
-                    fontFamily:"var(--mono)", fontSize:"11px",
-                    color:"rgba(0,255,200,.5)", letterSpacing:".04em",
-                  }}>
-                    {(t as any).earned} earned
-                  </span>
-                )}
+
               </div>
 
               {/* Top row: avatar + name + stars */}
@@ -239,23 +232,65 @@ export default function TestimonialsSection() {
 
         {/* Trust bar */}
         <div style={{
-          marginTop: "48px", padding: "20px 28px",
+          marginTop: "48px", padding: "24px 28px",
           border: "1px solid rgba(0,255,200,0.1)",
           borderRadius: "12px", background: "rgba(0,255,200,0.03)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          gap: "32px", flexWrap: "wrap",
+          gap: "0", flexWrap: "wrap",
         }}>
+          {/* Stats */}
           {[
-            { icon: "⭐", val: "5/5", label: t.nav.liveLab === "LIVE LAB" ? "Average Malt rating" : t.nav.liveLab === "EN VIVO" ? "Nota media Malt" : t.nav.liveLab === "مباشر" ? "متوسط تقييم Malt" : t.nav.liveLab === "LIVE LAB" ? "Gem. Malt-beoordeling" : "Note moyenne Malt" },
-            { icon: "✅", val: "100%", label: t.nav.liveLab === "LIVE LAB" ? "Recommendation rate" : t.nav.liveLab === "EN VIVO" ? "Tasa de recomendación" : t.nav.liveLab === "مباشر" ? "معدل التوصية" : "Taux de recommandation" },
-            { icon: "⚡", val: "< 24h", label: t.nav.liveLab === "LIVE LAB" ? "Response time" : t.nav.liveLab === "EN VIVO" ? "Tiempo de respuesta" : t.nav.liveLab === "مباشر" ? "وقت الاستجابة" : "Délai de réponse" },
-          ].map(s => (
-            <div key={s.label} style={{ textAlign: "center" }}>
+            { icon: "⭐", val: "5/5",   label: "Note moyenne" },
+            { icon: "✅", val: "100%",  label: "Recommandation" },
+            { icon: "⚡", val: "< 24h", label: "Délai de réponse" },
+          ].map((s, i) => (
+            <div key={s.label} style={{
+              textAlign: "center", padding: "0 28px",
+              borderRight: i < 2 ? "1px solid rgba(255,255,255,.06)" : "none",
+            }}>
               <div style={{ fontSize: "18px", marginBottom: "4px" }}>{s.icon}</div>
               <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "18px", color: "var(--cyan)" }}>{s.val}</div>
               <div style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--text-dim)", marginTop: "2px" }}>{s.label}</div>
             </div>
           ))}
+
+          {/* Séparateur */}
+          <div style={{ width: "1px", height: "48px", background: "rgba(255,255,255,.06)", margin: "0 28px" }} />
+
+          {/* Plateformes */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--text-dim)", marginBottom: "4px", letterSpacing: ".08em" }}>
+              VÉRIFIÉ SUR
+            </p>
+            <div style={{ display: "flex", gap: "8px" }}>
+              <a href="https://www.malt.fr/profile/oussamaabassi1" target="_blank" rel="noopener noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: "6px",
+                padding: "7px 14px", borderRadius: "8px",
+                border: "1px solid rgba(255,100,50,.25)",
+                background: "rgba(255,100,50,.07)",
+                fontFamily: "var(--mono)", fontSize: "11px", fontWeight: 700,
+                color: "#ff6432", textDecoration: "none", transition: "all .2s",
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,100,50,.55)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,100,50,.14)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,100,50,.25)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,100,50,.07)"; }}
+              >
+                ⭐ Malt
+              </a>
+              <a href="https://www.upwork.com/freelancers/~01e9d7e582881baac8" target="_blank" rel="noopener noreferrer" style={{
+                display: "inline-flex", alignItems: "center", gap: "6px",
+                padding: "7px 14px", borderRadius: "8px",
+                border: "1px solid rgba(20,179,78,.25)",
+                background: "rgba(20,179,78,.07)",
+                fontFamily: "var(--mono)", fontSize: "11px", fontWeight: 700,
+                color: "#14b34e", textDecoration: "none", transition: "all .2s",
+              }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(20,179,78,.55)"; (e.currentTarget as HTMLElement).style.background = "rgba(20,179,78,.14)"; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(20,179,78,.25)"; (e.currentTarget as HTMLElement).style.background = "rgba(20,179,78,.07)"; }}
+              >
+                ★ Upwork
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
