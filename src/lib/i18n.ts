@@ -25,7 +25,7 @@ export interface Translations {
   hero: {
     badge: string; headline1: string; words: string[];
     subtitle: string; subtitleBold: string;
-    cta: string; ctaSecondary: string;
+    cta: string; ctaSecondary: string; ctaLab: string;
     hint: string; scroll: string;
     stat1: string; stat2: string; stat3: string;
     availability: string;
@@ -143,6 +143,7 @@ const t: Record<SiteLang, Translations> = {
       subtitleBold:"Mon but est de vous faire gagner du temps et de l'argent.",
       cta:"Voir ce que je peux faire pour vous →",
       ctaSecondary:"ou démarrer un projet directement →",
+      ctaLab:"⚡ Tester les outils gratuitement",
       hint:"Navigation rapide :",
       scroll:"SCROLL",
       stat1:"Leads générés automatiquement",
@@ -267,6 +268,7 @@ const t: Record<SiteLang, Translations> = {
       subtitleBold:"My goal is to save you time and money.",
       cta:"See what I can do for you →",
       ctaSecondary:"or start a project directly →",
+      ctaLab:"⚡ Try the tools for free",
       hint:"Quick navigation:",
       scroll:"SCROLL",
       stat1:"Leads generated automatically",
@@ -391,6 +393,7 @@ const t: Record<SiteLang, Translations> = {
       subtitleBold:"هدفي هو توفير وقتك ومالك.",
       cta:"اكتشف ما يمكنني فعله لك ←",
       ctaSecondary:"أو ابدأ مشروعاً مباشرة ←",
+      ctaLab:"⚡ تجربة الأدوات مجاناً",
       hint:"التنقل السريع:",
       scroll:"التمرير",
       stat1:"عميل محتمل تم توليده تلقائياً",
@@ -515,6 +518,7 @@ const t: Record<SiteLang, Translations> = {
       subtitleBold:"Mi objetivo es ahorrarte tiempo y dinero.",
       cta:"Ver lo que puedo hacer por ti →",
       ctaSecondary:"o empezar un proyecto directamente →",
+      ctaLab:"⚡ Probar las herramientas gratis",
       hint:"Navegación rápida:",
       scroll:"SCROLL",
       stat1:"Leads generados automáticamente",
@@ -639,6 +643,7 @@ const t: Record<SiteLang, Translations> = {
       subtitleBold:"Mijn doel is u tijd en geld te besparen.",
       cta:"Ontdek wat ik voor u kan doen →",
       ctaSecondary:"of start direct een project →",
+      ctaLab:"⚡ Tools gratis uitproberen",
       hint:"Snelle navigatie:",
       scroll:"SCROLL",
       stat1:"Leads automatisch gegenereerd",

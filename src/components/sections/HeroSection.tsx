@@ -290,41 +290,46 @@ export default function HeroSection() {
           <strong style={{ color:"#00ffc8" }}>{t.hero.subtitleBold}</strong>
         </p>
 
-        {/* CTA — 1 principal + 1 secondaire discret */}
+        {/* CTAs */}
         <div style={{
-          display:"flex", gap:"14px", flexWrap:"wrap", alignItems:"center",
+          display:"flex", gap:"12px", flexWrap:"wrap", alignItems:"center",
           marginBottom:"24px",
           opacity:     mounted ? 1 : 0,
           animation:   mounted ? "heroFadeUp .7s .45s ease forwards" : "none",
           animationFillMode:"both",
         }}>
-          {/* CTA unique — clair et fort */}
+          {/* CTA principal — voir les projets */}
           <a href="#projects" style={{
-            padding:"15px 38px",
+            padding:"14px 32px",
             background:"linear-gradient(135deg,#00ffc8,#00b4d8)",
             color:"#050810",
-            fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"15px",
+            fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"14px",
             borderRadius:"8px", textDecoration:"none", letterSpacing:".04em",
             boxShadow:"0 0 30px rgba(0,255,200,.35)",
             transition:"all .25s",
             display:"inline-flex", alignItems:"center", gap:"8px",
           }}
-            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 50px rgba(0,255,200,.6)"; el.style.transform="translateY(-2px) scale(1.02)"; }}
-            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 30px rgba(0,255,200,.35)"; el.style.transform="translateY(0) scale(1)"; }}
+            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 50px rgba(0,255,200,.6)"; el.style.transform="translateY(-2px)"; }}
+            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.boxShadow="0 0 30px rgba(0,255,200,.35)"; el.style.transform="translateY(0)"; }}
           >
             {t.hero.cta}
           </a>
 
-          {/* Lien discret secondaire */}
-          <a href="#cta" style={{
-            fontFamily:"'Courier New',monospace", fontSize:"12px",
-            color:"rgba(255,255,255,.35)",
-            textDecoration:"none", transition:"color .2s",
+          {/* CTA secondaire — tester les outils, visible et cliquable */}
+          <a href="/lab" style={{
+            padding:"14px 28px",
+            background:"transparent",
+            color:"#00ffc8",
+            fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"14px",
+            borderRadius:"8px", textDecoration:"none", letterSpacing:".04em",
+            border:"1px solid rgba(0,255,200,.35)",
+            transition:"all .25s",
+            display:"inline-flex", alignItems:"center", gap:"8px",
           }}
-            onMouseEnter={e => ((e.currentTarget as HTMLElement).style.color="rgba(255,255,255,.65)")}
-            onMouseLeave={e => ((e.currentTarget as HTMLElement).style.color="rgba(255,255,255,.35)")}
+            onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.background="rgba(0,255,200,.08)"; el.style.borderColor="rgba(0,255,200,.7)"; }}
+            onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.background="transparent"; el.style.borderColor="rgba(0,255,200,.35)"; }}
           >
-            {t.hero.ctaSecondary}
+            {t.hero.ctaLab}
           </a>
         </div>
 

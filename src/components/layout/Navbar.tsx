@@ -132,16 +132,17 @@ export default function Navbar() {
 
         {/* Droite desktop */}
         <div style={{ display:"flex", alignItems:"center", gap:"10px", flexShrink:0 }}>
-          <span className="nav-live-badge" style={{
+          <Link href="/lab" className="nav-live-badge" style={{
             display:"inline-flex", alignItems:"center", gap:"5px",
             padding:"4px 10px", borderRadius:"20px",
             background:"rgba(255,77,109,.1)", border:"1px solid rgba(255,77,109,.2)",
             fontFamily:"var(--mono)", fontSize:"10px", fontWeight:700,
             color:"var(--red)", letterSpacing:".06em", textTransform:"uppercase",
+            textDecoration:"none", cursor:"pointer",
           }}>
             <span style={{ width:"6px", height:"6px", borderRadius:"50%", background:"var(--red)", animation:"livePulse 1.5s ease infinite" }} />
             {t.nav.liveLab}
-          </span>
+          </Link>
 
           {/* Sélecteur de langue */}
           <div style={{ position:"relative" }} className="nav-cta-desktop">
