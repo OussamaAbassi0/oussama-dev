@@ -20,6 +20,7 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import BlogPreviewSection  from "@/components/sections/BlogPreviewSection";
 import FAQSection         from "@/components/sections/FAQSection";
 import AboutSection       from "@/components/sections/AboutSection";
+import ProjectsSection    from "@/components/sections/ProjectsSection";
 import CTASection         from "@/components/sections/CTASection";
 
 /* ── UI globale ──────────────────────────────────────────── */
@@ -100,7 +101,12 @@ export default function HomePage() {
             Hero avec particules + typewriter. */}
         <HeroSection />
 
-        {/* 2 ─ COMPRENDRE
+        {/* 2 ─ PORTFOLIO
+            Projets réels avec screenshots, liens live,
+            métriques et timeline 2022→2026. */}
+        <ProjectsSection />
+
+        {/* 3 ─ COMPRENDRE
             "Comment ça marche" en 3 étapes.
             Avant / Après pour visualiser. */}
         <HowItWorksSection />
