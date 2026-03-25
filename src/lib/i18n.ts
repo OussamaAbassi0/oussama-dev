@@ -18,6 +18,7 @@ export interface Translations {
   nav: {
     lab: string; roi: string; blog: string; start: string; liveLab: string;
     menuRapide: string; quickLinks: string;
+    projects: string; services: string;
   };
 
   /* ── Hero ──────────────────────────────── */
@@ -132,6 +133,7 @@ const t: Record<SiteLang, Translations> = {
     nav: {
       lab:"Lab", roi:"ROI", blog:"Blog", start:"Démarrer →", liveLab:"LIVE LAB",
       menuRapide:"Menu Rapide...", quickLinks:"Navigation rapide",
+      projects:"Projets", services:"Services",
     },
     hero: {
       badge:"Lab interactif · Testez en direct",
@@ -255,6 +257,7 @@ const t: Record<SiteLang, Translations> = {
     nav: {
       lab:"Lab", roi:"ROI", blog:"Blog", start:"Get started →", liveLab:"LIVE LAB",
       menuRapide:"Quick Menu...", quickLinks:"Quick navigation",
+      projects:"Projects", services:"Services",
     },
     hero: {
       badge:"Interactive Lab · Test live",
@@ -378,6 +381,7 @@ const t: Record<SiteLang, Translations> = {
     nav: {
       lab:"المختبر", roi:"العائد", blog:"المدونة", start:"ابدأ الآن ←", liveLab:"مباشر",
       menuRapide:"قائمة سريعة...", quickLinks:"تنقل سريع",
+      projects:"المشاريع", services:"الخدمات",
     },
     hero: {
       badge:"مختبر تفاعلي · اختبر مباشرة",
@@ -501,6 +505,7 @@ const t: Record<SiteLang, Translations> = {
     nav: {
       lab:"Lab", roi:"ROI", blog:"Blog", start:"Empezar →", liveLab:"EN VIVO",
       menuRapide:"Menú rápido...", quickLinks:"Navegación rápida",
+      projects:"Proyectos", services:"Servicios",
     },
     hero: {
       badge:"Lab interactivo · Prueba en directo",
@@ -624,6 +629,7 @@ const t: Record<SiteLang, Translations> = {
     nav: {
       lab:"Lab", roi:"ROI", blog:"Blog", start:"Beginnen →", liveLab:"LIVE LAB",
       menuRapide:"Snel menu...", quickLinks:"Snelle navigatie",
+      projects:"Projecten", services:"Diensten",
     },
     hero: {
       badge:"Interactief lab · Test live",
