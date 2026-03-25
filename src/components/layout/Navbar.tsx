@@ -83,10 +83,10 @@ export default function Navbar() {
           <span style={{ opacity:0.5 }}>~/</span>oussama.dev
         </Link>
 
-        {/* Centre — liens nav + barre Ctrl+K (desktop) */}
+        {/* Centre — liens nav (desktop) */}
         <div className="nav-links-desktop" style={{ display:"flex", alignItems:"center", gap:"4px" }}>
-          {[{label:"Lab",href:"#lead-hunter"},{label:"ROI",href:"#roi"},{label:"Blog",href:"/blog"}].map(link => (
-            <a key={link.href} href={link.href} style={{
+          {NAV_LINKS.map(link => (
+            <Link key={link.href} href={link.href} style={{
               fontFamily:"'Courier New',monospace", fontSize:"12px",
               color:"rgba(255,255,255,.45)", textDecoration:"none",
               padding:"6px 12px", borderRadius:"6px",
@@ -94,7 +94,7 @@ export default function Navbar() {
             }}
               onMouseEnter={e => { const el=e.currentTarget as HTMLElement; el.style.color="white"; el.style.background="rgba(255,255,255,.06)"; }}
               onMouseLeave={e => { const el=e.currentTarget as HTMLElement; el.style.color="rgba(255,255,255,.45)"; el.style.background="transparent"; }}
-            >{link.label}</a>
+            >{link.label}</Link>
           ))}
         </div>
 
@@ -118,7 +118,7 @@ export default function Navbar() {
             <path d="M10.5 10.5L14 14" stroke="#00e5ff" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
           <span style={{ fontFamily:"'Courier New',monospace", fontSize:"12px", color:"rgba(255,255,255,.3)", flex:1, textAlign:"left" }}>
-            Menu Rapide...
+            {t.nav.menuRapide}
           </span>
           <span style={{
             padding:"2px 7px", background:"rgba(0,229,255,.07)",
@@ -140,7 +140,7 @@ export default function Navbar() {
             color:"var(--red)", letterSpacing:".06em", textTransform:"uppercase",
           }}>
             <span style={{ width:"6px", height:"6px", borderRadius:"50%", background:"var(--red)", animation:"livePulse 1.5s ease infinite" }} />
-            LIVE LAB
+            {t.nav.liveLab}
           </span>
 
           {/* Sélecteur de langue */}
@@ -269,7 +269,7 @@ export default function Navbar() {
             fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"14px",
             borderRadius:"8px", textDecoration:"none", letterSpacing:".04em",
           }}>
-            🚀 Démarrer un projet
+            🚀 {t.nav.start}
           </a>
         </div>
       )}
