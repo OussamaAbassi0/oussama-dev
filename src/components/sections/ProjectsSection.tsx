@@ -492,7 +492,7 @@ function AnimatedCount({ target, suffix = "" }: { target: number; suffix?: strin
 /* ══════════════════════════════════════════════════════════
    MAIN SECTION
 ══════════════════════════════════════════════════════════ */
-export default function ProjectsSection() {
+export default function ProjectsSection({ featured = false }: { featured?: boolean }) {
   const ref = useFadeIn<HTMLDivElement>();
   const { lang } = useLang();
   const [tab, setTab] = useState<"all" | "saas" | "n8n">("all");
@@ -505,74 +505,82 @@ export default function ProjectsSection() {
 
   const l = (obj: Record<string, string>) => obj[lang] ?? obj.en;
 
+  /* ── MODE FEATURED : homepage — 4 SaaS seulement, propre ── */
+  if (featured) {
+    return (
+      <section id="projects" style={{ padding:"100px 24px", background:"var(--bg2)" }}>
+        <div ref={ref} className="fade-in" style={{ maxWidth:"1100px", margin:"0 auto" }}>
+          <p className="section-label">// {l({ fr:"Projets récents", en:"Recent projects", ar:"المشاريع الأخيرة", es:"Proyectos recientes", nl:"Recente projecten" })}</p>
+          <h2 className="section-title">
+            {l({ fr:"Ce que j'ai construit.", en:"What I've built.", ar:"ما قمت ببنائه.", es:"Lo que he construido.", nl:"Wat ik heb gebouwd." })}<br />
+            <span className="text-cyan">{l({ fr:"Testez-le vous-même.", en:"Test it yourself.", ar:"جرّبه بنفسك.", es:"Pruébalo tú mismo.", nl:"Test het zelf." })}</span>
+          </h2>
+          <p style={{ fontFamily:"Arial, sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", maxWidth:"560px", lineHeight:1.7, marginBottom:"52px" }}>
+            {l({ fr:"4 projets live — SaaS full-stack et agents IA. Pas des démos, des vrais produits.", en:"4 live projects — full-stack SaaS and AI agents. Not demos, real products.", ar:"4 مشاريع حية — SaaS ووكلاء ذكاء اصطناعي. منتجات حقيقية.", es:"4 proyectos en vivo — SaaS full-stack y agentes IA. No demos, productos reales.", nl:"4 live projecten — full-stack SaaS en AI-agents. Geen demo's, echte producten." })}
+          </p>
+
+          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(300px, 1fr))", gap:"24px", marginBottom:"40px" }}>
+            {SAAS_PROJECTS.map(p => <SaasCard key={p.id} project={p} lang={lang} />)}
+          </div>
+
+          {/* CTA vers /projets */}
+          <div style={{ textAlign:"center", marginTop:"16px" }}>
+            <a href="/projets" style={{
+              display:"inline-flex", alignItems:"center", gap:"8px",
+              padding:"12px 28px", borderRadius:"8px",
+              border:"1px solid rgba(0,255,200,.3)", color:"var(--cyan)",
+              fontFamily:"'Courier New', monospace", fontWeight:700, fontSize:"12px",
+              textDecoration:"none", letterSpacing:".06em",
+              transition:"all .25s",
+            }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(0,255,200,.08)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "transparent"; }}
+            >
+              {l({ fr:"Voir tous les projets + 13 automatisations n8n →", en:"See all projects + 13 n8n automations →", ar:"← عرض جميع المشاريع + 13 أتمتة n8n", es:"Ver todos los proyectos + 13 automatizaciones n8n →", nl:"Alle projecten + 13 n8n-automatiseringen →" })}
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  /* ── MODE FULL : page /projets — tout avec tabs ── */
   return (
     <section id="projects" style={{ padding:"100px 24px", background:"var(--bg2)" }}>
       <div ref={ref} className="fade-in" style={{ maxWidth:"1200px", margin:"0 auto" }}>
 
-        {/* ── Header ── */}
-        <p className="section-label">// {l({ fr:"Mes projets & automatisations", en:"My projects & automations", ar:"مشاريعي وأتمتتي", es:"Mis proyectos y automatizaciones", nl:"Mijn projecten & automatiseringen" })}</p>
+        <p className="section-label">// {l({ fr:"Projets & automatisations", en:"Projects & automations", ar:"مشاريعي وأتمتتي", es:"Proyectos y automatizaciones", nl:"Projecten & automatiseringen" })}</p>
         <h2 className="section-title">
           {l({ fr:"Ce que j'ai construit.", en:"What I've built.", ar:"ما قمت ببنائه.", es:"Lo que he construido.", nl:"Wat ik heb gebouwd." })}<br />
           <span className="text-cyan">{l({ fr:"Des résultats réels.", en:"Real results.", ar:"نتائج حقيقية.", es:"Resultados reales.", nl:"Echte resultaten." })}</span>
         </h2>
-        <p style={{ fontFamily:"Arial, sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", maxWidth:"600px", lineHeight:1.7, marginBottom:"56px" }}>
-          {l({ fr:"4 SaaS/agents IA live + 13 automatisations n8n clients. Pas des démos — des projets avec des résultats mesurables.", en:"4 live SaaS/AI agents + 13 client n8n automations. Not demos — projects with measurable results.", ar:"4 مشاريع SaaS حية + 13 أتمتة n8n. ليست عروضاً — مشاريع بنتائج قابلة للقياس.", es:"4 SaaS/agentes IA en vivo + 13 automatizaciones n8n. No demos — proyectos con resultados medibles.", nl:"4 live SaaS/AI-agents + 13 n8n-automatiseringen. Geen demo's — projecten met meetbare resultaten." })}
+        <p style={{ fontFamily:"Arial, sans-serif", fontSize:"15px", color:"rgba(255,255,255,.5)", maxWidth:"600px", lineHeight:1.7, marginBottom:"40px" }}>
+          {l({ fr:"4 SaaS/agents IA live + 13 automatisations n8n. Pas des démos — des résultats mesurables.", en:"4 live SaaS/AI agents + 13 n8n automations. Not demos — measurable results.", ar:"4 مشاريع SaaS حية + 13 أتمتة n8n. نتائج قابلة للقياس.", es:"4 SaaS/agentes IA + 13 automatizaciones n8n. Resultados medibles.", nl:"4 live SaaS/AI-agents + 13 n8n-automatiseringen. Meetbare resultaten." })}
         </p>
 
-        {/* ── KPI Banner ── */}
-        <div style={{ display:"flex", flexWrap:"wrap", gap:"16px", marginBottom:"56px" }}>
-          {[
-            { icon:"🚀", val:17, suffix:"+", label:{ fr:"Projets livrés", en:"Projects delivered" } },
-            { icon:"⏱", val:148, suffix:"h", label:{ fr:"Économisées/semaine", en:"Saved/week" } },
-            { icon:"🤖", val:13, suffix:"", label:{ fr:"Workflows n8n", en:"n8n workflows" } },
-            { icon:"💰", val:0, suffix:"€", label:{ fr:"Coût bug (0 en prod)", en:"Bug cost (0 in prod)" } },
-          ].map((s) => (
-            <div key={s.icon} style={{
-              flex:"1 1 160px", padding:"20px", borderRadius:"12px",
-              background:"rgba(0,255,200,.03)", border:"1px solid rgba(0,255,200,.1)",
-              textAlign:"center",
-            }}>
-              <div style={{ fontSize:"22px", marginBottom:"6px" }}>{s.icon}</div>
-              <div style={{ fontFamily:"'Courier New', monospace", fontWeight:700, fontSize:"24px", color:"var(--cyan)" }}>
-                <AnimatedCount target={s.val} suffix={s.suffix} />
-              </div>
-              <div style={{ fontFamily:"Arial, sans-serif", fontSize:"11px", color:"rgba(255,255,255,.35)", marginTop:"4px" }}>
-                {l(s.label)}
-              </div>
-            </div>
-          ))}
-        </div>
-
         {/* ── Timeline ── */}
-        <p style={{ fontFamily:"'Courier New', monospace", fontSize:"11px", color:"rgba(0,255,200,.6)", letterSpacing:".15em", textTransform:"uppercase", marginBottom:"28px" }}>
+        <p style={{ fontFamily:"'Courier New', monospace", fontSize:"11px", color:"rgba(0,255,200,.6)", letterSpacing:".15em", textTransform:"uppercase", marginBottom:"20px" }}>
           // {l({ fr:"Ma progression 2022 → 2026", en:"My progression 2022 → 2026", ar:"تطوري 2022 → 2026", es:"Mi progresión 2022 → 2026", nl:"Mijn progressie 2022 → 2026" })}
         </p>
         <Timeline lang={lang} />
 
         {/* ── Tabs ── */}
-        <div style={{ display:"flex", gap:"8px", marginBottom:"40px", flexWrap:"wrap" }}>
+        <div style={{ display:"flex", gap:"8px", marginBottom:"36px", flexWrap:"wrap" }}>
           {TABS.map(t => (
-            <button
-              key={t.id}
-              onClick={() => setTab(t.id as typeof tab)}
-              style={{
-                padding:"10px 20px", borderRadius:"8px", cursor:"pointer",
-                fontFamily:"'Courier New', monospace", fontWeight:700, fontSize:"12px",
-                letterSpacing:".06em", transition:"all .25s",
-                background: tab === t.id ? "var(--cyan)" : "rgba(255,255,255,.04)",
-                color:       tab === t.id ? "#050810"    : "rgba(255,255,255,.5)",
-                border:      tab === t.id ? "1px solid var(--cyan)" : "1px solid rgba(255,255,255,.08)",
-                display:"flex", alignItems:"center", gap:"8px",
-              }}
-            >
+            <button key={t.id} onClick={() => setTab(t.id as typeof tab)} style={{
+              padding:"10px 20px", borderRadius:"8px", cursor:"pointer",
+              fontFamily:"'Courier New', monospace", fontWeight:700, fontSize:"12px",
+              letterSpacing:".06em", transition:"all .25s",
+              background: tab === t.id ? "var(--cyan)" : "rgba(255,255,255,.04)",
+              color:       tab === t.id ? "#050810"    : "rgba(255,255,255,.5)",
+              border:      tab === t.id ? "1px solid var(--cyan)" : "1px solid rgba(255,255,255,.08)",
+              display:"flex", alignItems:"center", gap:"8px",
+            }}>
               {l(t.label)}
-              <span style={{
-                padding:"1px 7px", borderRadius:"10px", fontSize:"10px",
+              <span style={{ padding:"1px 7px", borderRadius:"10px", fontSize:"10px",
                 background: tab === t.id ? "rgba(0,0,0,.2)" : "rgba(255,255,255,.08)",
-                color:       tab === t.id ? "#050810" : "rgba(255,255,255,.4)",
-              }}>
-                {t.count}
-              </span>
+                color: tab === t.id ? "#050810" : "rgba(255,255,255,.4)",
+              }}>{t.count}</span>
             </button>
           ))}
         </div>
@@ -580,12 +588,8 @@ export default function ProjectsSection() {
         {/* ── SaaS / Agent grid ── */}
         {(tab === "all" || tab === "saas") && (
           <>
-            {tab === "all" && (
-              <p style={{ fontFamily:"'Courier New', monospace", fontSize:"11px", color:"rgba(167,139,250,.7)", letterSpacing:".12em", textTransform:"uppercase", marginBottom:"20px" }}>
-                // SaaS &amp; Agents IA
-              </p>
-            )}
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(320px, 1fr))", gap:"24px", marginBottom: tab === "all" ? "60px" : "0" }}>
+            {tab === "all" && <p style={{ fontFamily:"'Courier New', monospace", fontSize:"11px", color:"rgba(167,139,250,.7)", letterSpacing:".12em", textTransform:"uppercase", marginBottom:"20px" }}>// SaaS &amp; Agents IA</p>}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(300px, 1fr))", gap:"24px", marginBottom: tab === "all" ? "60px" : "0" }}>
               {SAAS_PROJECTS.map(p => <SaasCard key={p.id} project={p} lang={lang} />)}
             </div>
           </>
@@ -594,19 +598,15 @@ export default function ProjectsSection() {
         {/* ── n8n Workflows grid ── */}
         {(tab === "all" || tab === "n8n") && (
           <>
-            {tab === "all" && (
-              <p style={{ fontFamily:"'Courier New', monospace", fontSize:"11px", color:"rgba(245,166,35,.7)", letterSpacing:".12em", textTransform:"uppercase", marginBottom:"20px" }}>
-                // Automatisations n8n livrées
-              </p>
-            )}
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(360px, 1fr))", gap:"20px" }}>
+            {tab === "all" && <p style={{ fontFamily:"'Courier New', monospace", fontSize:"11px", color:"rgba(245,166,35,.7)", letterSpacing:".12em", textTransform:"uppercase", marginBottom:"20px" }}>// Automatisations n8n livrées</p>}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(340px, 1fr))", gap:"20px" }}>
               {N8N_PROJECTS.map((wf, i) => <N8nCard key={wf.id} wf={wf} lang={lang} index={i} />)}
             </div>
           </>
         )}
 
-        {/* ── Badge stats ── */}
-        <div style={{ marginTop:"56px", padding:"20px 28px", background:"rgba(0,255,200,.03)", border:"1px solid rgba(0,255,200,.1)", borderRadius:"12px", display:"flex", alignItems:"center", justifyContent:"center", gap:"24px", flexWrap:"wrap" }}>
+        {/* ── Stats footer ── */}
+        <div style={{ marginTop:"56px", padding:"20px 28px", background:"rgba(0,255,200,.03)", border:"1px solid rgba(0,255,200,.1)", borderRadius:"12px", display:"flex", alignItems:"center", justifyContent:"center", gap:"32px", flexWrap:"wrap" }}>
           {[
             { icon:"📅", val:"2022", label: l({ fr:"Dans ce domaine depuis", en:"In this field since" }) },
             { icon:"🚀", val:"17+",  label: l({ fr:"Projets livrés", en:"Projects delivered" }) },
