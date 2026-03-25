@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 const SLOTS_LEFT = 2; // à modifier manuellement chaque mois
-const MONTH = "Mars 2026";
+const MONTH = "Avril 2026";
 
 export default function AvailabilityBadge() {
   const [pulse, setPulse] = useState(false);

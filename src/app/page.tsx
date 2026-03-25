@@ -12,6 +12,7 @@ import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import BlogPreviewSection  from "@/components/sections/BlogPreviewSection";
 import AboutSection        from "@/components/sections/AboutSection";
 import CTASection          from "@/components/sections/CTASection";
+import TrustSection        from "@/components/sections/TrustSection";
 
 /* ── UI globale ──────────────────────────────────────────── */
 import LoadingScreen     from "@/components/ui/LoadingScreen";
@@ -60,13 +61,16 @@ export default function HomePage() {
         {/* 3 — Témoignages : preuve sociale Malt + Upwork */}
         <TestimonialsSection />
 
-        {/* 4 — About : parcours + expertise */}
+        {/* 4 — Avant/Après + 3 étapes + garanties */}
+        <TrustSection />
+
+        {/* 5 — About : parcours + expertise */}
         <AboutSection />
 
-        {/* 5 — Blog : 3 articles récents */}
+        {/* 6 — Blog : 3 articles récents */}
         <BlogPreviewSection />
 
-        {/* 6 — CTA : formulaire de brief */}
+        {/* 7 — CTA : formulaire de brief */}
         <CTASection
           briefOpen={briefOpen}
           onBriefOpenChange={setBriefOpen}
