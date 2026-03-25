@@ -41,6 +41,7 @@ export const viewport: Viewport = {
 };
 
 import { LangProvider } from "@/lib/LangContext";
+import GlobalUI from "@/components/ui/GlobalUI";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -55,7 +56,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <LangProvider>{children}</LangProvider>
+        <LangProvider>
+          {children}
+          <GlobalUI />
+        </LangProvider>
       </body>
     </html>
   );

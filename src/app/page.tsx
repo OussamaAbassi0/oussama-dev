@@ -22,7 +22,6 @@ import CustomCursor        from "@/components/ui/CustomCursor";
 import ScrollProgressBar   from "@/components/ui/ScrollProgressBar";
 import WelcomeBanner       from "@/components/ui/WelcomeBanner";
 import LiveActivityFeed    from "@/components/ui/LiveActivityFeed";
-import ProactiveChat       from "@/components/ui/ProactiveChat";
 import ExitIntentPopup     from "@/components/ui/ExitIntentPopup";
 import DiagnosticCTABanner    from "@/components/ui/DiagnosticCTABanner";
 import NewsletterBanner       from "@/components/ui/NewsletterBanner";
@@ -52,7 +51,6 @@ export default function HomePage() {
       <Navbar />
       {!loading && <WelcomeBanner />}
       <LiveActivityFeed />
-      <ProactiveChat />
       <ExitIntentPopup />
 
       <main style={{ opacity: loading ? 0 : 1, transition: "opacity .5s ease" }}>
