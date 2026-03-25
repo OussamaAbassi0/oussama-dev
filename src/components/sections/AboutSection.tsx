@@ -106,7 +106,7 @@ export default function AboutSection() {
             </div>
 
             {/* CTA */}
-            <a href="#lead-hunter" style={{
+            <a href="/lab" style={{
               display: "inline-flex", alignItems: "center", gap: "8px",
               padding: "12px 24px", background: "var(--cyan)", color: "var(--bg)",
               fontFamily: "var(--mono)", fontWeight: 700, fontSize: "13px",
