@@ -299,7 +299,7 @@ export default function HeroSection() {
           animationFillMode:"both",
         }}>
           {/* CTA unique — clair et fort */}
-          <a href="#roi" style={{
+          <a href="#projects" style={{
             padding:"15px 38px",
             background:"linear-gradient(135deg,#00ffc8,#00b4d8)",
             color:"#050810",
@@ -338,7 +338,7 @@ export default function HeroSection() {
         }}>
           <span style={{ fontSize:"11px", opacity:.3 }}>💡</span>
           <p style={{ fontFamily:"'Courier New',monospace", fontSize:"11px", color:"rgba(255,255,255,.22)" }}>
-            Navigation rapide :{" "}
+            {t.hero.hint}{" "}
             <kbd style={{ padding:"1px 7px", background:"rgba(0,229,255,.08)", border:"1px solid rgba(0,229,255,.2)", borderRadius:"4px", color:"rgba(0,229,255,.55)", fontSize:"11px" }}>
               Ctrl + K
             </kbd>

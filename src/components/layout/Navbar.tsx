@@ -40,12 +40,10 @@ export default function Navbar() {
   }, [menuOpen]);
 
   const NAV_LINKS = [
-    { label: "Comment ça marche", href: "#how-it-works" },
-    { label: "Lead Hunter",        href: "#lead-hunter"  },
-    { label: "ROI Calculator",     href: "#roi"          },
-    { label: "Cas clients",        href: "#case-studies" },
-    { label: "Blog",               href: "/blog"         },
-    { label: "FAQ",                href: "#faq"          },
+    { label: t.nav.projects ?? "Projets",  href: "/projets"  },
+    { label: t.nav.services ?? "Services", href: "/services" },
+    { label: t.nav.lab ?? "Lab",           href: "/lab"      },
+    { label: t.nav.blog ?? "Blog",         href: "/blog"     },
   ];
 
   return (

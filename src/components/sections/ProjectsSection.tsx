@@ -446,7 +446,7 @@ export default function ProjectsSection() {
         {/* ── Grid projets ── */}
         <div style={{
           display:             "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))",
           gap:                 "24px",
         }}>
           {PROJECTS.map(p => (

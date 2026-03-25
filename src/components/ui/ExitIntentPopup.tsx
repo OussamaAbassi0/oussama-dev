@@ -105,10 +105,7 @@ export default function ExitIntentPopup() {
 
   const goROI = () => {
     close();
-    setTimeout(() => {
-      const el = document.getElementById("roi");
-      if (el) el.scrollIntoView({ behavior: "smooth" });
-    }, 400);
+    setTimeout(() => { window.location.href = "/lab"; }, 400);
   };
 
   if (!visible) return null;

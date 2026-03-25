@@ -6,56 +6,31 @@ import Navbar  from "@/components/layout/Navbar";
 import Footer  from "@/components/layout/Footer";
 
 /* ── Sections ────────────────────────────────────────────── */
-import HeroSection        from "@/components/sections/HeroSection";
-import HowItWorksSection  from "@/components/sections/HowItWorksSection";
-import BeforeAfterSection from "@/components/sections/BeforeAfterSection";
-import CaseStudiesSection from "@/components/sections/CaseStudiesSection";
-import LeadHunterSection  from "@/components/sections/LeadHunterSection";
-import WorkflowSection    from "@/components/sections/WorkflowSection";
-import ROICalculatorSection from "@/components/sections/ROICalculatorSection";
-import WorkflowGallery    from "@/components/sections/WorkflowGallery";
-import MaturityQuiz       from "@/components/sections/MaturityQuiz";
-import DeliveryTimeline   from "@/components/sections/DeliveryTimeline";
+import HeroSection         from "@/components/sections/HeroSection";
+import ProjectsSection     from "@/components/sections/ProjectsSection";
 import TestimonialsSection from "@/components/sections/TestimonialsSection";
 import BlogPreviewSection  from "@/components/sections/BlogPreviewSection";
-import FAQSection         from "@/components/sections/FAQSection";
-import AboutSection       from "@/components/sections/AboutSection";
-import ProjectsSection    from "@/components/sections/ProjectsSection";
-import CTASection         from "@/components/sections/CTASection";
+import AboutSection        from "@/components/sections/AboutSection";
+import CTASection          from "@/components/sections/CTASection";
 
 /* ── UI globale ──────────────────────────────────────────── */
-import LoadingScreen    from "@/components/ui/LoadingScreen";
-import CinematicIntro  from "@/components/ui/CinematicIntro";
-import CustomCursor     from "@/components/ui/CustomCursor";
+import LoadingScreen     from "@/components/ui/LoadingScreen";
+import CustomCursor      from "@/components/ui/CustomCursor";
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
-import WelcomeBanner    from "@/components/ui/WelcomeBanner";
-import LiveActivityFeed from "@/components/ui/LiveActivityFeed";
-import ProactiveChat    from "@/components/ui/ProactiveChat";
-import ExitIntentPopup from "@/components/ui/ExitIntentPopup";
+import WelcomeBanner     from "@/components/ui/WelcomeBanner";
+import LiveActivityFeed  from "@/components/ui/LiveActivityFeed";
+import ProactiveChat     from "@/components/ui/ProactiveChat";
+import ExitIntentPopup   from "@/components/ui/ExitIntentPopup";
 
-/* ══════════════════════════════════════════════════════════
-   PAGE
-══════════════════════════════════════════════════════════ */
 export default function HomePage() {
   const [loading,      setLoading     ] = useState(true);
-  const [cinematic,    setCinematic   ] = useState(false); // s'active après loading
   const [briefOpen,    setBriefOpen   ] = useState(false);
-  const [prefillBrief, setPrefillBrief] = useState<string|undefined>();
+  const [prefillBrief, setPrefillBrief] = useState<string | undefined>();
 
-  /* Bloque le scroll pendant loading ou cinématique */
   useEffect(() => {
-    if (loading || cinematic) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = loading ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [loading, cinematic]);
-
-  /* Vérifie si la cinématique a déjà été vue */
-  const hasSeen = typeof window !== "undefined"
-    ? sessionStorage.getItem("oussama_cinematic_seen") === "1"
-    : true;
+  }, [loading]);
 
   const openBrief = (prefill?: string) => {
     if (prefill) setPrefillBrief(prefill);
@@ -64,25 +39,8 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ─────────────────────────────────────────
-          LOADING SCREEN — 3 secondes d'impact
-      ───────────────────────────────────────── */}
-      {loading && (
-        <LoadingScreen onDone={() => {
-          setLoading(false);
-          /* Lance la cinématique uniquement si pas déjà vue */
-          if (!sessionStorage.getItem("oussama_cinematic_seen")) {
-            setCinematic(true);
-          }
-        }} />
-      )}
-      {cinematic && (
-        <CinematicIntro onDone={() => setCinematic(false)} />
-      )}
+      {loading && <LoadingScreen onDone={() => setLoading(false)} />}
 
-      {/* ─────────────────────────────────────────
-          UI GLOBALE — toujours visible
-      ───────────────────────────────────────── */}
       <CustomCursor />
       <ScrollProgressBar />
       <Navbar />
@@ -91,59 +49,24 @@ export default function HomePage() {
       <ProactiveChat />
       <ExitIntentPopup />
 
-      {/* ─────────────────────────────────────────
-          CONTENU — 8 blocs logiques
-      ───────────────────────────────────────── */}
       <main style={{ opacity: loading ? 0 : 1, transition: "opacity .5s ease" }}>
 
-        {/* 1 ─ ACCROCHE
-            Capturer l'attention en 3 secondes.
-            Hero avec particules + typewriter. */}
+        {/* 1 — Hero : qui est Oussama en 5 secondes */}
         <HeroSection />
 
-        {/* 2 ─ PORTFOLIO
-            Projets réels avec screenshots, liens live,
-            métriques et timeline 2022→2026. */}
+        {/* 2 — Portfolio : 4 projets live avec screenshots */}
         <ProjectsSection />
 
-        {/* 3 ─ COMPRENDRE
-            "Comment ça marche" en 3 étapes.
-            Avant / Après pour visualiser. */}
-        <HowItWorksSection />
-        <BeforeAfterSection />
-
-        {/* 3 ─ PREUVES
-            Cas clients réels avec chiffres.
-            Témoignages. */}
-        <CaseStudiesSection />
+        {/* 3 — Témoignages : preuve sociale Malt + Upwork */}
         <TestimonialsSection />
-        <BlogPreviewSection />
 
-        {/* 4 ─ TESTER (le Lab)
-            Les outils interactifs gratuits.
-            Le visiteur vit la preuve lui-même. */}
-        <LeadHunterSection />
-        <WorkflowSection />
-        <ROICalculatorSection onOpenBrief={() => openBrief()} />
-
-        {/* 5 ─ CHOISIR
-            Workflows prêts à déployer.
-            Quiz de maturité + roadmap. */}
-        <WorkflowGallery onOpenBrief={openBrief} />
-        <MaturityQuiz    onOpenBrief={() => openBrief()} />
-
-        {/* 6 ─ RASSURER
-            Timeline de livraison claire.
-            FAQ pour lever les objections. */}
-        <DeliveryTimeline />
-        <FAQSection />
-
-        {/* 7 ─ HUMANISER
-            Qui est Oussama vraiment. */}
+        {/* 4 — About : parcours + expertise */}
         <AboutSection />
 
-        {/* 8 ─ CONVERTIR
-            Formulaire de brief. */}
+        {/* 5 — Blog : 3 articles récents */}
+        <BlogPreviewSection />
+
+        {/* 6 — CTA : formulaire de brief */}
         <CTASection
           briefOpen={briefOpen}
           onBriefOpenChange={setBriefOpen}

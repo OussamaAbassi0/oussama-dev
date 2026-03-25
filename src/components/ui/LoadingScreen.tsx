@@ -3,12 +3,9 @@ import { useState, useEffect } from "react";
 
 const LINES = [
   { text: "> Initializing Oussama HQ...",          delay: 0    },
-  { text: "> Loading AI modules",                   delay: 600  },
-  { text: "> Connecting to n8n engine...",          delay: 1100 },
-  { text: "> GPT-4o bridge — online ✓",            delay: 1500 },
-  { text: "> Lead Hunter — ready ✓",               delay: 1800 },
-  { text: "> All systems operational.",             delay: 2100 },
-  { text: "> Welcome.",                             delay: 2500 },
+  { text: "> GPT-4o bridge — online ✓",            delay: 300  },
+  { text: "> All systems operational.",             delay: 650  },
+  { text: "> Welcome.",                             delay: 900  },
 ];
 
 export default function LoadingScreen({ onDone }: { onDone: () => void }) {
@@ -28,8 +25,8 @@ export default function LoadingScreen({ onDone }: { onDone: () => void }) {
     /* Déclenche la sortie */
     setTimeout(() => {
       setLeaving(true);
-      setTimeout(onDone, 700);
-    }, 3000);
+      setTimeout(onDone, 500);
+    }, 1300);
   }, [onDone]);
 
   return (

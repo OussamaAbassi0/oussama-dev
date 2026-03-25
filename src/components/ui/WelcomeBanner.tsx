@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 const STORAGE_KEY = "oussama_welcome_dismissed";
 
 const SHORTCUTS = [
-  { label: "💰 Calculer mon ROI",    href: "#roi",          color: "#ff4d6d" },
-  { label: "⚡ Trouver des leads",   href: "#lead-hunter",  color: "#00ffc8" },
+  { label: "💰 Calculer mon ROI",    href: "/lab#roi",      color: "#ff4d6d" },
+  { label: "⚡ Trouver des leads",   href: "/lab#lead-hunter", color: "#00ffc8" },
   { label: "🚀 Démarrer un projet",  href: "#cta",          color: "#a78bfa" },
 ];
 
@@ -74,7 +74,7 @@ export default function WelcomeBanner() {
           }}>
             <strong style={{ color: "white" }}>Première visite ?</strong>{" "}
             Commencez par le{" "}
-            <a href="#roi" onClick={dismiss} style={{ color: "#ff4d6d", textDecoration: "underline", cursor: "pointer" }}>
+            <a href="/lab" onClick={dismiss} style={{ color: "#ff4d6d", textDecoration: "underline", cursor: "pointer" }}>
               Calculateur de ROI
             </a>
             {" "}— 30 secondes pour voir ce que vous perdez chaque mois.
