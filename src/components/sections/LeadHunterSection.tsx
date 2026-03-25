@@ -1,9 +1,10 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 import { MOCK_LEADS, QUICK_TARGETS } from "@/lib/mock-leads";
 import type { Lead } from "@/lib/types";
+import { trackLabTool } from "@/lib/sessionTracker";
 
 /* ── Terminal logs ───────────────────────────────────────── */
 const LOGS_MOCK = [
@@ -279,6 +280,8 @@ function TerminalBlock({ logs, label }: { logs: string[]; label: string }) {
 export default function LeadHunterSection() {
   const ref = useFadeIn<HTMLDivElement>();
   const { t, lang } = useLang();
+
+  useEffect(() => { trackLabTool("lead-hunter"); }, []);
 
   const [query,         setQuery        ] = useState("");
   const [phase,         setPhase        ] = useState<"idle" | "scanning" | "done">("idle");

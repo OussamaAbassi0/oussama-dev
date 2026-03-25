@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLang } from "@/lib/LangContext";
+import { trackPageVisit, buildPersonalizedWelcome } from "@/lib/sessionTracker";
 
 /* ══════════════════════════════════════════════════════════
    TYPES
@@ -216,6 +217,13 @@ export default function ProactiveChat() {
   const inputRef  = useRef<HTMLInputElement>(null);
   const timerRef  = useRef<ReturnType<typeof setTimeout>|null>(null);
 
+  /* ── Track current page visit on mount ──────────────────── */
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      trackPageVisit(window.location.pathname);
+    }
+  }, []);
+
   /* ── Intersection Observer — section visible ─────────── */
   useEffect(() => {
     const ids = ["roi","lead-hunter","workflow","automation","blueprint","audit","gallery"];
@@ -259,7 +267,13 @@ export default function ProactiveChat() {
     if (!open) {
       setOpen(true);
       if (messages.length === 0) {
-        setMessages([{ role:"assistant", content: WELCOME[L] ?? WELCOME.fr }]);
+        /* Try personalized welcome based on session data */
+        const personalized = buildPersonalizedWelcome(
+          L,
+          typeof window !== "undefined" ? window.location.pathname : "/",
+        );
+        const welcomeMsg = personalized ?? (WELCOME[L] ?? WELCOME.fr);
+        setMessages([{ role:"assistant", content: welcomeMsg }]);
       }
       setTimeout(() => inputRef.current?.focus(), 100);
     } else {

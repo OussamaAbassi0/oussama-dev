@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { trackROIResult, trackLabTool } from "@/lib/sessionTracker";
 
 /* ══════════════════════════════════════════════════════════
    ANIMATED COUNTER HOOK
@@ -182,6 +183,15 @@ export default function ROICalculatorSection({ onOpenBrief }: { onOpenBrief: () 
   const costMonth    = costYear / 12;
   const roiMonths    = costMonth > 0 ? Math.ceil(INVEST / costMonth) : 0;
   const savingsYear  = Math.round(costYear * 0.65); // hypothèse : 65% automatisables
+
+  /* ── Track ROI tool usage + result ──────────────────── */
+  useEffect(() => { trackLabTool("roi"); }, []);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      trackROIResult(team * hours, savingsYear);
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [team, hours, savingsYear]);
 
   /* ── Compteurs animés ────────────────────────────────── */
   const animHours   = useAnimatedValue(hoursYear);

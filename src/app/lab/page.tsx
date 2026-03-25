@@ -8,6 +8,7 @@ import EmailGeneratorSection  from "@/components/sections/EmailGeneratorSection"
 import WorkflowSection        from "@/components/sections/WorkflowSection";
 import AutomationLiveSection  from "@/components/sections/AutomationLiveSection";
 import ROICalculatorSection   from "@/components/sections/ROICalculatorSection";
+import DomainAuditSection    from "@/components/sections/DomainAuditSection";
 import CTASection             from "@/components/sections/CTASection";
 import ScrollProgressBar    from "@/components/ui/ScrollProgressBar";
 import { useLang }          from "@/lib/LangContext";
@@ -109,7 +110,8 @@ export default function LabPage() {
             { anchor: "#email-gen",   emoji: "✉️", label: "Email Generator" },
             { anchor: "#workflow",    emoji: "⚙️", label: "Workflow Builder" },
             { anchor: "#automation",  emoji: "⚡", label: "Live Pipeline" },
-            { anchor: "#roi",         emoji: "💰", label: "ROI Calculator" },
+            { anchor: "#roi",          emoji: "💰", label: "ROI Calculator" },
+            { anchor: "#domain-audit", emoji: "🔎", label: "Domain Audit" },
           ].map(item => (
             <a key={item.anchor} href={item.anchor} style={{
               padding:        "10px 20px",
@@ -143,6 +145,7 @@ export default function LabPage() {
       <WorkflowSection />
       <AutomationLiveSection />
       <ROICalculatorSection onOpenBrief={() => setBriefOpen(true)} />
+      <DomainAuditSection />
 
       {/* CTA */}
       <CTASection

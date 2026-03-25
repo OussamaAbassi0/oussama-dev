@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
@@ -106,12 +106,119 @@ function TextAreaField({
   );
 }
 
+/* ─── Voice CSS injected once ──────────────────────────────── */
+const VOICE_CSS = `
+@keyframes voicePulse {
+  0%,100% { box-shadow: 0 0 0 0 rgba(255,80,80,0); }
+  50%      { box-shadow: 0 0 0 8px rgba(255,80,80,0.2); }
+}
+@keyframes voiceWave {
+  0%,100% { transform: scaleY(0.4); }
+  50%      { transform: scaleY(1); }
+}
+@keyframes voiceFillIn {
+  from { opacity: 0; max-height: 0; }
+  to   { opacity: 1; max-height: 200px; }
+}
+@keyframes fieldTypeIn {
+  from { background: rgba(0,255,200,.08); }
+  to   { background: var(--bg3); }
+}
+`;
+
 /* ── Project Brief Modal ─────────────────────────────────── */
 function ProjectBriefModal({ onClose }: { onClose: () => void }) {
+  const { lang } = useLang();
   const [form, setForm] = useState<FormData>({
     name: "", email: "", problem: "", tools: "", budget: "",
   });
   const [phase, setPhase] = useState<"form" | "sending" | "success">("form");
+
+  /* ── Voice state ── */
+  const [voicePhase,  setVoicePhase ] = useState<"idle" | "listening" | "processing">("idle");
+  const [voiceError,  setVoiceError ] = useState<string | null>(null);
+  const [transcript,  setTranscript ] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const recognitionRef = useRef<any>(null);
+  const cssInjected    = useRef(false);
+
+  useEffect(() => {
+    if (cssInjected.current) return;
+    cssInjected.current = true;
+    const el = document.createElement("style");
+    el.textContent = VOICE_CSS;
+    document.head.appendChild(el);
+  }, []);
+
+  const voiceLabels: Record<string, { listen: string; processing: string; error: string; transcript: string; noSupport: string }> = {
+    fr: { listen: "Parler mon brief", processing: "Analyse en cours...", error: "Erreur micro", transcript: "Votre brief oral :", noSupport: "Micro non supporté sur ce navigateur" },
+    en: { listen: "Speak my brief", processing: "Analysing...", error: "Mic error", transcript: "Your spoken brief:", noSupport: "Microphone not supported in this browser" },
+    ar: { listen: "تحدث عن مشروعي", processing: "جارٍ التحليل...", error: "خطأ في الميكروفون", transcript: "ملخصك الشفهي:", noSupport: "الميكروفون غير مدعوم" },
+    es: { listen: "Hablar mi brief", processing: "Analizando...", error: "Error de micro", transcript: "Tu brief oral:", noSupport: "Micrófono no soportado" },
+    nl: { listen: "Spreek mijn brief", processing: "Analyseren...", error: "Microfoon fout", transcript: "Jouw gesproken brief:", noSupport: "Microfoon niet ondersteund" },
+  };
+  const vl = voiceLabels[lang] ?? voiceLabels.fr;
+
+  /* Start/stop listening */
+  const toggleVoice = () => {
+    if (voicePhase === "listening") {
+      recognitionRef.current?.stop();
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const w = window as any;
+    const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
+    if (!SR) { setVoiceError(vl.noSupport); return; }
+
+    const rec = new SR();
+    rec.lang        = lang === "ar" ? "ar-SA" : lang === "nl" ? "nl-NL" : lang === "en" ? "en-US" : lang === "es" ? "es-ES" : "fr-FR";
+    rec.continuous  = true;
+    rec.interimResults = false;
+
+    let fullText = "";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    rec.onresult = (e: any) => {
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        fullText += e.results[i][0].transcript + " ";
+      }
+      setTranscript(fullText.trim());
+    };
+
+    rec.onerror = () => { setVoiceError(vl.error); setVoicePhase("idle"); };
+
+    rec.onend = async () => {
+      setVoicePhase("processing");
+      try {
+        const res  = await fetch("/api/voice-brief", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ transcript: fullText.trim(), lang }),
+        });
+        const data = await res.json();
+
+        /* Animate field fill-in */
+        const typeIn = (key: keyof FormData, value: string) => {
+          if (!value) return;
+          setForm(f => ({ ...f, [key]: value }));
+        };
+        typeIn("name",    data.name    ?? "");
+        typeIn("email",   data.email   ?? "");
+        typeIn("problem", data.problem ?? "");
+        typeIn("tools",   data.tools   ?? "");
+        if (data.budget) setForm(f => ({ ...f, budget: data.budget }));
+      } catch {
+        setVoiceError(vl.error);
+      }
+      setVoicePhase("idle");
+    };
+
+    recognitionRef.current = rec;
+    rec.start();
+    setVoicePhase("listening");
+    setVoiceError(null);
+    setTranscript("");
+  };
 
   const set = (key: keyof FormData) => (v: string) => setForm(f => ({ ...f, [key]: v }));
 
@@ -211,6 +318,93 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
               <p style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.7 }}>
                 Remplissez ce brief en 2 minutes. Je vous réponds avec une analyse personnalisée sous 24h.
               </p>
+            </div>
+
+            {/* ── Voice-to-Brief button ─────────────────────── */}
+            <div style={{ marginBottom: "20px" }}>
+              <button
+                type="button"
+                onClick={toggleVoice}
+                style={{
+                  width:        "100%",
+                  padding:      "11px 16px",
+                  background:   voicePhase === "listening"
+                    ? "rgba(255,50,50,.12)"
+                    : voicePhase === "processing"
+                    ? "rgba(255,170,0,.08)"
+                    : "rgba(0,255,200,.04)",
+                  border:       `1px solid ${voicePhase === "listening" ? "rgba(255,50,50,.4)" : voicePhase === "processing" ? "rgba(255,170,0,.3)" : "rgba(0,255,200,.15)"}`,
+                  borderRadius: "6px",
+                  cursor:       voicePhase === "processing" ? "wait" : "pointer",
+                  display:      "flex",
+                  alignItems:   "center",
+                  justifyContent: "center",
+                  gap:          "10px",
+                  transition:   "all .2s",
+                  animation:    voicePhase === "listening" ? "voicePulse 1.4s ease-in-out infinite" : "none",
+                }}
+                disabled={voicePhase === "processing"}
+              >
+                {/* Mic icon / waves */}
+                {voicePhase === "listening" ? (
+                  <span style={{ display: "flex", alignItems: "center", gap: "2px" }}>
+                    {[0,1,2,3,4].map(i => (
+                      <span key={i} style={{
+                        display: "inline-block",
+                        width: "3px",
+                        height: `${8 + i * 4}px`,
+                        background: "#ff5050",
+                        borderRadius: "2px",
+                        animation: `voiceWave .5s ${i * 80}ms ease-in-out infinite`,
+                      }} />
+                    ))}
+                  </span>
+                ) : (
+                  <span style={{ fontSize: "16px" }}>
+                    {voicePhase === "processing" ? "⏳" : "🎙️"}
+                  </span>
+                )}
+                <span style={{
+                  fontFamily:  "var(--mono)",
+                  fontSize:    "12px",
+                  color:       voicePhase === "listening" ? "#ff8080"
+                             : voicePhase === "processing" ? "#ffaa00"
+                             : "var(--cyan)",
+                  letterSpacing: ".05em",
+                }}>
+                  {voicePhase === "listening"
+                    ? "● Écoute en cours — cliquer pour stopper"
+                    : voicePhase === "processing"
+                    ? vl.processing
+                    : `${vl.listen} — remplissage auto des champs`}
+                </span>
+              </button>
+
+              {/* Error */}
+              {voiceError && (
+                <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--red)", marginTop: "6px" }}>
+                  ⚠ {voiceError}
+                </p>
+              )}
+
+              {/* Transcript preview */}
+              {transcript && (
+                <div style={{
+                  marginTop:    "8px",
+                  padding:      "10px 14px",
+                  background:   "rgba(0,255,200,.04)",
+                  border:       "1px solid rgba(0,255,200,.1)",
+                  borderRadius: "6px",
+                  animation:    "voiceFillIn .3s ease",
+                }}>
+                  <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "rgba(0,255,200,.5)", marginBottom: "4px", textTransform: "uppercase", letterSpacing: ".08em" }}>
+                    {vl.transcript}
+                  </p>
+                  <p style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "rgba(255,255,255,.6)", lineHeight: 1.6 }}>
+                    "{transcript}"
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Form fields */}

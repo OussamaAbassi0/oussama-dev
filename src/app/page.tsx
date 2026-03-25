@@ -24,8 +24,9 @@ import WelcomeBanner       from "@/components/ui/WelcomeBanner";
 import LiveActivityFeed    from "@/components/ui/LiveActivityFeed";
 import ProactiveChat       from "@/components/ui/ProactiveChat";
 import ExitIntentPopup     from "@/components/ui/ExitIntentPopup";
-import DiagnosticCTABanner from "@/components/ui/DiagnosticCTABanner";
-import NewsletterBanner    from "@/components/ui/NewsletterBanner";
+import DiagnosticCTABanner    from "@/components/ui/DiagnosticCTABanner";
+import NewsletterBanner       from "@/components/ui/NewsletterBanner";
+import AutomationCostClock    from "@/components/ui/AutomationCostClock";
 
 export default function HomePage() {
   const [loading,      setLoading     ] = useState(true);
@@ -59,7 +60,10 @@ export default function HomePage() {
         {/* 1 — Hero : qui est Oussama en 5 secondes */}
         <HeroSection />
 
-        {/* 2 — Live Stats : automatisations en temps réel */}
+        {/* 2 — Automation Cost Clock : coût en temps réel des tâches manuelles */}
+        <AutomationCostClock onOpenBrief={() => openBrief()} />
+
+        {/* 3 — Live Stats : automatisations en temps réel */}
         <LiveStatsSection />
 
         {/* 3 — Portfolio : 4 projets live avec screenshots */}
