@@ -626,6 +626,584 @@ Un sistema multi-agente funciona exactamente igual:
       `,
     },
   },
+
+  {
+    slug:     "5-taches-repetitives-encore-a-la-main",
+    date:     "2026-03-17",
+    readTime: "4 min",
+    tag:      "Productivité",
+    tagI18n:  { en:"Productivity", ar:"إنتاجية", es:"Productividad", nl:"Productiviteit", fr:"Productivité" },
+    tagColor: "#00ffc8",
+    fr: {
+      title:   "5 tâches répétitives que vous faites encore à la main (et qui coûtent cher)",
+      excerpt: "Chaque semaine, des milliers d'euros s'évaporent dans des copy-paste, des relances oubliées et des tableaux mal synchronisés. Voici les 5 coupables les plus fréquents.",
+      content: `
+# 5 tâches répétitives que vous faites encore à la main
+
+Quand j'analyse les processus de mes clients, je retrouve toujours les mêmes tâches chronophages. Pas parce que les dirigeants ne voient pas le problème — mais parce que "on a toujours fait comme ça".
+
+Voici les 5 tâches qui reviennent le plus souvent, et combien elles coûtent réellement.
+
+## 1. Copier-coller des données entre outils (2-3h/jour)
+
+Du CRM vers Excel, d'Excel vers le rapport, du rapport vers l'email au patron. Chaque transfert prend 10 minutes, arrive avec des erreurs, et recommence le lendemain.
+
+**La solution :** Un webhook qui synchronise automatiquement vos outils en temps réel. Vos données sont toujours à jour, sans intervention humaine.
+
+**Temps récupéré :** jusqu'à 15h/semaine pour une équipe de 5.
+
+## 2. Relancer les clients manuellement (1-2h/jour)
+
+Un devis envoyé sans réponse. Une facture impayée. Un projet en attente de validation. Chaque relance est rédigée à la main, oubliée, ou envoyée trop tard.
+
+**La solution :** Des séquences de relance automatiques déclenchées par des conditions précises (délai depuis l'envoi, statut du devis, date d'échéance).
+
+**Résultat :** Taux de conversion devis +23% en moyenne chez mes clients.
+
+## 3. Trier les emails entrants (1h/jour)
+
+Votre boîte de réception est un mélange de prospects chauds, de newsletters, de spam déguisé et de demandes urgentes. Trier, prioriser, router — tout ça à la main.
+
+**La solution :** Un agent IA qui lit, catégorise et route les emails. Les urgents arrivent en Slack. Les prospects sont créés dans le CRM. Le reste est archivé.
+
+**Temps récupéré :** 5h/semaine.
+
+## 4. Créer des rapports hebdomadaires (3-4h/semaine)
+
+Chaque lundi matin, quelqu'un passe 3 heures à compiler les chiffres de la semaine dans un Google Slides ou un PowerPoint. Les données viennent de 4 sources différentes. Le formatage prend la moitié du temps.
+
+**La solution :** Un dashboard automatique qui se met à jour chaque dimanche soir. Le rapport est dans votre boîte email à 7h lundi, sans que personne y touche.
+
+## 5. Qualifier les leads entrants (2-3h/jour)
+
+Un formulaire de contact arrive. Quelqu'un doit lire, évaluer si c'est sérieux, chercher l'entreprise sur LinkedIn, vérifier si c'est déjà un contact CRM, puis décider quoi faire.
+
+**La solution :** Un agent IA qui qualifie automatiquement chaque lead entrant : score, enrichissement, routage vers le bon commercial, et première réponse personnalisée dans les 3 minutes.
+
+**Impact :** Taux de réponse rapide ×4, satisfaction client +40%.
+
+## Ce que ça représente concrètement
+
+Pour une PME de 10 personnes où chaque employé perd 1h/jour sur ces tâches :
+
+- **Heures perdues :** 10h/jour = 50h/semaine = 2 300h/an
+- **Coût humain :** 2 300 × 35€ = **80 500€/an**
+- **Budget d'automatisation nécessaire :** 5 000 à 15 000€ (one-off)
+- **ROI :** atteint en 3 à 6 semaines
+
+Laquelle de ces tâches reconnaissez-vous dans votre quotidien ? [Parlez-m'en ici](#cta).
+      `,
+    },
+    en: {
+      title:   "5 repetitive tasks you're still doing by hand (and they're costing you)",
+      excerpt: "Every week, thousands of euros evaporate into copy-paste, forgotten follow-ups and out-of-sync spreadsheets. Here are the 5 most common culprits.",
+      content: `
+# 5 repetitive tasks you're still doing by hand
+
+When I analyze my clients' processes, I always find the same time-consuming tasks. Not because business owners don't see the problem — but because "we've always done it this way."
+
+Here are the 5 most common tasks, and what they really cost.
+
+## 1. Copy-pasting data between tools (2-3h/day)
+
+From CRM to Excel, from Excel to the report, from the report to the boss's email. Each transfer takes 10 minutes, arrives with errors, and starts again the next day.
+
+**The fix:** A webhook that automatically syncs your tools in real time. Your data is always up to date, with no human intervention.
+
+## 2. Manual client follow-ups (1-2h/day)
+
+A quote sent with no reply. An unpaid invoice. A project waiting for approval. Each follow-up is written by hand, forgotten, or sent too late.
+
+**The fix:** Automated follow-up sequences triggered by specific conditions (time since sending, quote status, due date).
+
+**Result:** +23% quote conversion rate on average for my clients.
+
+## 3. Sorting incoming emails (1h/day)
+
+Your inbox is a mix of hot leads, newsletters, disguised spam, and urgent requests. Sorting, prioritizing, routing — all by hand.
+
+**The fix:** An AI agent that reads, categorizes and routes emails. Urgent ones go to Slack. Prospects get created in the CRM. The rest is archived.
+
+## 4. Creating weekly reports (3-4h/week)
+
+Every Monday morning, someone spends 3 hours compiling the previous week's numbers. Data comes from 4 different sources. Formatting takes half the time.
+
+**The fix:** An automatic dashboard that updates every Sunday evening. The report is in your inbox at 7am Monday, without anyone touching it.
+
+## 5. Qualifying inbound leads (2-3h/day)
+
+A contact form arrives. Someone has to read it, assess if it's serious, look up the company on LinkedIn, check if it's already a CRM contact, then decide what to do.
+
+**The fix:** An AI agent that automatically qualifies each inbound lead: score, enrichment, routing to the right salesperson, and personalized first response in under 3 minutes.
+
+Which of these tasks do you recognize in your daily routine? [Tell me about it here](#cta).
+      `,
+    },
+    ar: {
+      title:   "5 مهام متكررة لا تزال تقوم بها يدوياً (وهي تكلفك غالياً)",
+      excerpt: "كل أسبوع، تتبخر آلاف اليوروهات في عمليات النسخ واللصق والمتابعات المنسية والجداول غير المتزامنة. إليك المجرمون الخمسة الأكثر شيوعاً.",
+      content: `
+# 5 مهام متكررة لا تزال تقوم بها يدوياً
+
+عندما أحلل عمليات عملائي، أجد دائماً نفس المهام المستهلكة للوقت. ليس لأن أصحاب العمل لا يرون المشكلة — بل لأن "هكذا اعتدنا دائماً".
+
+إليك أكثر 5 مهام شيوعاً وما تكلفه فعلاً.
+
+## 1. نسخ ولصق البيانات بين الأدوات (2-3 ساعات/يوم)
+
+من CRM إلى Excel، من Excel إلى التقرير، من التقرير إلى البريد الإلكتروني. كل نقل يستغرق 10 دقائق ويصل مع أخطاء.
+
+**الحل:** Webhook يزامن أدواتك تلقائياً في الوقت الفعلي.
+
+## 2. المتابعة اليدوية مع العملاء (1-2 ساعة/يوم)
+
+عرض سعر أُرسل دون رد. فاتورة غير مدفوعة. مشروع ينتظر الموافقة.
+
+**الحل:** تسلسلات متابعة تلقائية مُشغَّلة بشروط محددة.
+
+**النتيجة:** +23% معدل تحويل العروض في المتوسط لعملائي.
+
+## 3. فرز رسائل البريد الإلكتروني الواردة (1 ساعة/يوم)
+
+**الحل:** وكيل ذكاء اصطناعي يقرأ ويصنف ويوجّه رسائل البريد الإلكتروني تلقائياً.
+
+## 4. إنشاء التقارير الأسبوعية (3-4 ساعات/أسبوع)
+
+**الحل:** لوحة بيانات تلقائية تتحدث كل يوم أحد. التقرير في بريدك الإلكتروني الاثنين الساعة 7 صباحاً.
+
+## 5. تأهيل العملاء المحتملين الواردين (2-3 ساعات/يوم)
+
+**الحل:** وكيل ذكاء اصطناعي يؤهّل كل عميل محتمل تلقائياً خلال أقل من 3 دقائق.
+
+أي من هذه المهام تتعرف عليها في يومك؟ [أخبرني هنا](#cta).
+      `,
+    },
+    es: {
+      title:   "5 tareas repetitivas que sigues haciendo a mano (y te cuestan mucho)",
+      excerpt: "Cada semana, miles de euros se evaporan en copy-paste, seguimientos olvidados y hojas de cálculo desincronizadas. Estos son los 5 culpables más frecuentes.",
+      content: `
+# 5 tareas repetitivas que sigues haciendo a mano
+
+Cuando analizo los procesos de mis clientes, siempre encuentro las mismas tareas que consumen tiempo. No porque los directivos no vean el problema — sino porque "siempre lo hemos hecho así".
+
+Aquí están las 5 tareas más comunes y lo que realmente cuestan.
+
+## 1. Copiar y pegar datos entre herramientas (2-3h/día)
+
+Del CRM a Excel, de Excel al informe, del informe al email del jefe. Cada transferencia toma 10 minutos, llega con errores y comienza de nuevo al día siguiente.
+
+**La solución:** Un webhook que sincroniza automáticamente tus herramientas en tiempo real.
+
+## 2. Seguimientos manuales de clientes (1-2h/día)
+
+Un presupuesto enviado sin respuesta. Una factura impagada. Un proyecto en espera de validación.
+
+**La solución:** Secuencias de seguimiento automáticas activadas por condiciones específicas.
+
+**Resultado:** +23% de tasa de conversión de presupuestos de media.
+
+## 3. Clasificar emails entrantes (1h/día)
+
+**La solución:** Un agente IA que lee, categoriza y enruta los emails automáticamente.
+
+## 4. Crear informes semanales (3-4h/semana)
+
+**La solución:** Un dashboard automático que se actualiza cada domingo por la noche. El informe llega a tu email el lunes a las 7h.
+
+## 5. Cualificar leads entrantes (2-3h/día)
+
+**La solución:** Un agente IA que cualifica automáticamente cada lead en menos de 3 minutos.
+
+¿Cuál de estas tareas reconoces en tu día a día? [Cuéntamelo aquí](#cta).
+      `,
+    },
+  },
+
+  {
+    slug:     "recrutement-ia-temps-divise-par-5",
+    date:     "2026-03-10",
+    readTime: "6 min",
+    tag:      "Cas client",
+    tagI18n:  { en:"Case Study", ar:"دراسة حالة", es:"Caso de éxito", nl:"Case study", fr:"Cas client" },
+    tagColor: "#f5a623",
+    fr: {
+      title:   "Comment j'ai divisé par 5 le temps de recrutement d'une PME grâce à l'IA",
+      excerpt: "Un client RH passait 3 jours à trier des CVs pour chaque offre. Après 2 semaines d'automatisation, ce délai est tombé à 4 heures. Voici exactement comment.",
+      content: `
+# Comment j'ai divisé par 5 le temps de recrutement d'une PME grâce à l'IA
+
+**Client :** Cabinet de recrutement, 12 employés, 80 à 100 offres actives par mois.
+
+**Problème :** Pour chaque offre, un recruteur passait en moyenne 3 jours à trier les CVs, répondre aux candidats non retenus, et planifier les entretiens. Avec 100 offres par mois, c'était 300 jours-homme perdus chaque mois.
+
+**Objectif :** Ramener ce délai à moins d'une journée sans réduire la qualité.
+
+## Le diagnostic
+
+En analysant leur processus, j'ai identifié 4 étapes 100% automatisables :
+
+1. **Réception des CVs** — 100% manuelle, depuis 3 sources différentes (email, LinkedIn, Indeed)
+2. **Tri initial** — basé sur des critères objectifs (expérience, formation, localisation)
+3. **Réponses aux refus** — email copié-collé, personnalisé à la main
+4. **Planification des entretiens** — 8 à 12 échanges d'emails par candidat retenu
+
+## La solution en 3 workflows
+
+### Workflow 1 — Centralisation et parsing des CVs
+
+Un agent collecte automatiquement les CVs depuis Gmail, LinkedIn Recruiter et Indeed. Il extrait et structure les données clés : poste visé, années d'expérience, formations, compétences, localisation.
+
+Tous les profils atterrissent dans un tableau Airtable unifié, prêts pour l'étape suivante.
+
+**Temps avant :** 45 min/offre pour collecter et organiser
+**Temps après :** 0 min (automatique)
+
+### Workflow 2 — Scoring IA personnalisé par offre
+
+Pour chaque offre, un agent IA compare chaque CV aux critères spécifiques du poste. Il attribue un score de 0 à 100 avec une justification en 2 lignes.
+
+Les recruteurs voient directement les candidats triés par pertinence. Ils n'ont plus qu'à valider ou rejeter les propositions de l'IA.
+
+**Temps avant :** 2 jours pour trier 150 CVs
+**Temps après :** 30 minutes pour valider le tri de l'IA
+
+### Workflow 3 — Communication automatique
+
+- **Refus immédiats** (score < 30) : email personnalisé envoyé automatiquement dans les 2 heures
+- **Candidats retenus** : proposition de créneaux d'entretien via Calendly, relance automatique si pas de réponse sous 48h
+- **Après entretien** : email de remerciement automatique + décision sous 24h
+
+**Temps avant :** 2-3h/offre pour gérer les communications
+**Temps après :** 15 min pour les cas complexes seulement
+
+## Les résultats après 6 semaines
+
+| Métrique | Avant | Après | Gain |
+|----------|-------|-------|------|
+| Temps de tri/offre | 3 jours | 4 heures | -87% |
+| Délai de réponse aux candidats | 5-7 jours | 2 heures | -97% |
+| Offres traitées/mois | 80 | 130 | +63% |
+| Satisfaction candidats | 3,2/5 | 4,6/5 | +44% |
+| Coût RH mensuel | 18 000€ | 18 000€ | = |
+
+Le même budget RH permet maintenant de traiter **63% d'offres en plus**.
+
+## Ce que ce projet m'a appris
+
+La résistance principale venait des recruteurs seniors qui craignaient que l'IA "ne comprenne pas les nuances". En pratique, l'IA gère les critères objectifs — et les recruteurs gèrent les critères subjectifs. Les deux se complètent parfaitement.
+
+**Budget du projet :** 4 200€ (développement) + 80€/mois (infrastructure)
+**ROI atteint :** En 18 jours
+
+Votre processus RH ressemble à ça ? [Décrivez-le moi ici](#cta).
+      `,
+    },
+    en: {
+      title:   "How I cut a company's hiring time by 80% using AI",
+      excerpt: "An HR client was spending 3 days sorting CVs for every job posting. After 2 weeks of automation, that dropped to 4 hours. Here's exactly how.",
+      content: `
+# How I cut a company's hiring time by 80% using AI
+
+**Client:** Recruitment agency, 12 employees, 80 to 100 active job postings per month.
+
+**Problem:** For each posting, a recruiter spent an average of 3 days sorting CVs, responding to rejected candidates, and scheduling interviews.
+
+**Goal:** Bring that down to less than one day without reducing quality.
+
+## The solution in 3 workflows
+
+### Workflow 1 — CV centralization and parsing
+
+An agent automatically collects CVs from Gmail, LinkedIn Recruiter and Indeed. It extracts and structures key data: target role, years of experience, education, skills, location.
+
+All profiles land in a unified Airtable database, ready for the next step.
+
+### Workflow 2 — AI scoring customized per posting
+
+For each job posting, an AI agent compares every CV to the specific position criteria. It assigns a score from 0 to 100 with a 2-line justification.
+
+Recruiters see candidates ranked by relevance. They just validate or reject the AI's suggestions.
+
+### Workflow 3 — Automated communication
+
+- **Immediate rejections** (score < 30): personalized email sent automatically within 2 hours
+- **Retained candidates**: interview slot proposals via Calendly, automatic follow-up if no reply within 48h
+- **Post-interview**: automatic thank-you email + decision within 24h
+
+## Results after 6 weeks
+
+| Metric | Before | After | Gain |
+|--------|--------|-------|------|
+| Sorting time/posting | 3 days | 4 hours | -87% |
+| Candidate response time | 5-7 days | 2 hours | -97% |
+| Postings handled/month | 80 | 130 | +63% |
+| Candidate satisfaction | 3.2/5 | 4.6/5 | +44% |
+
+The same HR budget now handles **63% more job postings**.
+
+**Project budget:** €4,200 (development) + €80/month (infrastructure)
+**ROI reached:** In 18 days
+
+Does your HR process look like this? [Describe it to me here](#cta).
+      `,
+    },
+    ar: {
+      title:   "كيف قلّصت وقت التوظيف لدى شركة بنسبة 80% باستخدام الذكاء الاصطناعي",
+      excerpt: "كان عميل في مجال الموارد البشرية يقضي 3 أيام في فرز السير الذاتية لكل وظيفة. بعد أسبوعين من الأتمتة، انخفض ذلك إلى 4 ساعات.",
+      content: `
+# كيف قلّصت وقت التوظيف بنسبة 80%
+
+**العميل:** وكالة تجنيد، 12 موظفاً، 80 إلى 100 وظيفة شاغرة شهرياً.
+
+**المشكلة:** لكل وظيفة، يقضي المجنّد 3 أيام في فرز السير الذاتية والرد على المرشحين وجدولة المقابلات.
+
+**الهدف:** تقليص هذا الوقت إلى أقل من يوم واحد.
+
+## الحل في 3 مسارات عمل
+
+### المسار 1 — تجميع وتحليل السير الذاتية
+وكيل يجمع السير الذاتية تلقائياً من Gmail وLinkedIn وIndeed ويضعها في قاعدة بيانات موحدة.
+
+### المسار 2 — تقييم ذكي مخصص لكل وظيفة
+وكيل ذكاء اصطناعي يقارن كل سيرة ذاتية بمعايير الوظيفة ويمنحها درجة من 0 إلى 100.
+
+### المسار 3 — التواصل التلقائي
+- رفض فوري (درجة < 30): رسالة شخصية خلال ساعتين
+- المرشحون المقبولون: اقتراح مواعيد مقابلات تلقائياً
+
+## النتائج بعد 6 أسابيع
+
+| المقياس | قبل | بعد | التحسن |
+|---------|-----|-----|--------|
+| وقت الفرز/وظيفة | 3 أيام | 4 ساعات | -87% |
+| وقت الرد على المرشحين | 5-7 أيام | ساعتان | -97% |
+| الوظائف المعالجة/شهر | 80 | 130 | +63% |
+
+**ميزانية المشروع:** 4,200 يورو + 80 يورو/شهر
+**تحقق العائد:** خلال 18 يوماً
+
+[أخبرني عن عمليتك هنا](#cta).
+      `,
+    },
+    es: {
+      title:   "Cómo reduje el tiempo de contratación de una empresa un 80% con IA",
+      excerpt: "Un cliente de RR.HH. pasaba 3 días clasificando CVs por cada oferta. Tras 2 semanas de automatización, eso bajó a 4 horas.",
+      content: `
+# Cómo reduje el tiempo de contratación un 80% con IA
+
+**Cliente:** Agencia de selección, 12 empleados, 80 a 100 ofertas activas al mes.
+
+**Problema:** Para cada oferta, un recruiter pasaba 3 días clasificando CVs, respondiendo a candidatos rechazados y agendando entrevistas.
+
+**Objetivo:** Reducir ese tiempo a menos de un día sin reducir la calidad.
+
+## La solución en 3 workflows
+
+### Workflow 1 — Centralización y parsing de CVs
+Un agente recopila automáticamente CVs desde Gmail, LinkedIn Recruiter e Indeed y los coloca en una base de datos unificada en Airtable.
+
+### Workflow 2 — Puntuación IA personalizada por oferta
+Un agente IA compara cada CV con los criterios específicos del puesto y asigna una puntuación del 0 al 100 con justificación.
+
+### Workflow 3 — Comunicación automatizada
+- Rechazos inmediatos (puntuación < 30): email personalizado enviado automáticamente en 2 horas
+- Candidatos seleccionados: propuesta de horarios de entrevista vía Calendly
+
+## Resultados después de 6 semanas
+
+| Métrica | Antes | Después | Mejora |
+|---------|-------|---------|--------|
+| Tiempo de clasificación/oferta | 3 días | 4 horas | -87% |
+| Tiempo de respuesta a candidatos | 5-7 días | 2 horas | -97% |
+| Ofertas gestionadas/mes | 80 | 130 | +63% |
+
+**Presupuesto del proyecto:** 4.200€ + 80€/mes
+**ROI alcanzado:** En 18 días
+
+¿Tu proceso de RR.HH. se parece a esto? [Descríbemelo aquí](#cta).
+      `,
+    },
+  },
+
+  {
+    slug:     "ia-pas-reservee-grandes-entreprises",
+    date:     "2026-03-03",
+    readTime: "5 min",
+    tag:      "Guide PME",
+    tagI18n:  { en:"SME Guide", ar:"دليل للشركات", es:"Guía PYME", nl:"KMO Gids", fr:"Guide PME" },
+    tagColor: "#a78bfa",
+    fr: {
+      title:   "L'IA n'est pas réservée aux grandes entreprises : 3 exemples concrets pour les PME",
+      excerpt: "Amazon, Google, Tesla — on parle toujours de l'IA des géants. Mais les PME peuvent en bénéficier tout autant, avec des budgets accessibles et des résultats visibles en quelques semaines.",
+      content: `
+# L'IA n'est pas réservée aux grandes entreprises
+
+Quand on parle d'intelligence artificielle, les exemples cités sont toujours les mêmes : la recommandation Netflix, les voitures autonomes Tesla, le moteur de recherche Google. Des entreprises avec des milliards de dollars investis en R&D.
+
+Résultat : la plupart des dirigeants de PME pensent que l'IA, c'est "pour plus tard", "quand on sera plus grands", "quand on aura le budget".
+
+C'est une erreur. Voici 3 exemples réels de PME qui utilisent l'IA aujourd'hui, avec des budgets qui font moins peur.
+
+## Exemple 1 — L'agence immobilière qui répond à 200 demandes par jour
+
+**Contexte :** Agence de 8 personnes, 150 à 200 demandes de renseignements par jour via WhatsApp, email et formulaire web.
+
+**Avant :** 3 agents passaient leurs journées à répondre aux mêmes questions : "Est-ce disponible ?", "Quel est le loyer charges comprises ?", "Peut-on visiter ce week-end ?". Les vraies négociations en pâtissaient.
+
+**Après :** Un agent IA répond automatiquement à 85% des demandes en moins de 2 minutes, 7 jours sur 7. Il accède en temps réel aux disponibilités, au calendrier des visites, et aux détails des biens. Les 15% de cas complexes sont transmis aux agents humains avec le contexte complet de la conversation.
+
+**Résultat :** Les agents se concentrent sur les négociations et les visites. Le taux de conversion des demandes en visites a augmenté de 34%.
+
+**Budget :** 1 800€ de développement + 40€/mois d'infrastructure.
+
+## Exemple 2 — Le cabinet comptable qui automatise les rappels de paiement
+
+**Contexte :** Cabinet de 15 personnes, 320 clients actifs, factures impayées représentant en moyenne 45 000€ à 60 jours.
+
+**Avant :** Une assistante consacrait 2 jours par mois à identifier les impayés, personnaliser les relances et les envoyer. Les délais de paiement moyens étaient de 62 jours.
+
+**Après :** Un système automatisé surveille chaque facture en temps réel. À J+30 : email de rappel courtois avec récapitulatif. À J+45 : deuxième relance plus directe. À J+60 : alerte au responsable et proposition d'échelonnement. Tout est personnalisé par client et par historique.
+
+**Résultat :** Délai de paiement moyen réduit à 38 jours. 45 000€ de trésorerie récupérés en permanence. L'assistante fait maintenant du vrai travail à valeur ajoutée.
+
+**Budget :** 2 400€ de développement + 25€/mois.
+
+## Exemple 3 — Le e-commerce qui répond aux avis clients automatiquement
+
+**Contexte :** Boutique en ligne, 800 à 1 200 avis par mois sur Google, Amazon et Trustpilot.
+
+**Avant :** Personne ne répondait aux avis faute de temps. Les avis négatifs restaient sans réponse, visibles de tous les futurs acheteurs.
+
+**Après :** Un agent IA analyse chaque avis, détecte le sentiment (positif, neutre, négatif), et génère une réponse adaptée. Les réponses sont validées par un humain en 5 secondes (clic "approuver" dans une interface simple) puis publiées automatiquement. Les avis négatifs déclenchent une alerte pour traitement prioritaire.
+
+**Résultat :** 100% des avis reçoivent une réponse. Note Google passée de 3,8 à 4,4 étoiles en 3 mois. Taux de conversion +18%.
+
+**Budget :** 1 200€ de développement + 30€/mois.
+
+## Ce que ces 3 exemples ont en commun
+
+1. **Aucun ne nécessite une équipe tech interne.** Tout est géré et maintenu par un prestataire.
+2. **Le ROI est mesuré, pas estimé.** Chaque automatisation a des métriques concrètes avant/après.
+3. **L'humain reste dans la boucle** pour les décisions importantes. L'IA gère le volume, les humains gèrent les nuances.
+4. **Le budget est accessible.** Entre 1 200€ et 4 200€ de développement, récupéré en quelques semaines.
+
+## Par où commencer ?
+
+La meilleure première automatisation est celle qui prend le plus de temps chaque semaine à votre équipe, avec les critères les plus objectifs (donc les plus faciles à automatiser).
+
+Faites la liste de vos 5 tâches les plus répétitives. Celle qui prend le plus de temps avec les critères les plus simples — c'est votre premier projet IA.
+
+[Partagez votre liste avec moi](#cta) — je vous dirai laquelle automatiser en premier et pourquoi.
+      `,
+    },
+    en: {
+      title:   "AI isn't just for big companies: 3 concrete examples for SMEs",
+      excerpt: "Amazon, Google, Tesla — we always talk about big tech AI. But SMEs can benefit just as much, with accessible budgets and visible results within weeks.",
+      content: `
+# AI isn't just for big companies
+
+When people talk about AI, the examples are always the same: Netflix recommendations, Tesla self-driving cars, Google's search engine. Companies with billions invested in R&D.
+
+Result: most SME owners think AI is "for later", "when we're bigger", "when we have the budget."
+
+That's a mistake. Here are 3 real examples of SMEs using AI today.
+
+## Example 1 — The real estate agency answering 200 inquiries per day
+
+An AI agent automatically answers 85% of inquiries in under 2 minutes, 7 days a week. Agents focus on negotiations and viewings.
+
+**Result:** Inquiry-to-viewing conversion rate increased by 34%.
+**Budget:** €1,800 development + €40/month.
+
+## Example 2 — The accounting firm that automated payment reminders
+
+An automated system monitors every invoice in real time. Reminder at day 30, firmer follow-up at day 45, manager alert at day 60.
+
+**Result:** Average payment delay reduced from 62 to 38 days. €45,000 in cash flow permanently recovered.
+**Budget:** €2,400 development + €25/month.
+
+## Example 3 — The e-commerce store that responds to reviews automatically
+
+An AI agent analyzes each review, detects sentiment, and generates an adapted response. A human approves in 5 seconds with a single click.
+
+**Result:** 100% of reviews receive a response. Google rating went from 3.8 to 4.4 stars in 3 months. Conversion rate +18%.
+**Budget:** €1,200 development + €30/month.
+
+## What these 3 examples have in common
+
+- No internal tech team required
+- ROI is measured, not estimated
+- Humans stay in the loop for important decisions
+- Accessible budget: €1,200 to €4,200, recovered in weeks
+
+[Share your repetitive tasks with me](#cta) — I'll tell you which one to automate first and why.
+      `,
+    },
+    ar: {
+      title:   "الذكاء الاصطناعي ليس حكراً على الشركات الكبيرة: 3 أمثلة ملموسة للشركات الصغيرة",
+      excerpt: "أمازون، غوغل، تسلا — دائماً نتحدث عن الذكاء الاصطناعي للعمالقة. لكن الشركات الصغيرة يمكنها الاستفادة بنفس القدر، بميزانيات في المتناول ونتائج خلال أسابيع.",
+      content: `
+# الذكاء الاصطناعي ليس حكراً على الشركات الكبيرة
+
+معظم أصحاب الشركات الصغيرة يعتقدون أن الذكاء الاصطناعي "للمستقبل" أو "عندما نكبر". هذا خطأ.
+
+## مثال 1 — وكالة عقارية ترد على 200 استفسار يومياً
+
+وكيل ذكاء اصطناعي يرد تلقائياً على 85% من الاستفسارات في أقل من دقيقتين، 7 أيام في الأسبوع.
+
+**النتيجة:** ارتفع معدل تحويل الاستفسارات إلى زيارات بنسبة 34%.
+**الميزانية:** 1,800 يورو + 40 يورو/شهر.
+
+## مثال 2 — مكتب محاسبة أتمت تذكيرات الدفع
+
+نظام تلقائي يراقب كل فاتورة في الوقت الفعلي مع تذكيرات متصاعدة.
+
+**النتيجة:** تقليص متوسط تأخر الدفع من 62 إلى 38 يوماً. استرداد 45,000 يورو دائماً.
+**الميزانية:** 2,400 يورو + 25 يورو/شهر.
+
+## مثال 3 — متجر إلكتروني يرد على التقييمات تلقائياً
+
+وكيل ذكاء اصطناعي يحلل كل تقييم ويولّد رداً مناسباً. إنسان يوافق بنقرة واحدة.
+
+**النتيجة:** 100% من التقييمات تحصل على رد. تقييم Google من 3.8 إلى 4.4 نجوم في 3 أشهر.
+**الميزانية:** 1,200 يورو + 30 يورو/شهر.
+
+[شاركني قائمة مهامك المتكررة](#cta) — سأخبرك أيها تؤتمت أولاً.
+      `,
+    },
+    es: {
+      title:   "La IA no es solo para grandes empresas: 3 ejemplos concretos para PYMEs",
+      excerpt: "Amazon, Google, Tesla — siempre hablamos de la IA de los gigantes. Pero las PYMEs pueden beneficiarse igual, con presupuestos accesibles y resultados visibles en semanas.",
+      content: `
+# La IA no es solo para grandes empresas
+
+La mayoría de los dueños de PYMEs piensan que la IA es "para más adelante". Es un error.
+
+## Ejemplo 1 — La agencia inmobiliaria que responde 200 consultas al día
+
+Un agente IA responde automáticamente al 85% de las consultas en menos de 2 minutos, 7 días a la semana.
+
+**Resultado:** La tasa de conversión de consultas a visitas aumentó un 34%.
+**Presupuesto:** 1.800€ + 40€/mes.
+
+## Ejemplo 2 — La asesoría que automatizó los recordatorios de pago
+
+Un sistema automatizado monitoriza cada factura: recordatorio a los 30 días, seguimiento firme a los 45, alerta al responsable a los 60.
+
+**Resultado:** Plazo de pago reducido de 62 a 38 días. 45.000€ de tesorería recuperados permanentemente.
+**Presupuesto:** 2.400€ + 25€/mes.
+
+## Ejemplo 3 — El e-commerce que responde a reseñas automáticamente
+
+Un agente IA analiza cada reseña y genera una respuesta adaptada. Un humano aprueba en 5 segundos con un clic.
+
+**Resultado:** El 100% de las reseñas recibe respuesta. Valoración Google de 3,8 a 4,4 estrellas en 3 meses. Conversión +18%.
+**Presupuesto:** 1.200€ + 30€/mes.
+
+[Comparte tu lista de tareas repetitivas conmigo](#cta) — te diré cuál automatizar primero y por qué.
+      `,
+    },
+  },
 ];
 
 export function getArticle(slug: string): Article | undefined {

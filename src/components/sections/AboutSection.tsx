@@ -82,10 +82,26 @@ export default function AboutSection() {
               gap: "12px", marginBottom: "32px",
             }}>
               {[
-                { icon:"⚡", label:"Automatisation B2B",  desc:"n8n, Make, Webhooks" },
-                { icon:"🧠", label:"IA & Multi-Agents",   desc:"OpenAI, LangGraph, RAG" },
-                { icon:"🚀", label:"Full-Stack Dev",       desc:"Next.js, Python, Prisma" },
-                { icon:"📈", label: lang==="en" ? "Measurable results" : lang==="ar" ? "نتائج قابلة للقياس" : lang==="es" ? "Resultados medibles" : lang==="nl" ? "Meetbare resultaten" : "Résultats mesurables", desc:"+340h/mois, +12k leads" },
+                {
+                  icon:"⚡",
+                  label: lang==="en" ? "B2B Automation" : lang==="ar" ? "أتمتة الأعمال" : lang==="es" ? "Automatización B2B" : lang==="nl" ? "B2B Automatisering" : "Automatisation B2B",
+                  desc:  lang==="en" ? "Eliminate repetitive tasks" : lang==="ar" ? "التخلص من المهام المتكررة" : lang==="es" ? "Elimina las tareas repetitivas" : lang==="nl" ? "Elimineer repetitief werk" : "Supprimez les tâches répétitives",
+                },
+                {
+                  icon:"🤖",
+                  label: lang==="en" ? "AI Agents" : lang==="ar" ? "وكلاء الذكاء الاصطناعي" : lang==="es" ? "Agentes IA" : lang==="nl" ? "AI-agents" : "Agents IA",
+                  desc:  lang==="en" ? "They work for you 24h/day" : lang==="ar" ? "يعملون لأجلك 24 ساعة" : lang==="es" ? "Trabajan para ti 24h/día" : lang==="nl" ? "Werken voor u 24u/dag" : "Ils travaillent pour vous 24h/24",
+                },
+                {
+                  icon:"🚀",
+                  label: lang==="en" ? "Fast Delivery" : lang==="ar" ? "تسليم سريع" : lang==="es" ? "Entrega rápida" : lang==="nl" ? "Snelle levering" : "Livraison rapide",
+                  desc:  lang==="en" ? "From idea to product in days" : lang==="ar" ? "من الفكرة إلى المنتج في أيام" : lang==="es" ? "De la idea al producto en días" : lang==="nl" ? "Van idee naar product in dagen" : "De l'idée au produit en quelques jours",
+                },
+                {
+                  icon:"📈",
+                  label: lang==="en" ? "Measurable results" : lang==="ar" ? "نتائج قابلة للقياس" : lang==="es" ? "Resultados medibles" : lang==="nl" ? "Meetbare resultaten" : "Résultats mesurables",
+                  desc:  lang==="en" ? "+340h saved · +12k leads" : lang==="ar" ? "+340 ساعة موفرة · +12k عميل" : lang==="es" ? "+340h ahorradas · +12k leads" : lang==="nl" ? "+340u bespaard · +12k leads" : "+340h récupérées · +12k leads",
+                },
               ].map(trait => (
                 <div key={trait.label} style={{
                   display: "flex", alignItems: "center", gap: "12px",
