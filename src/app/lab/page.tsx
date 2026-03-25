@@ -2,11 +2,13 @@
 import { useState } from "react";
 import Navbar               from "@/components/layout/Navbar";
 import Footer               from "@/components/layout/Footer";
-import LeadHunterSection    from "@/components/sections/LeadHunterSection";
-import WorkflowSection      from "@/components/sections/WorkflowSection";
-import AutomationLiveSection from "@/components/sections/AutomationLiveSection";
-import ROICalculatorSection from "@/components/sections/ROICalculatorSection";
-import CTASection           from "@/components/sections/CTASection";
+import LeadHunterSection      from "@/components/sections/LeadHunterSection";
+import WorkflowGallery        from "@/components/sections/WorkflowGallery";
+import EmailGeneratorSection  from "@/components/sections/EmailGeneratorSection";
+import WorkflowSection        from "@/components/sections/WorkflowSection";
+import AutomationLiveSection  from "@/components/sections/AutomationLiveSection";
+import ROICalculatorSection   from "@/components/sections/ROICalculatorSection";
+import CTASection             from "@/components/sections/CTASection";
 import ScrollProgressBar    from "@/components/ui/ScrollProgressBar";
 import { useLang }          from "@/lib/LangContext";
 
@@ -103,6 +105,8 @@ export default function LabPage() {
         }}>
           {[
             { anchor: "#lead-hunter", emoji: "🎯", label: "Lead Hunter" },
+            { anchor: "#gallery",     emoji: "🗂️", label: "Workflow Gallery" },
+            { anchor: "#email-gen",   emoji: "✉️", label: "Email Generator" },
             { anchor: "#workflow",    emoji: "⚙️", label: "Workflow Builder" },
             { anchor: "#automation",  emoji: "⚡", label: "Live Pipeline" },
             { anchor: "#roi",         emoji: "💰", label: "ROI Calculator" },
@@ -132,8 +136,10 @@ export default function LabPage() {
         </div>
       </section>
 
-      {/* Les 3 outils */}
+      {/* Les outils */}
       <LeadHunterSection />
+      <WorkflowGallery onOpenBrief={() => setBriefOpen(true)} />
+      <EmailGeneratorSection />
       <WorkflowSection />
       <AutomationLiveSection />
       <ROICalculatorSection onOpenBrief={() => setBriefOpen(true)} />

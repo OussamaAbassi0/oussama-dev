@@ -13,15 +13,19 @@ import BlogPreviewSection  from "@/components/sections/BlogPreviewSection";
 import AboutSection        from "@/components/sections/AboutSection";
 import CTASection          from "@/components/sections/CTASection";
 import TrustSection        from "@/components/sections/TrustSection";
+import LiveStatsSection    from "@/components/sections/LiveStatsSection";
+import TechStackSection    from "@/components/sections/TechStackSection";
 
 /* ── UI globale ──────────────────────────────────────────── */
-import LoadingScreen     from "@/components/ui/LoadingScreen";
-import CustomCursor      from "@/components/ui/CustomCursor";
-import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
-import WelcomeBanner     from "@/components/ui/WelcomeBanner";
-import LiveActivityFeed  from "@/components/ui/LiveActivityFeed";
-import ProactiveChat     from "@/components/ui/ProactiveChat";
-import ExitIntentPopup   from "@/components/ui/ExitIntentPopup";
+import LoadingScreen       from "@/components/ui/LoadingScreen";
+import CustomCursor        from "@/components/ui/CustomCursor";
+import ScrollProgressBar   from "@/components/ui/ScrollProgressBar";
+import WelcomeBanner       from "@/components/ui/WelcomeBanner";
+import LiveActivityFeed    from "@/components/ui/LiveActivityFeed";
+import ProactiveChat       from "@/components/ui/ProactiveChat";
+import ExitIntentPopup     from "@/components/ui/ExitIntentPopup";
+import DiagnosticCTABanner from "@/components/ui/DiagnosticCTABanner";
+import NewsletterBanner    from "@/components/ui/NewsletterBanner";
 
 export default function HomePage() {
   const [loading,      setLoading     ] = useState(true);
@@ -55,22 +59,38 @@ export default function HomePage() {
         {/* 1 — Hero : qui est Oussama en 5 secondes */}
         <HeroSection />
 
-        {/* 2 — Portfolio : 4 projets live avec screenshots */}
+        {/* 2 — Live Stats : automatisations en temps réel */}
+        <LiveStatsSection />
+
+        {/* 3 — Portfolio : 4 projets live avec screenshots */}
         <ProjectsSection />
 
-        {/* 3 — Témoignages : preuve sociale Malt + Upwork */}
+        {/* 4 — Témoignages : preuve sociale Malt + Upwork */}
         <TestimonialsSection />
 
-        {/* 4 — Avant/Après + 3 étapes + garanties */}
+        {/* 5 — Avant/Après + 3 étapes + garanties */}
         <TrustSection />
 
-        {/* 5 — About : parcours + expertise */}
+        {/* 6 — Diagnostic CTA Banner */}
+        <DiagnosticCTABanner />
+
+        {/* 7 — About : parcours + expertise */}
         <AboutSection />
 
-        {/* 6 — Blog : 3 articles récents */}
+        {/* 8 — Tech Stack : les outils avec animations */}
+        <TechStackSection />
+
+        {/* 9 — Blog : 3 articles récents */}
         <BlogPreviewSection />
 
-        {/* 7 — CTA : formulaire de brief */}
+        {/* 10 — Newsletter */}
+        <section style={{ padding: "60px 24px", background: "var(--bg2)" }}>
+          <div style={{ maxWidth: "640px", margin: "0 auto" }}>
+            <NewsletterBanner />
+          </div>
+        </section>
+
+        {/* 11 — CTA : formulaire de brief */}
         <CTASection
           briefOpen={briefOpen}
           onBriefOpenChange={setBriefOpen}
