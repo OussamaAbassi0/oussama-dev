@@ -4,6 +4,7 @@ import Navbar               from "@/components/layout/Navbar";
 import Footer               from "@/components/layout/Footer";
 import LeadHunterSection    from "@/components/sections/LeadHunterSection";
 import WorkflowSection      from "@/components/sections/WorkflowSection";
+import AutomationLiveSection from "@/components/sections/AutomationLiveSection";
 import ROICalculatorSection from "@/components/sections/ROICalculatorSection";
 import CTASection           from "@/components/sections/CTASection";
 import ScrollProgressBar    from "@/components/ui/ScrollProgressBar";
@@ -103,6 +104,7 @@ export default function LabPage() {
           {[
             { anchor: "#lead-hunter", emoji: "🎯", label: "Lead Hunter" },
             { anchor: "#workflow",    emoji: "⚙️", label: "Workflow Builder" },
+            { anchor: "#automation",  emoji: "⚡", label: "Live Pipeline" },
             { anchor: "#roi",         emoji: "💰", label: "ROI Calculator" },
           ].map(item => (
             <a key={item.anchor} href={item.anchor} style={{
@@ -133,6 +135,7 @@ export default function LabPage() {
       {/* Les 3 outils */}
       <LeadHunterSection />
       <WorkflowSection />
+      <AutomationLiveSection />
       <ROICalculatorSection onOpenBrief={() => setBriefOpen(true)} />
 
       {/* CTA */}
