@@ -13,50 +13,98 @@ interface Msg {
 }
 
 /* ══════════════════════════════════════════════════════════
-   INTENT → ACTION BUTTONS
-   Analyse le texte (user + bot) et retourne des boutons contextuels
+   INTENT → ACTION BUTTONS (v2 — logique en 2 passes)
+
+   Passe 1 : texte USER uniquement — intention explicite du visiteur
+   Passe 2 : texte BOT uniquement — URLs précises mentionnées par le bot
+   → évite les faux positifs sur "projet", "gratuit", "formulaire"…
 ══════════════════════════════════════════════════════════ */
 function getActions(userText: string, botText: string): Action[] {
-  const t = (userText + " " + botText)
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{Mn}/gu, ""); // supprime les accents
+  const n = (s: string) =>
+    s.toLowerCase().normalize("NFD").replace(/\p{Mn}/gu, "");
 
-  const checks: [RegExp, Action][] = [
-    [/article|blog|lire|post|publication|ecriture|redaction/,
-      { label: "📖 Lire le blog",          href: "/blog",              color: "#00ffc8" }],
-    [/projet|portfolio|realisation|leadscout|flowaudit|talentscout|exemple de|travail|cas client/,
-      { label: "🚀 Voir les projets",       href: "/projets",           color: "#a78bfa" }],
-    [/service|prestation|offre|propose|fais-tu|que fais|qu est-ce que|expertise/,
-      { label: "💼 Voir les services",      href: "/services",          color: "#f5a623" }],
-    [/outil|lab|tester|demo|essayer|gratuit|playground|interactif/,
-      { label: "⚡ Tester les outils",      href: "/lab",               color: "#00e5ff" }],
-    [/lead hunter|lead scou|prospect|prospection|leads?/,
-      { label: "🎯 Lead Hunter",            href: "/lab#lead-hunter",   color: "#00ffc8" }],
-    [/roi|economis|argent|cout|combien|calculer|calculateur|perd/,
-      { label: "💰 Calculateur ROI",        href: "/lab#roi",           color: "#f5a623" }],
-    [/n8n|make|webhook|workflow|builder|pipeline/,
-      { label: "⚙️ Workflow Builder",       href: "/lab#workflow",      color: "#a78bfa" }],
-    [/automatisation en temps reel|live pipeline|animation/,
-      { label: "⚡ Live Pipeline",          href: "/lab#automation",    color: "#00e5ff" }],
-    [/commencer|demarrer|brief|contacter|travailler ensemble|collaborer|projet|devis/,
-      { label: "📋 Démarrer un projet",     href: "/#cta",              color: "#00ffc8" }],
-    [/recrutement|rh|cv|embauche|embaucher/,
-      { label: "📖 Cas client RH",         href: "/blog/recrutement-ia-temps-divise-par-5", color: "#f5a623" }],
-    [/pme|petite entreprise|tpe|petite boite/,
-      { label: "📖 Guide PME",             href: "/blog/ia-pas-reservee-grandes-entreprises", color: "#a78bfa" }],
+  const u = n(userText);   // intention de l'utilisateur
+  const b = n(botText);    // réponse du bot
+
+  /* ── Passe 1 : intention USER (patterns stricts) ──────── */
+  const USER_INTENTS: [RegExp, Action][] = [
+    // Contact / démarrer — TOP PRIORITY
+    [/contacter|contact|joindre|ecrire|envoyer|message|collaboration|travaill.*ensemble|commencer.*projet|demarrer.*projet|brief|devis|tarif|combien.*cout|combien.*pric/,
+      { label: "📋 Démarrer un projet",  href: "/#cta",                         color: "#00ffc8" }],
+    // Blog / articles
+    [/\barticle|\bblog|lire|post|publication|guide.*pme|taches.*repetitives/,
+      { label: "📖 Lire le blog",        href: "/blog",                         color: "#00ffc8" }],
+    // Projets concrets
+    [/\bprojets?\b|portfolio|realisation|leadscout|flowaudit|talentscout|ce que tu as fait|tes travaux/,
+      { label: "🚀 Voir les projets",    href: "/projets",                      color: "#a78bfa" }],
+    // Services
+    [/\bservice|prestation|offre|que proposes|que fais.?tu|qu est.?ce que|expertise/,
+      { label: "💼 Voir les services",   href: "/services",                     color: "#f5a623" }],
+    // Lead Hunter spécifique
+    [/lead.?hunter|generer.*lead|trouver.*prospect|prospects? qualifie/,
+      { label: "🎯 Lead Hunter",         href: "/lab#lead-hunter",              color: "#00ffc8" }],
+    // ROI Calculator
+    [/\broi\b|calculer.*roi|calculateur|heures.*perdues|economis.*argent/,
+      { label: "💰 Calculateur ROI",     href: "/lab#roi",                      color: "#f5a623" }],
+    // Workflow Builder
+    [/\bn8n\b|\bmake\b|workflow.*builder|construire.*workflow/,
+      { label: "⚙️ Workflow Builder",    href: "/lab#workflow",                 color: "#a78bfa" }],
+    // Lab / outils générique
+    [/\blab\b|tester.*outil|outils.*gratuit|essayer.*demo|playground/,
+      { label: "⚡ Tester les outils",   href: "/lab",                          color: "#00e5ff" }],
+    // Cas client RH
+    [/recrutement|embauche|tri.*cv|cv.*tri|rh\b/,
+      { label: "📖 Cas client RH",       href: "/blog/recrutement-ia-temps-divise-par-5", color: "#f5a623" }],
+    // Guide PME
+    [/pme|petite.*entreprise|tpe\b|petite.*boite/,
+      { label: "📖 Guide PME",           href: "/blog/ia-pas-reservee-grandes-entreprises", color: "#a78bfa" }],
   ];
 
-  const seen  = new Set<string>();
-  const hits: Action[] = [];
-  for (const [re, action] of checks) {
-    if (re.test(t) && !seen.has(action.href)) {
-      hits.push(action);
+  const seen    = new Set<string>();
+  const actions: Action[] = [];
+
+  for (const [re, action] of USER_INTENTS) {
+    if (re.test(u) && !seen.has(action.href)) {
+      actions.push(action);
       seen.add(action.href);
-      if (hits.length >= 2) break;
+      break; // une seule action depuis le texte user
     }
   }
-  return hits;
+
+  /* ── Passe 2 : URLs citées par le BOT (patterns très précis) ── */
+  // Le bot est forcé par son system prompt à écrire les URLs → on les détecte
+  const BOT_URLS: [RegExp, Action][] = [
+    [/\/blog(?!\/)/,
+      { label: "📖 Lire le blog",        href: "/blog",                         color: "#00ffc8" }],
+    [/\/projets/,
+      { label: "🚀 Voir les projets",    href: "/projets",                      color: "#a78bfa" }],
+    [/\/services/,
+      { label: "💼 Voir les services",   href: "/services",                     color: "#f5a623" }],
+    [/lead.?hunter|\/lab#lead/,
+      { label: "🎯 Lead Hunter",         href: "/lab#lead-hunter",              color: "#00ffc8" }],
+    [/roi.?calculat|\/lab#roi/,
+      { label: "💰 Calculateur ROI",     href: "/lab#roi",                      color: "#f5a623" }],
+    [/workflow.?builder|\/lab#workflow/,
+      { label: "⚙️ Workflow Builder",    href: "/lab#workflow",                 color: "#a78bfa" }],
+    [/live.?pipeline|\/lab#automation/,
+      { label: "⚡ Live Pipeline",       href: "/lab#automation",               color: "#00e5ff" }],
+    [/\/lab(?!#)/,
+      { label: "⚡ Tester les outils",   href: "/lab",                          color: "#00e5ff" }],
+    [/formulaire.*brief|bouton.*demarrer|cta|\/#cta/,
+      { label: "📋 Démarrer un projet",  href: "/#cta",                         color: "#00ffc8" }],
+  ];
+
+  if (actions.length < 2) {
+    for (const [re, action] of BOT_URLS) {
+      if (re.test(b) && !seen.has(action.href)) {
+        actions.push(action);
+        seen.add(action.href);
+        if (actions.length >= 2) break;
+      }
+    }
+  }
+
+  return actions;
 }
 
 /* ══════════════════════════════════════════════════════════
