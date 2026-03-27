@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
-import AvailabilityBadge from "@/components/ui/AvailabilityBadge";
 import { useLang } from "@/lib/LangContext";
 
 /* ══════════════════════════════════════════════════════════
@@ -250,7 +249,6 @@ export default function HeroSection() {
             <span style={{ width:"6px", height:"6px", borderRadius:"50%", background:"#ff4d6d", animation:"livePulse 1.5s ease-in-out infinite" }} />
             {t.hero.badge}
           </span>
-          <AvailabilityBadge />
         </div>
 
         {/* Headline */}
@@ -363,9 +361,9 @@ export default function HeroSection() {
           animationFillMode:"both",
         }}>
           {[
-            { val:12000, suffix:"+", label:t.hero.stat1 },
-            { val:340,   suffix:"h", label:t.hero.stat2 },
-            { val:98,    suffix:"%", label:t.hero.stat3 },
+            { val:17,  suffix:"",   label:t.hero.stat1 },
+            { val:13,  suffix:"",   label:t.hero.stat2 },
+            { val:5,   suffix:"/5", label:t.hero.stat3 },
           ].map((s, i) => (
             <div key={s.label} style={{
               flex:1, minWidth:"130px", textAlign:"center",
