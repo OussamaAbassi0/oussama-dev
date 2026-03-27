@@ -20,7 +20,7 @@ const TRANS: Record<string, {
     titleAccent: "réellement livré.",
     hours: "heures économisées / semaine (total clients)",
     workflows: "automatisations n8n livrées",
-    projects: "projets livrés depuis 2022",
+    projects: "projets livrés",
     satisfaction: "note moyenne Malt & Upwork",
   },
   en: {
@@ -29,7 +29,7 @@ const TRANS: Record<string, {
     titleAccent: "actually delivered.",
     hours: "hours saved / week (total clients)",
     workflows: "n8n automations delivered",
-    projects: "projects delivered since 2022",
+    projects: "projects delivered",
     satisfaction: "avg rating Malt & Upwork",
   },
   ar: {
@@ -38,7 +38,7 @@ const TRANS: Record<string, {
     titleAccent: "فعلياً.",
     hours: "ساعات موفرة / أسبوع",
     workflows: "أتمتة n8n مسلّمة",
-    projects: "مشروع مسلّم منذ 2022",
+    projects: "مشروع مسلّم",
     satisfaction: "متوسط التقييم",
   },
   es: {
@@ -47,7 +47,7 @@ const TRANS: Record<string, {
     titleAccent: "entregado realmente.",
     hours: "horas ahorradas / semana (total clientes)",
     workflows: "automatizaciones n8n entregadas",
-    projects: "proyectos entregados desde 2022",
+    projects: "proyectos entregados",
     satisfaction: "nota media Malt & Upwork",
   },
   nl: {
@@ -56,7 +56,7 @@ const TRANS: Record<string, {
     titleAccent: "echt heb geleverd.",
     hours: "uren bespaard / week (totaal klanten)",
     workflows: "n8n-automatiseringen geleverd",
-    projects: "projecten geleverd sinds 2022",
+    projects: "projecten geleverd",
     satisfaction: "gemiddelde score Malt & Upwork",
   },
 };
