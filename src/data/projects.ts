@@ -328,6 +328,62 @@ export const N8N_PROJECTS: N8nProject[] = [
     screenshot: "/workflows/lead-scoring.png",
   },
   {
+    id: "wf-medical-doc-intelligence",
+    name: "AI Medical Document Intelligence Pipeline",
+    color: "#00ffc8",
+    emoji: "🏥",
+    category: "Healthcare · IA Médicale",
+    categoryKey: "healthcare",
+    problem: {
+      fr: "Des centaines d'ordonnances et bilans PDF arrivaient par email chaque semaine — traitement 100% manuel, risques d'erreurs critiques dans un contexte médical sensible.",
+      en: "Hundreds of PDF prescriptions and lab results arrived by email weekly — 100% manual processing with critical error risk in a sensitive medical context.",
+    },
+    solution: {
+      fr: "Pipeline n8n en 32 nœuds : OCR via PDF.co → classification GPT-4o (6 types de documents) → extraction structurée spécialisée → validation → dossier patient → archivage Drive → alerte STAT Slack → résumé clinique → tâche Notion → rapport conformité RGPD.",
+      en: "32-node n8n pipeline: OCR via PDF.co → GPT-4o classification (6 document types) → specialized structured extraction → validation → patient record → Drive archive → STAT Slack alert → clinical summary → Notion task → GDPR compliance report.",
+    },
+    result: {
+      fr: "Traitement automatisé bout-en-bout. Alertes STAT instantanées. Conformité RGPD intégrée. Zéro document perdu. Piste d'audit complète Google Sheets.",
+      en: "End-to-end automated processing. Instant STAT alerts. Built-in GDPR compliance. Zero lost document. Full Google Sheets audit trail.",
+    },
+    stack: ["n8n", "GPT-4o", "PDF.co (OCR)", "Google Drive", "Google Sheets", "Notion", "Slack", "Gmail"],
+    metrics: [
+      { icon: "🏥", val: "6 types", label: "Documents classifiés IA" },
+      { icon: "⚡", val: "STAT", label: "Alertes critiques instant." },
+      { icon: "🔒", val: "RGPD", label: "Conformité intégrée" },
+      { icon: "🔗", val: "32 nœuds", label: "Pipeline complet" },
+    ],
+    screenshot: "/workflows/medical-doc-intelligence.png",
+  },
+  {
+    id: "wf-b2b-revenue-autopilot",
+    name: "B2B Revenue Intelligence & Outreach Autopilot",
+    color: "#a78bfa",
+    emoji: "🚀",
+    category: "Sales · Prospection IA",
+    categoryKey: "sales",
+    problem: {
+      fr: "La prospection B2B manuelle : 3h/jour pour chercher des leads, rédiger des emails, relancer, qualifier — et les meilleurs prospects n'étaient jamais contactés au bon moment.",
+      en: "Manual B2B prospecting: 3h/day finding leads, writing emails, following up, qualifying — and the best prospects were never contacted at the right time.",
+    },
+    solution: {
+      fr: "Autopilot en 33 nœuds : Apollo fetch leads ICP (CEO/CTO, 10-1000 emp) → dédoublonnage HubSpot → enrichissement complet → scoring ICP GPT-4o (0-100 + pain points + hook perso) → email ultra-personnalisé → séquence J+3/J+7 → deal auto si réponse → brief pré-RDV intelligence → rapport hebdo Slack.",
+      en: "33-node autopilot: Apollo fetch ICP leads (CEO/CTO, 10-1000 emp) → HubSpot dedup → full enrichment → GPT-4o ICP scoring (0-100 + pain points + perso hook) → ultra-personalized email → J+3/J+7 sequence → auto deal on reply → pre-meeting intelligence brief → weekly Slack report.",
+    },
+    result: {
+      fr: "Prospection 24/7 sans intervention humaine. Emails personnalisés niveau humain à grande échelle. Deal HubSpot + brief pré-RDV auto dès qu'un prospect répond. Rapport pipeline chaque vendredi.",
+      en: "24/7 prospecting without human intervention. Human-level personalized emails at scale. HubSpot deal + pre-meeting brief auto-created on reply. Pipeline report every Friday.",
+    },
+    stack: ["n8n", "Apollo.io", "GPT-4o", "HubSpot", "Gmail", "Google Sheets", "Slack", "Calendly"],
+    metrics: [
+      { icon: "🎯", val: "0-100", label: "Score ICP GPT-4o" },
+      { icon: "📧", val: "J+3/J+7", label: "Séquence auto" },
+      { icon: "🔥", val: "Auto", label: "Deal sur réponse" },
+      { icon: "🔗", val: "33 nœuds", label: "Pipeline complet" },
+    ],
+    screenshot: "/workflows/b2b-revenue-autopilot.png",
+  },
+  {
     id: "wf-payment", name: "Paiement → Ticket → Notification", color: "#00e5ff",
     emoji: "✉️", category: "Ops · Finance", categoryKey: "ops",
     problem: { fr: "Après un paiement Stripe, 3 actions manuelles : créer ticket Jira, notifier Slack, envoyer facture.", en: "After a Stripe payment, 3 manual actions: create Jira ticket, notify Slack, send invoice." },
