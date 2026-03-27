@@ -3,11 +3,11 @@ import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
 const STEPS_DATA = [
-  { day:"Jour 1",      icon:"📋", title:"Analyse du besoin",        desc:"Appel de découverte de 30 min. On comprend votre problème, vos outils et vos objectifs. Aucun jargon.",           color:"#00ffc8" },
-  { day:"Jour 2–3",    icon:"🔷", title:"Architecture du workflow",  desc:"Je dessine la solution complète : les outils connectés, les règles de décision, les résultats attendus.",          color:"#a78bfa" },
-  { day:"Jour 4–5",    icon:"⚙️", title:"Développement & tests",     desc:"Construction du workflow en n8n ou Make, tests sur des données réelles, corrections jusqu'à zéro bug.",             color:"#f5a623" },
-  { day:"Jour 6",      icon:"🚀", title:"Livraison & formation",     desc:"Mise en production, formation vidéo de 20 min pour votre équipe. Vous êtes autonomes dès le premier jour.",        color:"#00e5ff" },
-  { day:"Semaine 2+",  icon:"📊", title:"Monitoring & optimisation", desc:"Suivi des performances pendant 30 jours. Alertes automatiques. Ajustements inclus sans supplément.",              color:"#4ade80" },
+  { day:"Brief",       icon:"📋", title:"Tu décris ton besoin",      desc:"Formulaire de 2 minutes. Ton problème en langage simple — pas besoin de savoir ce qu'est une API.",                color:"#00ffc8" },
+  { day:"< 24h",       icon:"🔍", title:"Analyse & devis",           desc:"Je reviens avec une solution concrète, un périmètre clair et un prix fixe. Gratuit, sans engagement.",             color:"#a78bfa" },
+  { day:"Selon scope", icon:"⚙️", title:"Développement & tests",     desc:"n8n simple : quelques heures. Workflow complexe : 1-2 jours. Agent IA : 2-4 jours. SaaS : quelques semaines.",    color:"#f5a623" },
+  { day:"Livraison",   icon:"🚀", title:"Mise en prod & documentation","desc":"Déploiement, tests finaux sur vos vraies données, documentation claire. Tu es autonome dès le premier jour.", color:"#00e5ff" },
+  { day:"30 jours",    icon:"📊", title:"Suivi inclus",              desc:"Monitoring des performances, alertes automatiques, ajustements inclus. Aucun supplément pendant 30 jours.",         color:"#4ade80" },
 ];
 
 export default function DeliveryTimeline() {
@@ -16,11 +16,11 @@ export default function DeliveryTimeline() {
 
   const STEP_TRANS: Record<string, {title:string;desc:string;day:string}[]> = {
     en: [
-      {day:"Day 1",       title:"Needs analysis",        desc:"30-min discovery call. We understand your problem, tools and goals. No jargon."},
-      {day:"Day 2–3",     title:"Workflow architecture", desc:"I draw the complete solution: connected tools, decision rules, expected results."},
-      {day:"Day 4–5",     title:"Development & testing", desc:"Building the workflow in n8n or Make, testing on real data, fixes until zero bugs."},
-      {day:"Day 6",       title:"Delivery & training",   desc:"Production deployment, 20-min video training for your team. You're autonomous from day one."},
-      {day:"Week 2+",     title:"Monitoring & optimization",desc:"Performance tracking for 30 days. Automatic alerts. Adjustments included at no extra cost."},
+      {day:"Brief",       title:"Describe your need",    desc:"2-minute form. Your problem in plain language — no need to know what an API is."},
+      {day:"< 24h",       title:"Analysis & quote",      desc:"I come back with a concrete solution, clear scope and a fixed price. Free, no commitment."},
+      {day:"By scope",    title:"Development & testing", desc:"Simple n8n: a few hours. Complex workflow: 1–2 days. AI agent: 2–4 days. SaaS: a few weeks."},
+      {day:"Delivery",    title:"Production & docs",     desc:"Deployment, final tests on your real data, clear documentation. Autonomous from day one."},
+      {day:"30 days",     title:"Monitoring included",   desc:"Performance monitoring, automatic alerts, adjustments included — no extra charge for 30 days."},
     ],
     ar: [
       {day:"اليوم 1",       title:"تحليل الاحتياج",        desc:"مكالمة اكتشافية لمدة 30 دقيقة. نفهم مشكلتك وأدواتك وأهدافك. لا مصطلحات تقنية."},

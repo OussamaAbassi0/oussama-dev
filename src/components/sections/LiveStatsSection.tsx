@@ -9,67 +9,55 @@ const TRANS: Record<string, {
   sectionLabel: string;
   title: string;
   titleAccent: string;
-  leads: string;
   hours: string;
   workflows: string;
   projects: string;
   satisfaction: string;
-  emails: string;
 }> = {
   fr: {
-    sectionLabel: "// En Direct",
-    title: "Mes automatisations",
-    titleAccent: "tournent 24h/24",
-    leads: "leads générés pour les clients",
-    hours: "heures économisées ce mois",
-    workflows: "workflows actifs",
-    projects: "projets livrés",
-    satisfaction: "taux de satisfaction",
-    emails: "emails automatisés",
+    sectionLabel: "// En chiffres",
+    title: "Ce que j'ai",
+    titleAccent: "réellement livré.",
+    hours: "heures économisées / semaine (total clients)",
+    workflows: "automatisations n8n livrées",
+    projects: "projets livrés depuis 2022",
+    satisfaction: "note moyenne Malt & Upwork",
   },
   en: {
-    sectionLabel: "// Live",
-    title: "My automations",
-    titleAccent: "run 24/7",
-    leads: "leads generated for clients",
-    hours: "hours saved this month",
-    workflows: "active workflows",
-    projects: "delivered projects",
-    satisfaction: "satisfaction rate",
-    emails: "automated emails",
+    sectionLabel: "// By the numbers",
+    title: "What I've",
+    titleAccent: "actually delivered.",
+    hours: "hours saved / week (total clients)",
+    workflows: "n8n automations delivered",
+    projects: "projects delivered since 2022",
+    satisfaction: "avg rating Malt & Upwork",
   },
   ar: {
-    sectionLabel: "// مباشر",
-    title: "أتمتتي",
-    titleAccent: "تعمل 24/7",
-    leads: "عملاء محتملون للعملاء",
-    hours: "ساعات موفرة هذا الشهر",
-    workflows: "سير عمل نشط",
-    projects: "مشاريع مسلمة",
-    satisfaction: "معدل الرضا",
-    emails: "رسائل بريد إلكتروني تلقائية",
+    sectionLabel: "// بالأرقام",
+    title: "ما قدّمته",
+    titleAccent: "فعلياً.",
+    hours: "ساعات موفرة / أسبوع",
+    workflows: "أتمتة n8n مسلّمة",
+    projects: "مشروع مسلّم منذ 2022",
+    satisfaction: "متوسط التقييم",
   },
   es: {
-    sectionLabel: "// En Directo",
-    title: "Mis automatizaciones",
-    titleAccent: "funcionan 24h/24",
-    leads: "leads generados para clientes",
-    hours: "horas ahorradas este mes",
-    workflows: "workflows activos",
-    projects: "proyectos entregados",
-    satisfaction: "tasa de satisfacción",
-    emails: "emails automatizados",
+    sectionLabel: "// En números",
+    title: "Lo que he",
+    titleAccent: "entregado realmente.",
+    hours: "horas ahorradas / semana (total clientes)",
+    workflows: "automatizaciones n8n entregadas",
+    projects: "proyectos entregados desde 2022",
+    satisfaction: "nota media Malt & Upwork",
   },
   nl: {
-    sectionLabel: "// Live",
-    title: "Mijn automatiseringen",
-    titleAccent: "draaien 24u/24",
-    leads: "leads gegenereerd voor klanten",
-    hours: "uren bespaard deze maand",
-    workflows: "actieve workflows",
-    projects: "geleverde projecten",
-    satisfaction: "tevredenheidspercentage",
-    emails: "geautomatiseerde e-mails",
+    sectionLabel: "// In cijfers",
+    title: "Wat ik",
+    titleAccent: "echt heb geleverd.",
+    hours: "uren bespaard / week (totaal klanten)",
+    workflows: "n8n-automatiseringen geleverd",
+    projects: "projecten geleverd sinds 2022",
+    satisfaction: "gemiddelde score Malt & Upwork",
   },
 };
 
@@ -85,12 +73,10 @@ interface StatConfig {
 }
 
 const STAT_CONFIGS: StatConfig[] = [
-  { key: "leads",        base: 12847,   increment: 1,   intervalMs: 3000 },
-  { key: "hours",        base: 3420,    increment: 0.3, intervalMs: 5000, isFloat: true },
-  { key: "workflows",    base: 47,      increment: 0,   intervalMs: 0,    fixed: true },
-  { key: "projects",     base: 34,      increment: 0,   intervalMs: 0,    fixed: true },
-  { key: "satisfaction", base: 98,      increment: 0,   intervalMs: 0,    fixed: true, suffix: "%" },
-  { key: "emails",       base: 892400,  increment: 1,   intervalMs: 2000 },
+  { key: "projects",     base: 17,  increment: 0, intervalMs: 0, fixed: true },
+  { key: "workflows",    base: 13,  increment: 0, intervalMs: 0, fixed: true },
+  { key: "hours",        base: 148, increment: 0, intervalMs: 0, fixed: true },
+  { key: "satisfaction", base: 5,   increment: 0, intervalMs: 0, fixed: true, suffix: "/5" },
 ];
 
 /* ── Flash animation injected once ─────────────────────────────── */
@@ -175,12 +161,10 @@ export default function LiveStatsSection() {
   };
 
   const statLabels: Record<string, string> = {
-    leads: tx.leads,
     hours: tx.hours,
     workflows: tx.workflows,
     projects: tx.projects,
     satisfaction: tx.satisfaction,
-    emails: tx.emails,
   };
 
   return (
