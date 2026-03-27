@@ -258,13 +258,11 @@ function BentoCard({
 function FullSaasCard({ project, lang, index }: { project: SaasProject; lang: string; index: number }) {
   const l = (o: Record<string, string>) => o[lang] ?? o.en;
   const isLive = project.liveUrl !== "#";
-  const stagger = ["stagger-1", "stagger-2", "stagger-3", "stagger-4"][index] ?? "";
 
   return (
     <TiltWrap
       color={project.color}
-      className={`fade-in-scale ${stagger}`}
-      style={{ background: "#0a0e16", cursor: "default" }}
+      style={{ background: "#0a0e16", cursor: "default", animation: `projectIn 0.6s cubic-bezier(0.22,1,0.36,1) ${index * 0.1}s both` }}
     >
       {/* Top accent bar */}
       <div style={{ height: "2px", background: `linear-gradient(90deg, ${project.color}, transparent)` }} />
@@ -383,10 +381,10 @@ function FullSaasCard({ project, lang, index }: { project: SaasProject; lang: st
 function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; index: number }) {
   const [open, setOpen] = useState(false);
   const l = (o: Record<string, string>) => o[lang] ?? o.en;
-  const stagger = ["stagger-1","stagger-2","stagger-3","stagger-4","stagger-5","stagger-6"][index % 6] ?? "";
 
   return (
-    <div className={`proj-card-wrap fade-in ${stagger}`} style={{
+    <div className="proj-card-wrap" style={{
+      animation: `projectIn 0.5s cubic-bezier(0.22,1,0.36,1) ${index * 0.07}s both`,
       background: "#0a0e16",
       border: `1px solid ${open ? wf.color + "30" : "rgba(255,255,255,.06)"}`,
       borderRadius: "14px", overflow: "hidden",
