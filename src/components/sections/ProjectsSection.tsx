@@ -383,60 +383,56 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
   const l = (o: Record<string, string>) => o[lang] ?? o.en;
 
   return (
-    <div className="proj-card-wrap" style={{
+    <div style={{
       animation: `projectIn 0.5s cubic-bezier(0.22,1,0.36,1) ${index * 0.07}s both`,
       background: "#0a0e16",
       border: `1px solid ${open ? wf.color + "30" : "rgba(255,255,255,.06)"}`,
       borderRadius: "14px", overflow: "hidden",
       transition: "border-color .3s ease",
-      cursor: "pointer",
-    }} onClick={() => setOpen(!open)}>
+    }}>
       {/* Top accent */}
       <div style={{ height: "2px", background: `linear-gradient(90deg, ${wf.color}, transparent)` }} />
 
-      {/* Header */}
-      <div style={{ padding: "18px 20px", display: "flex", gap: "14px", alignItems: "flex-start" }}>
-        {/* Emoji */}
+      {/* Header — toggle zone UNIQUEMENT */}
+      <button
+        onClick={() => setOpen(!open)}
+        style={{
+          width: "100%", background: "none", border: "none", cursor: "pointer",
+          padding: "18px 20px", display: "flex", gap: "14px", alignItems: "flex-start",
+          textAlign: "left",
+        }}
+      >
         <div style={{
           width: "44px", height: "44px", flexShrink: 0,
           borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
-          background: `${wf.color}12`, border: `1px solid ${wf.color}22`,
-          fontSize: "20px",
+          background: `${wf.color}12`, border: `1px solid ${wf.color}22`, fontSize: "20px",
         }}>
           {wf.emoji}
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "4px" }}>
-            <h4 style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: "14px", color: "#fff", margin: 0 }}>
-              {wf.name}
-            </h4>
-          </div>
+          <h4 style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: "14px", color: "#fff", margin: "0 0 4px" }}>
+            {wf.name}
+          </h4>
           <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: wf.color, letterSpacing: ".1em", textTransform: "uppercase", margin: 0 }}>
             {wf.category}
           </p>
-
-          {/* Key result */}
-          <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,.4)", lineHeight: 1.5, marginTop: "6px" }}>
+          <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,.4)", lineHeight: 1.5, marginTop: "6px", marginBottom: 0 }}>
             {l(wf.result)}
           </p>
         </div>
 
-        {/* Chevron */}
         <div style={{
-          width: "24px", height: "24px", borderRadius: "50%",
+          width: "24px", height: "24px", borderRadius: "50%", flexShrink: 0,
           display: "flex", alignItems: "center", justifyContent: "center",
           background: "rgba(255,255,255,.04)", border: "1px solid rgba(255,255,255,.08)",
           fontFamily: "var(--mono)", fontSize: "10px", color: "rgba(255,255,255,.3)",
           transition: "transform .35s ease",
           transform: open ? "rotate(180deg)" : "rotate(0deg)",
-          flexShrink: 0,
-        }}>
-          ↓
-        </div>
-      </div>
+        }}>↓</div>
+      </button>
 
-      {/* Metrics row */}
+      {/* Metrics */}
       <div style={{ padding: "0 20px 14px", display: "flex", gap: "8px" }}>
         {wf.metrics.map((m) => (
           <div key={m.label} style={{
@@ -449,7 +445,7 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
         ))}
       </div>
 
-      {/* Expandable detail */}
+      {/* Expandable */}
       <div className={`n8n-detail ${open ? "open" : ""}`}>
         <div style={{ padding: "0 20px 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
           {[
@@ -465,27 +461,28 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
               <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,.55)", lineHeight: 1.6, margin: 0 }}>{row.text}</p>
             </div>
           ))}
-          {/* Stack */}
           <div style={{ display: "flex", gap: "5px", flexWrap: "wrap", marginTop: "4px" }}>
             {wf.stack.map((s) => (
               <span key={s} style={{
                 padding: "2px 8px", borderRadius: "20px",
-                background: `${STACK_COLORS[s] ?? "#fff"}10`,
-                border: `1px solid ${STACK_COLORS[s] ?? "#fff"}20`,
-                fontFamily: "var(--mono)", fontSize: "9px",
-                color: STACK_COLORS[s] ?? "rgba(255,255,255,.5)",
+                background: `${STACK_COLORS[s] ?? "#fff"}10`, border: `1px solid ${STACK_COLORS[s] ?? "#fff"}20`,
+                fontFamily: "var(--mono)", fontSize: "9px", color: STACK_COLORS[s] ?? "rgba(255,255,255,.5)",
               }}>{s}</span>
             ))}
           </div>
-          {/* Detail page link */}
-          <Link href={`/projets/${wf.id}`}
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: "5px", marginTop: "4px",
-              fontFamily: "var(--mono)", fontWeight: 700, fontSize: "10px",
-              color: wf.color, textDecoration: "none", letterSpacing: ".08em",
-            }}>
-            Voir le détail complet <span className="proj-arrow">→</span>
+          {/* Lien vers page dédiée — PAS dans la zone cliquable du toggle */}
+          <Link href={`/projets/${wf.id}`} style={{
+            display: "inline-flex", alignItems: "center", gap: "6px", marginTop: "6px",
+            padding: "9px 16px", borderRadius: "8px",
+            background: `${wf.color}14`, border: `1px solid ${wf.color}30`,
+            fontFamily: "var(--mono)", fontWeight: 700, fontSize: "11px",
+            color: wf.color, textDecoration: "none", letterSpacing: ".06em",
+            transition: "all .25s ease", width: "fit-content",
+          }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = `${wf.color}24`; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = `${wf.color}14`; }}
+          >
+            Voir la page dédiée →
           </Link>
         </div>
       </div>
