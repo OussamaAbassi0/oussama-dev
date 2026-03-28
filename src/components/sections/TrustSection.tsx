@@ -167,8 +167,8 @@ const TRANS: Record<string, {
   },
   es: {
     beforeAfterLabel: "// Lo que cambia concretamente",
-    beforeTitle: "❌ Antes",
-    afterTitle: "✅ Después",
+    beforeTitle: "Antes",
+    afterTitle: "Después",
     beforeItems: [
       "10h/semana perdidas en tareas repetitivas",
       "Leads buscados manualmente, uno a uno",

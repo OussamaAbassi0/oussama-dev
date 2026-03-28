@@ -2,6 +2,10 @@
 import { useRef, useEffect, useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { Zap, Target, Lock } from "lucide-react";
+
+const stripEmoji = (s: string) => s.replace(/^[\p{Extended_Pictographic}][\uFE0F]?\u20E3?\s*/u, "");
+const STAT_ICONS = [<Target key="t" size={11} />, <Zap key="z" size={11} />, <Lock key="l" size={11} />];
 
 /* ── Translations ──────────────────────────────────────────────── */
 const TRANS: Record<string, {
@@ -112,7 +116,7 @@ export default function DiagnosticCTABanner() {
           marginBottom: "28px",
           animation: "diagSlideUp .5s ease 0ms both",
         }}>
-          {tx.badge}
+          <Zap size={12} /> {stripEmoji(tx.badge)}
         </div>
 
         {/* ── Title ──────────────────────────────────────────── */}
@@ -185,9 +189,13 @@ export default function DiagnosticCTABanner() {
                 fontSize: "11px",
                 color: "rgba(255,255,255,.35)",
                 letterSpacing: ".04em",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "4px",
               }}
             >
-              {stat}
+              <span style={{ color: "rgba(0,255,200,.5)" }}>{STAT_ICONS[i]}</span>
+              {stripEmoji(stat)}
             </span>
           ))}
         </div>

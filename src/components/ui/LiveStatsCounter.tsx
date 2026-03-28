@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { Zap, RefreshCw, Clock, Target } from "lucide-react";
 
 /* Chiffres de base réalistes — s'incrémentent en live */
 const BASE = {
@@ -56,10 +57,10 @@ export default function LiveStatsCounter() {
   }, []);
 
   const STATS = [
-    { icon: "⚡", value: `${vals.workflows}`, label: "workflows actifs" },
-    { icon: "🔄", value: fmt(vals.tasks),     label: "tâches auto." },
-    { icon: "⏱",  value: `${fmt(vals.hours)}h`, label: "économisées" },
-    { icon: "🎯", value: fmt(vals.leads),     label: "leads générés" },
+    { icon: <Zap size={13} />,       value: `${vals.workflows}`, label: "workflows actifs" },
+    { icon: <RefreshCw size={13} />, value: fmt(vals.tasks),     label: "tâches auto." },
+    { icon: <Clock size={13} />,     value: `${fmt(vals.hours)}h`, label: "économisées" },
+    { icon: <Target size={13} />,    value: fmt(vals.leads),     label: "leads générés" },
   ];
 
   return (
@@ -137,7 +138,7 @@ export default function LiveStatsCounter() {
               padding:       "0 14px",
               borderRight:   i < STATS.length - 1 ? "1px solid rgba(255,255,255,.06)" : "none",
             }}>
-              <span style={{ fontSize: "13px" }}>{s.icon}</span>
+              <span style={{ color: "rgba(0,229,255,.7)", display: "flex" }}>{s.icon}</span>
               <div>
                 <span style={{
                   fontFamily: "'Courier New', monospace",

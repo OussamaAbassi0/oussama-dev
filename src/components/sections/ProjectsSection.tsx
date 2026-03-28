@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { Calendar, Rocket, Wrench, Star } from "lucide-react";
 import {
   SAAS_PROJECTS, N8N_PROJECTS, STACK_COLORS,
   SaasProject, N8nProject,
@@ -667,13 +668,13 @@ export default function ProjectsSection({ featured = false }: { featured?: boole
           justifyContent: "center", gap: "48px", flexWrap: "wrap",
         }}>
           {[
-            { icon: "📅", val: "2022", label: l({ fr: "Dans ce domaine depuis", en: "In this field since" }) },
-            { icon: "🚀", val: "17+",  label: l({ fr: "Projets livrés", en: "Projects delivered" }) },
-            { icon: "🛠", val: "20+",  label: l({ fr: "Technologies maîtrisées", en: "Technologies mastered" }) },
-            { icon: "⭐", val: "5/5",  label: l({ fr: "Note Malt & Upwork", en: "Malt & Upwork rating" }) },
-          ].map((s) => (
-            <div key={s.label} style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "20px", marginBottom: "6px" }}>{s.icon}</div>
+            { icon: <Calendar size={20} />, val: "2022", label: l({ fr: "Dans ce domaine depuis", en: "In this field since" }) },
+            { icon: <Rocket size={20} />,   val: "17+",  label: l({ fr: "Projets livrés", en: "Projects delivered" }) },
+            { icon: <Wrench size={20} />,   val: "20+",  label: l({ fr: "Technologies maîtrisées", en: "Technologies mastered" }) },
+            { icon: <Star size={20} />,     val: "5/5",  label: l({ fr: "Note Malt & Upwork", en: "Malt & Upwork rating" }) },
+          ].map((s, idx) => (
+            <div key={idx} style={{ textAlign: "center" }}>
+              <div style={{ color: "var(--cyan)", display: "flex", justifyContent: "center", marginBottom: "6px" }}>{s.icon}</div>
               <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "22px", color: "var(--cyan)" }}>{s.val}</div>
               <div style={{ fontFamily: "var(--sans)", fontSize: "11px", color: "rgba(255,255,255,.3)", marginTop: "3px" }}>{s.label}</div>
             </div>

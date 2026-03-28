@@ -2,6 +2,27 @@
 import { useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import {
+  Brain, Link2, Mail, BarChart3, Settings, Bot, TrendingUp, Rocket,
+  RefreshCw, Radio, Lightbulb, DollarSign,
+} from "lucide-react";
+
+/* Strip leading emoji from option labels */
+const stripEmoji = (s: string) => s.replace(/^[\p{Emoji_Presentation}\p{Extended_Pictographic}][\uFE0F\u20E3]?\s*/u, "");
+
+const ROADMAP_ICON_MAP: Record<string, React.ReactNode> = {
+  "🔗": <Link2 size={20} />,
+  "📧": <Mail size={20} />,
+  "📊": <BarChart3 size={20} />,
+  "⚙️": <Settings size={20} />,
+  "🤖": <Bot size={20} />,
+  "📈": <TrendingUp size={20} />,
+  "🚀": <Rocket size={20} />,
+  "🧠": <Brain size={20} />,
+  "🔄": <RefreshCw size={20} />,
+  "📡": <Radio size={20} />,
+  "💡": <Lightbulb size={20} />,
+};
 
 
 /* ══════════════════════════════════════════════════════════
@@ -608,7 +629,7 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
         {/* ── INTRO ── */}
         {step === "intro" && (
           <div style={{ textAlign:"center", padding:"48px 32px", background:"#07090f", border:"1px solid rgba(0,229,255,.15)", borderRadius:"16px", animation:"quizFadeIn .4s ease" }}>
-            <div style={{ fontSize:"56px", marginBottom:"20px" }}>🧠</div>
+            <div style={{ color:"var(--cyan)", display:"flex", justifyContent:"center", marginBottom:"20px" }}><Brain size={56} strokeWidth={1.5} /></div>
             <h3 style={{ fontFamily:"var(--sans)", fontWeight:800, fontSize:"24px", color:"white", marginBottom:"12px" }}>
               {trans.intro.title}
             </h3>
@@ -679,7 +700,7 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
                       }
                     }}
                   >
-                    {opt.label}
+                    {stripEmoji(opt.label)}
                   </button>
                 );
               })}
@@ -700,7 +721,7 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
               fontFamily:"var(--mono)", fontSize:"12px", fontWeight:700,
               color:roadmap.levelColor, letterSpacing:".06em",
             }}>
-              📊 {roadmap.level}
+              <BarChart3 size={12} /> {roadmap.level}
             </div>
 
             <h3 style={{ fontFamily:"var(--sans)", fontWeight:800, fontSize:"28px", color:"white", marginBottom:"8px", lineHeight:1.2 }}>
@@ -714,7 +735,7 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
               background:"rgba(74,222,128,.08)", border:"1px solid rgba(74,222,128,.2)",
               fontFamily:"var(--mono)", fontSize:"12px", color:"#4ade80",
             }}>
-              💰 {roadmap.roi}
+              <DollarSign size={12} /> {roadmap.roi}
             </div>
 
             {/* Steps */}
@@ -732,9 +753,10 @@ export default function MaturityQuiz({ onOpenBrief }: { onOpenBrief: () => void 
                     width:"40px", height:"40px", borderRadius:"10px", flexShrink:0,
                     background:`${roadmap.levelColor}12`,
                     border:`1px solid ${roadmap.levelColor}25`,
-                    display:"flex", alignItems:"center", justifyContent:"center", fontSize:"18px",
+                    display:"flex", alignItems:"center", justifyContent:"center",
+                    color: roadmap.levelColor,
                   }}>
-                    {step_.icon}
+                    {ROADMAP_ICON_MAP[step_.icon] ?? <Rocket size={20} />}
                   </div>
                   <div style={{ flex:1 }}>
                     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:"4px", flexWrap:"wrap", gap:"6px" }}>

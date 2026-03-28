@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Zap, DollarSign, Bot, Rocket, Wrench, Send, Mail, FileText, ArrowUp } from "lucide-react";
 
 /* ══════════════════════════════════════════════════════════
    TYPES
@@ -7,7 +8,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 interface CommandAction {
   id:     string;
   group:  string;
-  icon:   string;
+  icon:   React.ReactNode;
   label:  string;
   sub?:   string;
   action: () => void;
@@ -64,43 +65,43 @@ export default function CommandPalette({ onOpenBrief, onClose, onHackerMode }: C
   const ACTIONS: CommandAction[] = [
     {
       id: "leads",   group: "Outils",
-      icon: "⚡",    label: "Chasser des Leads",
+      icon: <Zap size={17} />,         label: "Chasser des Leads",
       sub: "→ /lab — Lead Hunter IA",
       action: () => { close(); window.location.href = "/lab#lead-hunter"; },
     },
     {
       id: "roi",     group: "Outils",
-      icon: "💰",    label: "Calculer mon ROI",
+      icon: <DollarSign size={17} />,  label: "Calculer mon ROI",
       sub: "→ /lab — ROI Calculator",
       action: () => { close(); window.location.href = "/lab#roi"; },
     },
     {
       id: "workflow", group: "Outils",
-      icon: "🤖",    label: "Générer un workflow n8n",
+      icon: <Bot size={17} />,         label: "Générer un workflow n8n",
       sub: "→ /lab — Workflow Builder",
       action: () => { close(); window.location.href = "/lab#workflow"; },
     },
     {
       id: "projects", group: "Navigation",
-      icon: "🚀",    label: "Voir les projets live",
+      icon: <Rocket size={17} />,      label: "Voir les projets live",
       sub: "→ /projets — 4 SaaS & agents IA",
       action: () => { close(); window.location.href = "/projets"; },
     },
     {
       id: "services", group: "Navigation",
-      icon: "🛠",    label: "Voir les services & process",
+      icon: <Wrench size={17} />,      label: "Voir les services & process",
       sub: "→ /services — Comment ça marche",
       action: () => { close(); window.location.href = "/services"; },
     },
     {
       id: "brief",   group: "Contact",
-      icon: "📨",    label: "Démarrer un projet",
+      icon: <Send size={17} />,        label: "Démarrer un projet",
       sub: "Ouvre le formulaire de brief",
       action: () => { close(); onOpenBrief(); },
     },
     {
       id: "email",   group: "Contact",
-      icon: "📧",    label: copied ? "Email copié ✓" : "Copier l'email d'Oussama",
+      icon: <Mail size={17} />,        label: copied ? "Email copié ✓" : "Copier l'email d'Oussama",
       sub: "oussama.abassi.work@gmail.com",
       action: async () => {
         await copyToClipboard("oussama.abassi.work@gmail.com");
@@ -110,13 +111,13 @@ export default function CommandPalette({ onOpenBrief, onClose, onHackerMode }: C
     },
     {
       id: "blog",    group: "Navigation",
-      icon: "📝",    label: "Lire le Blog",
+      icon: <FileText size={17} />,    label: "Lire le Blog",
       sub: "→ /blog — Articles automatisation & IA",
       action: () => { close(); window.location.href = "/blog"; },
     },
     {
       id: "top",     group: "Navigation",
-      icon: "↑",     label: "Retour en haut",
+      icon: <ArrowUp size={17} />,     label: "Retour en haut",
       sub: "Scroll → Héro",
       action: () => { close(); window.scrollTo({ top: 0, behavior: "smooth" }); },
     },
@@ -264,7 +265,7 @@ export default function CommandPalette({ onOpenBrief, onClose, onHackerMode }: C
                         transition:  "background .1s, border-color .1s",
                       }}
                     >
-                      <span style={{ fontSize: "17px", width: "28px", textAlign: "center", flexShrink: 0, filter: isActive ? "drop-shadow(0 0 4px rgba(0,229,255,.5))" : "none", transition: "filter .15s" }}>
+                      <span style={{ width: "28px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: isActive ? "#00e5ff" : "rgba(255,255,255,.45)", filter: isActive ? "drop-shadow(0 0 4px rgba(0,229,255,.5))" : "none", transition: "color .15s, filter .15s" }}>
                         {action.icon}
                       </span>
                       <div style={{ flex: 1, minWidth: 0 }}>

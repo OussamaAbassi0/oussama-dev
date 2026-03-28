@@ -39,15 +39,14 @@ const SIMPLE_ICONS: Record<string, string> = {
   "n8n":             "n8n",
   "Make":            "make",
   "Python":          "python",
-  "Playwright":      "playwright",
   "Prisma":          "prisma",
   "Resend":          "resend",
-  "Qdrant":          "qdrant",
   "LangChain":       "langchain",
   "HubSpot":         "hubspot",
   "Slack":           "slack",
   "Notion":          "notion",
   "Stripe":          "stripe",
+  "LinkedIn":        "linkedin",
 };
 
 /* ══════════════════════════════════════════════════════════
@@ -166,6 +165,38 @@ function IconNeon({ size = 18 }: { size?: number }) {
   );
 }
 
+function IconPlaywright({ size = 18 }: { size?: number }) {
+  /* Theater masks — comedy (right) and tragedy (left) */
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      {/* Left mask — tragedy */}
+      <path d="M9 2H3a1 1 0 0 0-1 1v6c0 2.76 1.79 5 4 5s4-2.24 4-5V3a1 1 0 0 0-1-1z"/>
+      <circle cx="4" cy="5.5" r=".7" fill="white"/>
+      <circle cx="8" cy="5.5" r=".7" fill="white"/>
+      <path d="M4 8.5h4" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round"/>
+      {/* Right mask — comedy (offset down-right) */}
+      <path d="M22 7h-6a1 1 0 0 0-1 1v6c0 2.76 1.79 5 4 5s4-2.24 4-5V8a1 1 0 0 0-1-1z" opacity="0.65"/>
+      <circle cx="16.5" cy="10.5" r=".7" fill="white" opacity="0.8"/>
+      <circle cx="20.5" cy="10.5" r=".7" fill="white" opacity="0.8"/>
+      <path d="M16.5 13.5a2.5 2.5 0 0 0 4 0" stroke="white" strokeWidth="1.3" fill="none" strokeLinecap="round" opacity="0.8"/>
+    </svg>
+  );
+}
+
+function IconQdrant({ size = 18 }: { size?: number }) {
+  /* 3D geometric cube — Qdrant logo style */
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+      {/* Top face */}
+      <polygon points="12,3 21,8 12,13 3,8" fillOpacity="0.55"/>
+      {/* Right face */}
+      <polygon points="21,8 21,16 12,21 12,13" fillOpacity="0.9"/>
+      {/* Left face */}
+      <polygon points="3,8 3,16 12,21 12,13" fillOpacity="0.65"/>
+    </svg>
+  );
+}
+
 /* ══════════════════════════════════════════════════════════
    CUSTOM ICON MAP
 ══════════════════════════════════════════════════════════ */
@@ -180,6 +211,8 @@ const CUSTOM_ICON_COMPONENTS: Record<string, React.ComponentType<{ size?: number
   "Google Maps API": IconGoogleMaps,
   "Apollo":          IconApollo,
   "Neon (Postgres)": IconNeon,
+  "Playwright":      IconPlaywright,
+  "Qdrant":          IconQdrant,
 };
 
 /* ══════════════════════════════════════════════════════════
@@ -252,7 +285,7 @@ function TechIcon({
 const STACK = [
   { cat: "Frontend",    items: ["Next.js", "React", "TailwindCSS", "Vercel"] },
   { cat: "IA & Agents", items: ["Anthropic", "OpenAI", "CrewAI", "LangGraph", "RAG"] },
-  { cat: "Automation",  items: ["n8n", "Make", "Webhooks", "Python", "Playwright"] },
+  { cat: "Automation",  items: ["n8n", "Make", "Webhooks", "Python", "Playwright", "LinkedIn"] },
   { cat: "Data",        items: ["Firecrawl", "Apollo", "Tavily", "Google Maps API"] },
   { cat: "Backend",     items: ["Prisma", "Neon (Postgres)", "Qdrant", "Resend", "API REST"] },
 ];

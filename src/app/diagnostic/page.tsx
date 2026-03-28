@@ -4,6 +4,9 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ScrollProgressBar from "@/components/ui/ScrollProgressBar";
 import { useLang } from "@/lib/LangContext";
+import { Brain, Zap, CheckCircle2, Lock, Map, ClipboardList, Rocket } from "lucide-react";
+
+const stripEmoji = (s: string) => s.replace(/^[\p{Extended_Pictographic}][\uFE0F]?\u20E3?\s*/u, "");
 
 /* ══════════════════════════════════════════════════════════
    QUESTIONS — extraites de MaturityQuiz.tsx (5 premières)
@@ -729,7 +732,11 @@ export default function DiagnosticPage() {
                 gap: "12px",
                 flexWrap: "wrap",
               }}>
-                {[tr.badge1, tr.badge2, tr.badge3].map((b, i) => (
+                {[
+                  { text: tr.badge1, icon: <CheckCircle2 size={11} /> },
+                  { text: tr.badge2, icon: <Zap size={11} /> },
+                  { text: tr.badge3, icon: <Lock size={11} /> },
+                ].map((b, i) => (
                   <span key={i} style={{
                     padding: "6px 14px",
                     background: "rgba(0,255,200,.06)",
@@ -738,8 +745,11 @@ export default function DiagnosticPage() {
                     fontFamily: "var(--mono)",
                     fontSize: "12px",
                     color: "rgba(255,255,255,.7)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "5px",
                   }}>
-                    {b}
+                    {b.icon} {stripEmoji(b.text)}
                   </span>
                 ))}
               </div>
@@ -830,10 +840,7 @@ export default function DiagnosticPage() {
                         flexDirection: isRTL ? "row-reverse" : "row",
                       }}
                     >
-                      <span style={{ fontSize: "18px", lineHeight: 1, flexShrink: 0 }}>
-                        {/* emoji already in label */}
-                      </span>
-                      {opt.label}
+                      {stripEmoji(opt.label)}
                       {selectedOpt === opt.value && (
                         <span style={{ marginLeft: "auto", marginRight: isRTL ? "auto" : 0, color: "var(--cyan)", fontSize: "16px" }}>✓</span>
                       )}
@@ -861,9 +868,9 @@ export default function DiagnosticPage() {
                 alignItems: "center",
                 justifyContent: "center",
                 animation: "pulseGlow 2s ease infinite",
-                fontSize: "36px",
+                color: "var(--cyan)",
               }}>
-                🧠
+                <Brain size={36} strokeWidth={1.5} />
               </div>
 
               <p style={{
@@ -989,7 +996,7 @@ export default function DiagnosticPage() {
                   color: "white",
                   marginBottom: "14px",
                 }}>
-                  {tr.quickWinsTitle}
+                  <Zap size={16} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px" }} />{stripEmoji(tr.quickWinsTitle)}
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                   {report.quickWins.map((qw, i) => (
@@ -998,7 +1005,7 @@ export default function DiagnosticPage() {
                       className="quick-win-item"
                       style={{ animationDelay: `${i * 0.1}s` }}
                     >
-                      <span style={{ fontSize: "16px", flexShrink: 0 }}>⚡</span>
+                      <span style={{ flexShrink: 0, color: "var(--cyan)", display: "flex" }}><Zap size={14} /></span>
                       <span style={{
                         fontFamily: "'Arial', sans-serif",
                         fontSize: "14px",
@@ -1020,7 +1027,7 @@ export default function DiagnosticPage() {
                   color: "white",
                   marginBottom: "14px",
                 }}>
-                  {tr.roadmapTitle}
+                  <Map size={16} style={{ display: "inline", verticalAlign: "middle", marginRight: "6px" }} />{stripEmoji(tr.roadmapTitle)}
                 </h3>
                 <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                   {report.roadmap.map((r, i) => (
@@ -1098,7 +1105,7 @@ export default function DiagnosticPage() {
                   textTransform: "uppercase",
                   letterSpacing: ".08em",
                 }}>
-                  {tr.summaryTitle}
+                  <ClipboardList size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: "5px" }} />{stripEmoji(tr.summaryTitle)}
                 </h3>
                 <p style={{
                   fontFamily: "'Arial', sans-serif",
@@ -1119,8 +1126,8 @@ export default function DiagnosticPage() {
                 justifyContent: "center",
                 flexDirection: isRTL ? "row-reverse" : "row",
               }}>
-                <a href="/#cta" className="diag-cta-primary">
-                  {tr.ctaPrimary}
+                <a href="/#cta" className="diag-cta-primary" style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>
+                  <Rocket size={14} />{stripEmoji(tr.ctaPrimary)}
                 </a>
                 <button className="diag-cta-secondary" onClick={resetDiagnostic}>
                   {tr.ctaSecondary}

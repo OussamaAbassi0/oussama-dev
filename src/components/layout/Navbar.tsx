@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { Rocket } from "lucide-react";
 import CommandPalette from "@/components/ui/CommandPalette";
 import TerminalMode   from "@/components/ui/TerminalMode";
 import { useLang }   from "@/lib/LangContext";
@@ -270,7 +271,7 @@ export default function Navbar() {
             fontFamily:"'Courier New',monospace", fontWeight:700, fontSize:"14px",
             borderRadius:"8px", textDecoration:"none", letterSpacing:".04em",
           }}>
-            🚀 {t.nav.start}
+            <Rocket size={14} style={{ display: "inline", verticalAlign: "middle" }} /> {t.nav.start}
           </a>
         </div>
       )}

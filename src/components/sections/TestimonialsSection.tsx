@@ -1,6 +1,7 @@
 "use client";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { Star, CheckCircle2, Zap } from "lucide-react";
 
 const TESTIMONIALS = [
   {
@@ -89,7 +90,7 @@ export default function TestimonialsSection() {
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(255,100,50,.5)"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor="rgba(255,100,50,.2)"; }}
             >
-              ⭐ Malt →
+              <Star size={11} /> Malt →
             </a>
             <a href="https://www.upwork.com/freelancers/~01e9d7e582881baac8" target="_blank" rel="noopener noreferrer"
               style={{
@@ -149,7 +150,7 @@ export default function TestimonialsSection() {
                   onMouseEnter={e => ((e.currentTarget as HTMLElement).style.opacity=".75")}
                   onMouseLeave={e => ((e.currentTarget as HTMLElement).style.opacity="1")}
                 >
-                  {(t as any).source === "upwork" ? "★ Upwork" : "⭐ Malt"}
+                  <Star size={10} style={{ display: "inline", verticalAlign: "middle" }} />{" "}{(t as any).source === "upwork" ? "Upwork" : "Malt"}
                 </a>
 
               </div>
@@ -240,15 +241,15 @@ export default function TestimonialsSection() {
         }}>
           {/* Stats */}
           {[
-            { icon: "⭐", val: "5/5",   label: "Note moyenne" },
-            { icon: "✅", val: "100%",  label: "Recommandation" },
-            { icon: "⚡", val: "< 24h", label: "Délai de réponse" },
+            { icon: <Star size={18} />,         val: "5/5",   label: "Note moyenne" },
+            { icon: <CheckCircle2 size={18} />, val: "100%",  label: "Recommandation" },
+            { icon: <Zap size={18} />,          val: "< 24h", label: "Délai de réponse" },
           ].map((s, i) => (
             <div key={s.label} style={{
               textAlign: "center", padding: "0 28px",
               borderRight: i < 2 ? "1px solid rgba(255,255,255,.06)" : "none",
             }}>
-              <div style={{ fontSize: "18px", marginBottom: "4px" }}>{s.icon}</div>
+              <div style={{ color: "var(--cyan)", display: "flex", justifyContent: "center", marginBottom: "4px" }}>{s.icon}</div>
               <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "18px", color: "var(--cyan)" }}>{s.val}</div>
               <div style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--text-dim)", marginTop: "2px" }}>{s.label}</div>
             </div>
@@ -274,7 +275,7 @@ export default function TestimonialsSection() {
                 onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,100,50,.55)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,100,50,.14)"; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(255,100,50,.25)"; (e.currentTarget as HTMLElement).style.background = "rgba(255,100,50,.07)"; }}
               >
-                ⭐ Malt
+                <Star size={12} /> Malt
               </a>
               <a href="https://www.upwork.com/freelancers/~01e9d7e582881baac8" target="_blank" rel="noopener noreferrer" style={{
                 display: "inline-flex", alignItems: "center", gap: "6px",

@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from "react";
+import { DollarSign, Zap, Rocket, Hand } from "lucide-react";
 
 const STORAGE_KEY = "oussama_welcome_dismissed";
 
 const SHORTCUTS = [
-  { label: "💰 Calculer mon ROI",    href: "/lab#roi",      color: "#ff4d6d" },
-  { label: "⚡ Trouver des leads",   href: "/lab#lead-hunter", color: "#00ffc8" },
-  { label: "🚀 Démarrer un projet",  href: "#cta",          color: "#a78bfa" },
+  { icon: <DollarSign size={11} />, label: "Calculer mon ROI",   href: "/lab#roi",         color: "#ff4d6d" },
+  { icon: <Zap size={11} />,        label: "Trouver des leads",  href: "/lab#lead-hunter", color: "#00ffc8" },
+  { icon: <Rocket size={11} />,     label: "Démarrer un projet", href: "#cta",              color: "#a78bfa" },
 ];
 
 export default function WelcomeBanner() {
@@ -65,7 +66,7 @@ export default function WelcomeBanner() {
 
         {/* Emoji + texte */}
         <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: "200px" }}>
-          <span style={{ fontSize: "18px" }}>👋</span>
+          <span style={{ color: "rgba(0,229,255,.7)", display: "flex" }}><Hand size={18} /></span>
           <p style={{
             fontFamily: "Arial, Helvetica, sans-serif",
             fontSize:   "13px",
@@ -109,7 +110,7 @@ export default function WelcomeBanner() {
                 (e.currentTarget as HTMLElement).style.borderColor  = `${s.color}35`;
               }}
             >
-              {s.label}
+              <span style={{ display: "flex", alignItems: "center", gap: "5px" }}>{s.icon} {s.label}</span>
             </a>
           ))}
         </div>
