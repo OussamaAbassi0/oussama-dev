@@ -1,7 +1,15 @@
 "use client";
 import Image from "next/image";
+import { Zap, Bot, Rocket, TrendingUp } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+
+const TRAIT_ICONS = [
+  <Zap key="zap" size={18} strokeWidth={2} />,
+  <Bot key="bot" size={18} strokeWidth={2} />,
+  <Rocket key="rocket" size={18} strokeWidth={2} />,
+  <TrendingUp key="trend" size={18} strokeWidth={2} />,
+];
 
 export default function AboutSection() {
   const ref = useFadeIn<HTMLDivElement>();
@@ -102,7 +110,7 @@ export default function AboutSection() {
                   label: lang==="en" ? "Measurable results" : lang==="ar" ? "نتائج قابلة للقياس" : lang==="es" ? "Resultados medibles" : lang==="nl" ? "Meetbare resultaten" : "Résultats mesurables",
                   desc:  lang==="en" ? "+340h saved · +12k leads" : lang==="ar" ? "+340 ساعة موفرة · +12k عميل" : lang==="es" ? "+340h ahorradas · +12k leads" : lang==="nl" ? "+340u bespaard · +12k leads" : "+340h récupérées · +12k leads",
                 },
-              ].map(trait => (
+              ].map((trait, i) => (
                 <div key={trait.label} style={{
                   display: "flex", alignItems: "center", gap: "12px",
                   padding: "12px 16px",
@@ -112,7 +120,7 @@ export default function AboutSection() {
                   onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,229,255,.25)"}
                   onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,229,255,.1)"}
                 >
-                  <span style={{ fontSize: "20px", flexShrink: 0 }}>{trait.icon}</span>
+                  <div style={{ color: "#00e5ff", flexShrink: 0 }}>{TRAIT_ICONS[i]}</div>
                   <div>
                     <p style={{ fontFamily:"var(--sans)", fontSize:"13px", color:"white", fontWeight:600, marginBottom:"2px" }}>{trait.label}</p>
                     <p style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"rgba(0,229,255,.5)", letterSpacing:".04em" }}>{trait.desc}</p>

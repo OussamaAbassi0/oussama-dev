@@ -1,6 +1,14 @@
 "use client";
+import { RefreshCw, ShieldCheck, Zap, FileText, X, Check } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+
+const GUARANTEE_ICONS = [
+  <RefreshCw key="refresh" size={18} strokeWidth={2} />,
+  <ShieldCheck key="shield" size={18} strokeWidth={2} />,
+  <Zap key="zap" size={18} strokeWidth={2} />,
+  <FileText key="file" size={18} strokeWidth={2} />,
+];
 
 /* ══════════════════════════════════════════════════════════
    TRUST SECTION — Before/After + 3 étapes + Garanties
@@ -18,8 +26,8 @@ const TRANS: Record<string, {
 }> = {
   fr: {
     beforeAfterLabel: "// Ce que ça change concrètement",
-    beforeTitle: "❌ Avant",
-    afterTitle: "✅ Après",
+    beforeTitle: "Avant",
+    afterTitle: "Après",
     beforeItems: [
       "10h/semaine perdues sur des tâches répétitives",
       "Leads recherchés manuellement, 1 par 1",
@@ -65,8 +73,8 @@ const TRANS: Record<string, {
   },
   en: {
     beforeAfterLabel: "// What actually changes",
-    beforeTitle: "❌ Before",
-    afterTitle: "✅ After",
+    beforeTitle: "Before",
+    afterTitle: "After",
     beforeItems: [
       "10h/week lost on repetitive tasks",
       "Leads searched manually, one by one",
@@ -112,8 +120,8 @@ const TRANS: Record<string, {
   },
   ar: {
     beforeAfterLabel: "// ما الذي يتغير فعلياً",
-    beforeTitle: "❌ قبل",
-    afterTitle: "✅ بعد",
+    beforeTitle: "قبل",
+    afterTitle: "بعد",
     beforeItems: [
       "10 ساعات أسبوعياً ضائعة في مهام متكررة",
       "البحث عن العملاء يدوياً، واحداً تلو الآخر",
@@ -206,8 +214,8 @@ const TRANS: Record<string, {
   },
   nl: {
     beforeAfterLabel: "// Wat er concreet verandert",
-    beforeTitle: "❌ Vóór",
-    afterTitle: "✅ Na",
+    beforeTitle: "Vóór",
+    afterTitle: "Na",
     beforeItems: [
       "10u/week verloren aan repetitieve taken",
       "Leads handmatig gezocht, één voor één",
@@ -288,7 +296,9 @@ export default function TrustSection() {
             <p style={{
               fontFamily: "'Syne',sans-serif", fontWeight: 800,
               fontSize: "16px", color: "#ff4d6d", marginBottom: "20px",
+              display: "flex", alignItems: "center", gap: "8px",
             }}>
+              <X size={16} strokeWidth={2.5} />
               {tx.beforeTitle}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -298,7 +308,7 @@ export default function TrustSection() {
                   fontFamily: "Arial,sans-serif", fontSize: "14px",
                   color: "rgba(255,255,255,.5)", lineHeight: 1.5,
                 }}>
-                  <span style={{ color: "#ff4d6d", flexShrink: 0, marginTop: "2px" }}>✗</span>
+                  <X size={13} strokeWidth={2.5} color="#ff4d6d" style={{ flexShrink: 0, marginTop: "2px" }} />
                   {item}
                 </div>
               ))}
@@ -316,7 +326,9 @@ export default function TrustSection() {
             <p style={{
               fontFamily: "'Syne',sans-serif", fontWeight: 800,
               fontSize: "16px", color: "#00ffc8", marginBottom: "20px",
+              display: "flex", alignItems: "center", gap: "8px",
             }}>
+              <Check size={16} strokeWidth={2.5} />
               {tx.afterTitle}
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -326,7 +338,7 @@ export default function TrustSection() {
                   fontFamily: "Arial,sans-serif", fontSize: "14px",
                   color: "rgba(255,255,255,.8)", lineHeight: 1.5,
                 }}>
-                  <span style={{ color: "#00ffc8", flexShrink: 0, marginTop: "2px" }}>✓</span>
+                  <Check size={13} strokeWidth={2.5} color="#00ffc8" style={{ flexShrink: 0, marginTop: "2px" }} />
                   {item}
                 </div>
               ))}
@@ -437,7 +449,7 @@ export default function TrustSection() {
             textTransform: "uppercase", marginBottom: "24px",
             textAlign: "center",
           }}>
-            ✦ {tx.guaranteesLabel} ✦
+            {tx.guaranteesLabel}
           </p>
           <div style={{
             display: "grid",
@@ -448,7 +460,15 @@ export default function TrustSection() {
               <div key={i} style={{
                 display: "flex", alignItems: "flex-start", gap: "14px",
               }}>
-                <span style={{ fontSize: "22px", flexShrink: 0 }}>{g.icon}</span>
+                <div style={{
+                  color: "#00ffc8", flexShrink: 0,
+                  padding: "9px", borderRadius: "10px",
+                  background: "rgba(0,255,200,.08)",
+                  border: "1px solid rgba(0,255,200,.15)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {GUARANTEE_ICONS[i]}
+                </div>
                 <div>
                   <p style={{
                     fontFamily: "'Syne',sans-serif", fontWeight: 700,

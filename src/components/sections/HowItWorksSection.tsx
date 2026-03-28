@@ -1,11 +1,24 @@
 "use client";
+import { FlaskConical, ClipboardList, CheckCircle2, ShieldCheck, Zap, Target, MessageCircle } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+
+const STEP_ICONS = [
+  <FlaskConical key="flask" size={24} strokeWidth={1.8} />,
+  <ClipboardList key="clip" size={24} strokeWidth={1.8} />,
+  <CheckCircle2 key="check" size={24} strokeWidth={1.8} />,
+];
+
+const REASSURE_ICONS = [
+  <ShieldCheck key="shield" size={15} strokeWidth={2} />,
+  <Zap key="zap" size={15} strokeWidth={2} />,
+  <Target key="target" size={15} strokeWidth={2} />,
+  <MessageCircle key="msg" size={15} strokeWidth={2} />,
+];
 
 const STEPS_META = [
   {
     num:   "01",
-    icon:  "🧪",
     title: "Testez les outils",
     desc:  "Essayez gratuitement le chercheur de prospects, le calculateur de ROI ou le générateur de workflow. Aucune inscription requise — les résultats sont immédiats.",
     color: "#00ffc8",
@@ -14,7 +27,6 @@ const STEPS_META = [
   },
   {
     num:   "02",
-    icon:  "📋",
     title: "Décrivez votre projet",
     desc:  "Remplissez le formulaire de brief en 2 minutes. Pas de jargon technique — expliquez simplement votre problème avec vos mots.",
     color: "#a78bfa",
@@ -23,7 +35,6 @@ const STEPS_META = [
   },
   {
     num:   "03",
-    icon:  "✅",
     title: "Recevez une analyse sous 24h",
     desc:  "Oussama vous répond avec une solution concrète, un chiffrage et un plan d'action. Pas de promesses vagues — des résultats mesurables.",
     color: "#f5a623",
@@ -144,10 +155,9 @@ export default function HowItWorksSection() {
                   display:        "flex",
                   alignItems:     "center",
                   justifyContent: "center",
-                  fontSize:       "24px",
                   marginBottom:   "16px",
                 }}>
-                  {step.icon}
+                  <div style={{ color: step.color }}>{STEP_ICONS[STEPS.indexOf(step)]}</div>
                 </div>
 
                 {/* Titre */}
@@ -250,13 +260,13 @@ export default function HowItWorksSection() {
           flexWrap:     "wrap",
         }}>
           {[
-            { icon: "🔒", text: t.how.reassure1 },
-            { icon: "⚡", text: t.how.reassure2 },
-            { icon: "🎯", text: t.how.reassure3 },
-            { icon: "💬", text: t.how.reassure4 },
+            { icon: REASSURE_ICONS[0], text: t.how.reassure1 },
+            { icon: REASSURE_ICONS[1], text: t.how.reassure2 },
+            { icon: REASSURE_ICONS[2], text: t.how.reassure3 },
+            { icon: REASSURE_ICONS[3], text: t.how.reassure4 },
           ].map(item => (
             <div key={item.text} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <span style={{ fontSize: "16px" }}>{item.icon}</span>
+              <span style={{ color: "rgba(0,229,255,.6)" }}>{item.icon}</span>
               <span style={{
                 fontFamily: "Arial, Helvetica, sans-serif",
                 fontSize:   "12.5px",

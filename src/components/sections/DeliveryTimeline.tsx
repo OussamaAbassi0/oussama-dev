@@ -1,13 +1,22 @@
 "use client";
+import { ClipboardList, Search, Settings, Rocket, BarChart3, ShieldCheck } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
+const STEP_ICONS = [
+  <ClipboardList key="brief" size={22} strokeWidth={1.8} />,
+  <Search key="search" size={22} strokeWidth={1.8} />,
+  <Settings key="settings" size={22} strokeWidth={1.8} />,
+  <Rocket key="rocket" size={22} strokeWidth={1.8} />,
+  <BarChart3 key="chart" size={22} strokeWidth={1.8} />,
+];
+
 const STEPS_DATA = [
-  { day:"Brief",       icon:"📋", title:"Tu décris ton besoin",      desc:"Formulaire de 2 minutes. Ton problème en langage simple — pas besoin de savoir ce qu'est une API.",                color:"#00ffc8" },
-  { day:"< 24h",       icon:"🔍", title:"Analyse & devis",           desc:"Je reviens avec une solution concrète, un périmètre clair et un prix fixe. Gratuit, sans engagement.",             color:"#a78bfa" },
-  { day:"Selon scope", icon:"⚙️", title:"Développement & tests",     desc:"n8n simple : quelques heures. Workflow complexe : 1-2 jours. Agent IA : 2-4 jours. SaaS : quelques semaines.",    color:"#f5a623" },
-  { day:"Livraison",   icon:"🚀", title:"Mise en prod & documentation","desc":"Déploiement, tests finaux sur vos vraies données, documentation claire. Tu es autonome dès le premier jour.", color:"#00e5ff" },
-  { day:"30 jours",    icon:"📊", title:"Suivi inclus",              desc:"Monitoring des performances, alertes automatiques, ajustements inclus. Aucun supplément pendant 30 jours.",         color:"#4ade80" },
+  { day:"Brief",       title:"Tu décris ton besoin",      desc:"Formulaire de 2 minutes. Ton problème en langage simple — pas besoin de savoir ce qu'est une API.",                color:"#00ffc8" },
+  { day:"< 24h",       title:"Analyse & devis",           desc:"Je reviens avec une solution concrète, un périmètre clair et un prix fixe. Gratuit, sans engagement.",             color:"#a78bfa" },
+  { day:"Selon scope", title:"Développement & tests",     desc:"n8n simple : quelques heures. Workflow complexe : 1-2 jours. Agent IA : 2-4 jours. SaaS : quelques semaines.",    color:"#f5a623" },
+  { day:"Livraison",   title:"Mise en prod & documentation", desc:"Déploiement, tests finaux sur vos vraies données, documentation claire. Tu es autonome dès le premier jour.", color:"#00e5ff" },
+  { day:"30 jours",    title:"Suivi inclus",              desc:"Monitoring des performances, alertes automatiques, ajustements inclus. Aucun supplément pendant 30 jours.",         color:"#4ade80" },
 ];
 
 export default function DeliveryTimeline() {
@@ -84,10 +93,10 @@ export default function DeliveryTimeline() {
                   width:"50px", height:"50px", borderRadius:"50%", flexShrink:0,
                   background:`${step.color}15`, border:`2px solid ${step.color}40`,
                   display:"flex", alignItems:"center", justifyContent:"center",
-                  fontSize:"20px", zIndex:1,
+                  zIndex:1,
                   boxShadow:`0 0 16px ${step.color}20`,
                 }}>
-                  {step.icon}
+                  <div style={{ color: step.color }}>{STEP_ICONS[i]}</div>
                 </div>
 
                 {/* Content */}
@@ -135,7 +144,7 @@ export default function DeliveryTimeline() {
           background:"rgba(74,222,128,.06)", border:"1px solid rgba(74,222,128,.2)",
           borderRadius:"12px", display:"flex", alignItems:"center", gap:"16px",
         }}>
-          <span style={{ fontSize:"28px", flexShrink:0 }}>🛡️</span>
+          <div style={{ color:"#4ade80", flexShrink:0 }}><ShieldCheck size={26} strokeWidth={1.8} /></div>
           <div>
             <p style={{ fontFamily:"var(--sans)", fontWeight:700, fontSize:"15px", color:"white", marginBottom:"4px" }}>
               {t.timeline.guarantee}
