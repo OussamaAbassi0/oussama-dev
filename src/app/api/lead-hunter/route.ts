@@ -19,16 +19,16 @@ function buildSignal(place: GooglePlaceDetail): string {
   const reviews    = place.user_ratings_total ?? 0;
 
   if (!hasWebsite && !hasPhone)
-    return "Aucune présence digitale détectée — opportunité de création de site 🚀";
+    return "Aucune présence digitale détectée — opportunité de création de site";
   if (!hasWebsite)
-    return "Pas de site web — forte opportunité d'acquisition digitale ⚠️";
+    return "Pas de site web — forte opportunité d'acquisition digitale";
   if (rating >= 4.5 && reviews >= 50)
-    return `Note ${rating}/5 (${reviews} avis) — forte réputation, potentiel de scale IA 📈`;
+    return `Note ${rating}/5 (${reviews} avis) — forte réputation, potentiel de scale IA`;
   if (rating < 3.5 && reviews >= 10)
-    return `Note ${rating}/5 — amélioration de l'expérience client via automatisation possible 🔧`;
+    return `Note ${rating}/5 — amélioration de l'expérience client via automatisation possible`;
   if (hasWebsite && hasPhone)
-    return "Présence digitale confirmée — maturité pour intégration IA/automatisation ✅";
-  return "Lead qualifié — prêt pour une approche personnalisée 🎯";
+    return "Présence digitale confirmée — maturité pour intégration IA/automatisation";
+  return "Lead qualifié — prêt pour une approche personnalisée";
 }
 
 /* ── Google Places types ─────────────────────────────────── */

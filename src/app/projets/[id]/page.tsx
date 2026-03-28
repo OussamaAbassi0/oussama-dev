@@ -3,11 +3,20 @@ import { useParams } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Package, Gift, Bot, Mail, Link2, Zap, TrendingDown, ClipboardList, Wrench, DollarSign, Brain, TrendingUp, Target, Flame, Users, FileText, CheckCircle2, Calendar, AlertCircle, Star, BarChart3, Lock, ShoppingCart, Smartphone, Activity, Search, Rocket, Shield, X, Check } from "lucide-react";
+import { Clock, Package, Gift, Bot, Mail, Link2, Zap, TrendingDown, ClipboardList, Wrench, DollarSign, Brain, TrendingUp, Target, Flame, Users, FileText, CheckCircle2, Calendar, AlertCircle, Star, BarChart3, Lock, ShoppingCart, Smartphone, Activity, Search, Rocket, Shield, X, Check, Settings, Tag, Radio, CreditCard, ShoppingBag, Send } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useLang } from "@/lib/LangContext";
 import { SAAS_PROJECTS, N8N_PROJECTS, STACK_COLORS, SaasProject, N8nProject } from "@/data/projects";
+
+/* Emoji → Lucide icon mapping for project hero icons */
+const PROJECT_ICON_MAP: Record<string, React.ReactNode> = {
+  "🎯": <Target size={38} />, "🔥": <Flame size={38} />, "📨": <Send size={38} />,
+  "👥": <Users size={38} />, "🚀": <Rocket size={38} />, "🎫": <Tag size={38} />,
+  "🛒": <ShoppingCart size={38} />, "📡": <Radio size={38} />, "📊": <BarChart3 size={38} />,
+  "💳": <CreditCard size={38} />, "🛍️": <ShoppingBag size={38} />, "⚡": <Zap size={38} />,
+  "🏥": <Activity size={38} />, "✉️": <Mail size={38} />,
+};
 
 /* Emoji → Lucide icon mapping for metric stat boxes */
 const METRIC_ICON_MAP: Record<string, React.ReactNode> = {
@@ -296,7 +305,7 @@ function StatBox({ icon, rawValue, label, color, delay = 0 }: { icon: string; ra
    NARRATIVE SECTION (Problem → Solution → Impact)
 ────────────────────────────────────────────── */
 function NarrativeStep({ icon, accentColor, title, body, delay = 0, connector = true }: {
-  icon: string; accentColor: string; title: string; body: string; delay?: number; connector?: boolean;
+  icon: React.ReactNode; accentColor: string; title: string; body: string; delay?: number; connector?: boolean;
 }) {
   const { ref, visible } = useInView<HTMLDivElement>(0.2);
   return (
@@ -307,7 +316,7 @@ function NarrativeStep({ icon, accentColor, title, body, delay = 0, connector = 
           width: "52px", height: "52px", borderRadius: "16px",
           display: "flex", alignItems: "center", justifyContent: "center",
           background: `${accentColor}14`, border: `1px solid ${accentColor}35`,
-          fontSize: "22px", flexShrink: 0,
+          flexShrink: 0,
           boxShadow: `0 0 24px ${accentColor}20`,
         }}>
           {icon}
@@ -577,17 +586,17 @@ function SaasPage({ p }: { p: SaasProject }) {
             // {lang === "fr" ? "L'histoire du projet" : "Project story"}
           </p>
           <NarrativeStep
-            icon="❌" accentColor="#ff4d6d"
+            icon={<X size={22} />} accentColor="#ff4d6d"
             title={lang === "fr" ? "Le problème" : "The challenge"}
             body={L(p.challenge)} delay={0}
           />
           <NarrativeStep
-            icon="⚙️" accentColor={p.color}
+            icon={<Settings size={22} />} accentColor={p.color}
             title={lang === "fr" ? "La solution" : "The solution"}
             body={L(p.solution)} delay={0.1}
           />
           <NarrativeStep
-            icon="✅" accentColor="#4ade80"
+            icon={<CheckCircle2 size={22} />} accentColor="#4ade80"
             title={lang === "fr" ? "L'impact" : "The impact"}
             body={L(p.impact)} delay={0.2} connector={false}
           />
@@ -682,11 +691,11 @@ function N8nPage({ wf }: { wf: N8nProject }) {
               width: "80px", height: "80px", borderRadius: "22px",
               display: "flex", alignItems: "center", justifyContent: "center",
               background: `${wf.color}14`, border: `1px solid ${wf.color}30`,
-              fontSize: "38px", flexShrink: 0,
+              color: wf.color, flexShrink: 0,
               boxShadow: `0 0 40px ${wf.color}20`,
               animation: "floatLoop 5s ease-in-out infinite",
             }}>
-              {wf.emoji}
+              {PROJECT_ICON_MAP[wf.emoji] ?? <Zap size={38} />}
             </div>
             <div>
               <div style={{
@@ -744,17 +753,17 @@ function N8nPage({ wf }: { wf: N8nProject }) {
             // {lang === "fr" ? "Problème · Solution · Résultat" : "Problem · Solution · Result"}
           </p>
           <NarrativeStep
-            icon="❌" accentColor="#ff4d6d"
+            icon={<X size={22} />} accentColor="#ff4d6d"
             title={lang === "fr" ? "Le problème" : "The challenge"}
             body={L(wf.problem)} delay={0}
           />
           <NarrativeStep
-            icon="⚙️" accentColor={wf.color}
+            icon={<Settings size={22} />} accentColor={wf.color}
             title={lang === "fr" ? "La solution n8n" : "The n8n solution"}
             body={L(wf.solution)} delay={0.1}
           />
           <NarrativeStep
-            icon="📈" accentColor="#4ade80"
+            icon={<TrendingUp size={22} />} accentColor="#4ade80"
             title={lang === "fr" ? "Le résultat" : "The result"}
             body={L(wf.result)} delay={0.2} connector={false}
           />

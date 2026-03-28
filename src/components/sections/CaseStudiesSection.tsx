@@ -1,5 +1,5 @@
 "use client";
-import { Activity, Bus } from "lucide-react";
+import { Activity, Bus, CheckCircle2, X, Settings } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
@@ -162,7 +162,7 @@ export default function CaseStudiesSection() {
                     background: "rgba(74,222,128,.08)", border: "1px solid rgba(74,222,128,.2)",
                     fontFamily: "var(--mono)", fontSize: "9px", color: "#4ade80", letterSpacing: ".1em",
                   }}>
-                    ✓ {tx.verifiedBadge}
+                    <CheckCircle2 size={9} style={{ display:"inline", verticalAlign:"middle", marginRight:"3px" }} />{tx.verifiedBadge}
                   </span>
                 </div>
               </div>
@@ -172,7 +172,7 @@ export default function CaseStudiesSection() {
                 {/* BEFORE */}
                 <div style={{ padding: "24px", borderRight: "1px solid rgba(255,255,255,.05)" }}>
                   <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "#ff4d6d", letterSpacing: ".2em", marginBottom: "12px" }}>
-                    ❌ {tx.before}
+                    <X size={9} style={{ display:"inline", verticalAlign:"middle", marginRight:"3px" }} />{tx.before}
                   </p>
                   <p style={{ fontFamily: "Arial,sans-serif", fontSize: "12.5px", color: "rgba(255,255,255,.5)", lineHeight: 1.6, marginBottom: "14px" }}>
                     {ls(c.before.problem)}
@@ -180,7 +180,7 @@ export default function CaseStudiesSection() {
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     {la(c.before.pain).map((p, j) => (
                       <div key={j} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                        <span style={{ color: "#ff4d6d", fontSize: "11px" }}>✗</span>
+                        <span style={{ color: "#ff4d6d", display:"flex" }}><X size={11} /></span>
                         <span style={{ fontFamily: "Arial,sans-serif", fontSize: "12px", color: "rgba(255,255,255,.45)" }}>{p}</span>
                       </div>
                     ))}
@@ -190,7 +190,7 @@ export default function CaseStudiesSection() {
                 {/* SOLUTION */}
                 <div style={{ padding: "24px", borderRight: "1px solid rgba(255,255,255,.05)", background: `${c.color}04` }}>
                   <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: c.color, letterSpacing: ".2em", marginBottom: "12px" }}>
-                    ⚙️ {tx.solution}
+                    <Settings size={9} style={{ display:"inline", verticalAlign:"middle", marginRight:"3px" }} />{tx.solution}
                   </p>
                   <p style={{ fontFamily: "Arial,sans-serif", fontSize: "12.5px", color: "rgba(255,255,255,.6)", lineHeight: 1.65, marginBottom: "14px" }}>
                     {ls(c.solution)}
@@ -210,12 +210,12 @@ export default function CaseStudiesSection() {
                 {/* RESULTS */}
                 <div style={{ padding: "24px" }}>
                   <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "#4ade80", letterSpacing: ".2em", marginBottom: "12px" }}>
-                    ✅ {tx.after}
+                    <CheckCircle2 size={9} style={{ display:"inline", verticalAlign:"middle", marginRight:"3px" }} />{tx.after}
                   </p>
                   <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     {la(c.after.results).map((r, j) => (
                       <div key={j} style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                        <span style={{ color: "#4ade80", fontSize: "11px" }}>✓</span>
+                        <span style={{ color: "#4ade80", display:"flex" }}><CheckCircle2 size={11} /></span>
                         <span style={{ fontFamily: "Arial,sans-serif", fontSize: "12px", color: "rgba(255,255,255,.75)", fontWeight: 500 }}>{r}</span>
                       </div>
                     ))}

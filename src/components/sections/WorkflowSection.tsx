@@ -2,6 +2,14 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { Zap, Brain, Search, Mail, CheckCircle2 } from "lucide-react";
+
+const NODE_ICON_MAP: Record<string, React.ReactNode> = {
+  "⚡": <Zap size={20} />,
+  "🧠": <Brain size={20} />,
+  "🔍": <Search size={20} />,
+  "📧": <Mail size={20} />,
+};
 
 /* ══════════════════════════════════════════════════════════
    TYPES
@@ -223,8 +231,8 @@ function DraggableNode({
         animation: isActive ? "nodeActivePulse 0.7s ease-in-out infinite"
           : highlighted && !isConnected ? "nodeHighlight 1.5s ease-in-out infinite" : "none",
       }}>
-        <div style={{ fontSize: "22px", marginBottom: "5px", filter: isActive ? `drop-shadow(0 0 6px ${node.color})` : "none", transition: "filter 0.3s" }}>
-          {isDone ? "✅" : isActive ? "⚡" : node.icon}
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"center", marginBottom: "5px", filter: isActive ? `drop-shadow(0 0 6px ${node.color})` : "none", transition: "filter 0.3s", color: isActive || isDone ? "white" : node.color }}>
+          {isDone ? <CheckCircle2 size={20} /> : isActive ? <Zap size={20} /> : (NODE_ICON_MAP[node.icon] ?? <Zap size={20} />)}
         </div>
         <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "11px", color: isActive || isDone ? "white" : highlighted ? node.color : isConnected ? "var(--text)" : "var(--text-dim)", marginBottom: "2px", transition: "color 0.3s" }}>
           {node.label}

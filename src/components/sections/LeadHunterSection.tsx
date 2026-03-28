@@ -5,6 +5,7 @@ import { useLang } from "@/lib/LangContext";
 import { MOCK_LEADS, QUICK_TARGETS } from "@/lib/mock-leads";
 import type { Lead } from "@/lib/types";
 import { trackLabTool } from "@/lib/sessionTracker";
+import { CheckCircle2, ShieldAlert, Search, Loader2, Send, Lock, AlertTriangle, Smartphone, Globe, MapPin, Target, Zap } from "lucide-react";
 
 /* ── Terminal logs ───────────────────────────────────────── */
 const LOGS_MOCK = [
@@ -19,7 +20,7 @@ const LOGS_MOCK = [
 const LOGS_CUSTOM = [
   "→ Analyse de la requête personnalisée...",
   "→ Vérification du profil utilisateur...",
-  "→ Protection anti-abus activée 🛡️",
+  "→ Protection anti-abus activée [shield]",
   "→ Accès scraping custom : authentification requise...",
 ];
 
@@ -67,9 +68,9 @@ function LeadCard({ lead, index }: { lead: Lead; index: number }) {
 
       {/* Contacts */}
       <div style={{ fontFamily: "var(--mono)", fontSize: "11px", lineHeight: 2, marginBottom: "12px" }}>
-        <div style={{ color: hasPhone ? "var(--text)" : "var(--text-dim)" }}>📱 {lead.phone}</div>
-        <div>
-          🌐{" "}
+        <div style={{ color: hasPhone ? "var(--text)" : "var(--text-dim)", display:"flex", alignItems:"center", gap:"4px" }}><Smartphone size={11} /> {lead.phone}</div>
+        <div style={{ display:"flex", alignItems:"center", gap:"4px" }}>
+          <Globe size={11} />{" "}
           {hasWebsite ? (
             <a
               href={lead.website.startsWith("http") ? lead.website : `https://${lead.website}`}
@@ -82,7 +83,7 @@ function LeadCard({ lead, index }: { lead: Lead; index: number }) {
             <span style={{ color: "var(--red)", opacity: 0.7 }}>Aucun site détecté</span>
           )}
         </div>
-        <div style={{ color: "var(--text-dim)", fontSize: "10px" }}>📍 {lead.address}</div>
+        <div style={{ color: "var(--text-dim)", fontSize: "10px", display:"flex", alignItems:"center", gap:"4px" }}><MapPin size={10} /> {lead.address}</div>
       </div>
 
       {/* Signal */}
@@ -92,7 +93,7 @@ function LeadCard({ lead, index }: { lead: Lead; index: number }) {
         fontFamily: "var(--mono)", fontSize: "11px", color: "var(--amber)", lineHeight: 1.6,
         marginBottom: "12px",
       }}>
-        🎯 {lead.signal}
+        <Target size={11} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{lead.signal}
       </div>
 
       {/* Maps CTA */}
@@ -108,7 +109,7 @@ function LeadCard({ lead, index }: { lead: Lead; index: number }) {
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,0.4)"; (e.currentTarget as HTMLElement).style.color = "var(--cyan)"; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,0.15)"; (e.currentTarget as HTMLElement).style.color = "var(--text-dim)"; }}
       >
-        📍 Voir sur Google Maps →
+        <MapPin size={11} /> Voir sur Google Maps →
       </a>
     </div>
   );
@@ -146,7 +147,7 @@ function LeadCaptureBlock({ query }: { query: string }) {
         boxShadow: "0 0 40px rgba(0,255,200,0.08)",
         border: "1px solid rgba(0,255,200,0.25)",
       }}>
-        <div style={{ fontSize: "44px", marginBottom: "16px" }}>✅</div>
+        <div style={{ color: "var(--cyan)", display: "flex", justifyContent: "center", marginBottom: "16px" }}><CheckCircle2 size={44} strokeWidth={1.5} /></div>
         <h3 style={{ fontFamily: "var(--sans)", fontWeight: 800, fontSize: "20px", color: "white", marginBottom: "10px" }}>
           Demande envoyée !
         </h3>
@@ -177,9 +178,10 @@ function LeadCaptureBlock({ query }: { query: string }) {
         <div style={{
           width: "36px", height: "36px", borderRadius: "8px", flexShrink: 0,
           background: "rgba(245,166,35,0.1)", border: "1px solid rgba(245,166,35,0.25)",
-          display: "flex", alignItems: "center", justifyContent: "center", fontSize: "18px",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          color: "var(--amber)",
         }}>
-          🛡️
+          <ShieldAlert size={18} />
         </div>
         <div>
           <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--amber)", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "2px" }}>
@@ -198,7 +200,7 @@ function LeadCaptureBlock({ query }: { query: string }) {
         background: "rgba(245,166,35,0.08)", border: "1px solid rgba(245,166,35,0.2)",
         fontFamily: "var(--mono)", fontSize: "11px", color: "var(--amber)",
       }}>
-        🔍 Requête : &ldquo;{query}&rdquo;
+        <Search size={11} /> Requête : &ldquo;{query}&rdquo;
       </div>
 
       <p style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.8, marginBottom: "24px" }}>
@@ -239,20 +241,22 @@ function LeadCaptureBlock({ query }: { query: string }) {
             transition: "all 0.2s", whiteSpace: "nowrap",
           }}
         >
-          {status === "sending" ? "⏳ Envoi..." : "📨 Recevoir mes leads"}
+          {status === "sending"
+            ? <><Loader2 size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px", animation: "spin 1s linear infinite" }} />Envoi...</>
+            : <><Send size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />Recevoir mes leads</>}
         </button>
       </div>
 
       {/* Error */}
       {status === "error" && (
         <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--red)", marginTop: "10px" }}>
-          ⚠ {errMsg}
+          <AlertTriangle size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />{errMsg}
         </p>
       )}
 
       {/* Trust note */}
       <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--text-dim)", marginTop: "14px", opacity: 0.7 }}>
-        🔒 Aucun spam · Données non partagées · Réponse sous 2 min
+        <Lock size={10} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />Aucun spam · Données non partagées · Réponse sous 2 min
       </p>
     </div>
   );
@@ -345,7 +349,7 @@ export default function LeadHunterSection() {
               padding: "12px 16px", fontFamily: "var(--mono)", fontSize: "13px",
               borderRadius: "6px", outline: "none", transition: "border-color 0.2s",
             }}
-            placeholder={lang==="ar" ? 'اكتب هدفك... أو جرّب مثالاً ⬇️' : lang==="en" ? 'Type your target... or test an example below 👇' : lang==="es" ? 'Escribe tu objetivo... o prueba un ejemplo 👇' : lang==="nl" ? 'Typ uw doel... of probeer een voorbeeld 👇' : 'Tapez votre cible... ou testez un exemple ci-dessous 👇'}
+            placeholder={lang==="ar" ? 'اكتب هدفك... أو جرّب مثالاً أدناه' : lang==="en" ? 'Type your target... or test an example below' : lang==="es" ? 'Escribe tu objetivo... o prueba un ejemplo abajo' : lang==="nl" ? 'Typ uw doel... of probeer een voorbeeld hieronder' : 'Tapez votre cible... ou testez un exemple ci-dessous'}
             value={query}
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === "Enter" && run(query)}
@@ -364,7 +368,7 @@ export default function LeadHunterSection() {
               transition: "opacity 0.2s",
             }}
           >
-            {phase === "scanning" ? (lang==="ar" ? "⏳ جاري البحث..." : lang==="en" ? "⏳ Scanning..." : lang==="es" ? "⏳ Buscando..." : lang==="nl" ? "⏳ Zoeken..." : "⏳ Scanning...") : (lang==="ar" ? "⚡ وضع الصياد" : lang==="en" ? "⚡ Hunter Mode" : lang==="es" ? "⚡ Modo Cazador" : lang==="nl" ? "⚡ Jager Modus" : "⚡ Hunter Mode")}
+            {phase === "scanning" ? <><Loader2 size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{lang==="ar" ? "جاري البحث..." : lang==="en" ? "Scanning..." : lang==="es" ? "Buscando..." : lang==="nl" ? "Zoeken..." : "Scanning..."}</> : <><Zap size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{lang==="ar" ? "وضع الصياد" : lang==="en" ? "Hunter Mode" : lang==="es" ? "Modo Cazador" : lang==="nl" ? "Jager Modus" : "Hunter Mode"}</>}
           </button>
         </div>
 
@@ -373,7 +377,7 @@ export default function LeadHunterSection() {
           fontFamily: "var(--mono)", fontSize: "12px",
           color: "rgba(0,255,200,0.75)", marginBottom: "10px", letterSpacing: "0.03em",
         }}>
-          {lang==="ar" ? "⚡ شاهد السحر مباشرة" : lang==="en" ? "⚡ See the magic live" : lang==="es" ? "⚡ Ver la magia en directo" : lang==="nl" ? "⚡ Zie de magie live" : "⚡ Voir la magie en direct"}{" "}
+          <Zap size={12} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{lang==="ar" ? "شاهد السحر مباشرة" : lang==="en" ? "See the magic live" : lang==="es" ? "Ver la magia en directo" : lang==="nl" ? "Zie de magie live" : "Voir la magie en direct"}{" "}
           <span style={{ color: "rgba(0,255,200,0.45)" }}>{lang==="ar" ? "(عروض مجانية) :" : lang==="en" ? "(Free demos):" : lang==="es" ? "(Demos gratuitas):" : lang==="nl" ? "(Gratis demo's):" : "(Démos gratuites) :"}</span>
         </p>
         <style>{`
@@ -423,7 +427,7 @@ export default function LeadHunterSection() {
             background: "rgba(255,77,109,0.08)", border: "1px solid rgba(255,77,109,0.2)",
             fontFamily: "var(--mono)", fontSize: "12px", color: "var(--red)",
           }}>
-            ⚠ {error}
+            <AlertTriangle size={12} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{error}
           </div>
         )}
 
@@ -434,7 +438,7 @@ export default function LeadHunterSection() {
         {!isLeadCapture && leads.length > 0 && (
           <>
             <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--text-dim)", marginBottom: "16px" }}>
-              ✓ {leads.length} leads qualifiés — données vérifiées
+              <CheckCircle2 size={11} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{leads.length} leads qualifiés — données vérifiées
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "16px" }}>
               {leads.map((lead, i) => <LeadCard key={i} lead={lead} index={i} />)}

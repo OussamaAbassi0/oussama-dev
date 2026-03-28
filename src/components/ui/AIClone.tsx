@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { Bot, X } from "lucide-react";
 
 /* ══════════════════════════════════════════════════════════
    TYPES & CONSTANTS
@@ -144,10 +145,11 @@ function ChatPanel({ onClose }: { onClose: () => void }) {
           background: "linear-gradient(135deg,#001a14,#002820)",
           border: "1.5px solid rgba(0,255,200,.35)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: "16px", flexShrink: 0,
+          flexShrink: 0,
           boxShadow: "0 0 12px rgba(0,255,200,.2)",
+          color: "var(--cyan)",
         }}>
-          🤖
+          <Bot size={16} />
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -343,7 +345,7 @@ export default function AIClone() {
             onMouseEnter={e => (e.currentTarget.style.transform = "scale(1.08)")}
             onMouseLeave={e => (e.currentTarget.style.transform = "scale(1)")}
           >
-            {open ? "×" : "🤖"}
+            {open ? <X size={22} /> : <Bot size={22} />}
           </button>
         </div>
       </div>

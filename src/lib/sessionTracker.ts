@@ -109,18 +109,18 @@ export function buildPersonalizedWelcome(
     if (hasROI) {
       const h = Math.round(s.roiHours!);
       const e = Math.round(s.roiEuros!).toLocaleString("fr-FR");
-      return `J'ai vu que vous avez calculé **${h}h/semaine** perdues — soit **${e}€/an**. 🔥 Voulez-vous qu'on parle de comment éliminer ça concrètement ?`;
+      return `J'ai vu que vous avez calculé **${h}h/semaine** perdues — soit **${e}€/an**. Voulez-vous qu'on parle de comment éliminer ça concrètement ?`;
     }
     if (hasArticle) {
       const topic = ARTICLE_LABELS[s.articlesRead[s.articlesRead.length - 1]] ?? "l'automatisation";
-      return `J'ai vu que vous avez lu l'article sur **${topic}**. 📖 Vous avez des questions ou un cas concret à explorer ?`;
+      return `J'ai vu que vous avez lu l'article sur **${topic}**. Vous avez des questions ou un cas concret à explorer ?`;
     }
     if (hasTool) {
       const tool = TOOL_LABELS[s.labToolsUsed[s.labToolsUsed.length - 1]] ?? "les outils";
-      return `Je vois que vous avez testé le **${tool}** 🧪 Des questions sur comment ça fonctionnerait pour votre business ?`;
+      return `Je vois que vous avez testé le **${tool}**. Des questions sur comment ça fonctionnerait pour votre business ?`;
     }
     if (isReturning) {
-      return `Vous explorez le site en détail 👀 Je peux vous aider à trouver exactement ce que vous cherchez.`;
+      return `Vous explorez le site en détail. Je peux vous aider à trouver exactement ce que vous cherchez.`;
     }
   }
 
@@ -128,25 +128,25 @@ export function buildPersonalizedWelcome(
     if (hasROI) {
       const h = Math.round(s.roiHours!);
       const e = Math.round(s.roiEuros!).toLocaleString("en-US");
-      return `I saw you calculated **${h}h/week** lost — that's **$${e}/year**. 🔥 Want to talk about how to eliminate that concretely?`;
+      return `I saw you calculated **${h}h/week** lost — that's **$${e}/year**. Want to talk about how to eliminate that concretely?`;
     }
     if (hasArticle) {
-      return `I saw you were reading the blog 📖 Any questions or a specific case you'd like to explore?`;
+      return `I saw you were reading the blog. Any questions or a specific case you'd like to explore?`;
     }
     if (hasTool) {
       const tool = TOOL_LABELS[s.labToolsUsed[s.labToolsUsed.length - 1]] ?? "the tools";
-      return `I see you tested the **${tool}** 🧪 Questions about how it would work for your business?`;
+      return `I see you tested the **${tool}**. Questions about how it would work for your business?`;
     }
     if (isReturning) {
-      return `You're exploring the site closely 👀 I can help you find exactly what you're looking for.`;
+      return `You're exploring the site closely. I can help you find exactly what you're looking for.`;
     }
   }
 
   /* For ar/es/nl — generic returning visitor message */
   if (isReturning || hasArticle || hasTool || hasROI) {
-    if (lang === "ar") return `أرى أنك تتصفح الموقع بتمعن 👀 هل يمكنني مساعدتك في العثور على ما تبحث عنه؟`;
-    if (lang === "es") return `Veo que estás explorando el sitio 👀 ¿Puedo ayudarte a encontrar exactamente lo que buscas?`;
-    if (lang === "nl") return `Ik zie dat je de site grondig bekijkt 👀 Kan ik je helpen precies te vinden wat je zoekt?`;
+    if (lang === "ar") return `أرى أنك تتصفح الموقع بتمعن. هل يمكنني مساعدتك في العثور على ما تبحث عنه؟`;
+    if (lang === "es") return `Veo que estás explorando el sitio. ¿Puedo ayudarte a encontrar exactamente lo que buscas?`;
+    if (lang === "nl") return `Ik zie dat je de site grondig bekijkt. Kan ik je helpen precies te vinden wat je zoekt?`;
   }
 
   return null;

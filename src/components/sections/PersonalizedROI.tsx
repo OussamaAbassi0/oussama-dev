@@ -1,6 +1,31 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import {
+  Building2, Briefcase, Users, ShoppingCart,
+  Clock, BarChart3, DollarSign, Target, Mail, FileText,
+  Calendar, MessageCircle, Package, Star, MousePointerClick,
+} from "lucide-react";
+
+const PROFILE_ICONS = [
+  <Building2 key="ceo" size={14} />,
+  <Briefcase key="sales" size={14} />,
+  <Users key="hr" size={14} />,
+  <ShoppingCart key="ecom" size={14} />,
+];
+
+const GAIN_ICON_MAP: Record<string, React.ReactNode> = {
+  "⏱":  <Clock size={13} />,
+  "📊":  <BarChart3 size={13} />,
+  "💰":  <DollarSign size={13} />,
+  "🎯":  <Target size={13} />,
+  "📧":  <Mail size={13} />,
+  "📄":  <FileText size={13} />,
+  "📅":  <Calendar size={13} />,
+  "💬":  <MessageCircle size={13} />,
+  "📦":  <Package size={13} />,
+  "⭐":  <Star size={13} />,
+};
 
 /* ══════════════════════════════════════════════════════════
    PROFILS & DONNÉES
@@ -144,7 +169,7 @@ export default function PersonalizedROI({ onOpenBrief }: { onOpenBrief: () => vo
 
         {/* Profil selector */}
         <div style={{ display:"flex", gap:"12px", flexWrap:"wrap", marginBottom:"40px" }}>
-          {PROFILES.map(p => (
+          {PROFILES.map((p, pi) => (
             <button
               key={p.id}
               onClick={() => setActiveProfile(p.id === activeProfile ? null : p.id)}
@@ -163,7 +188,7 @@ export default function PersonalizedROI({ onOpenBrief }: { onOpenBrief: () => vo
                 boxShadow:    activeProfile === p.id ? `0 0 16px ${p.color}25` : "none",
               }}
             >
-              {p.emoji} {p.label}
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}>{PROFILE_ICONS[pi]} {p.label}</span>
             </button>
           ))}
         </div>
@@ -176,7 +201,7 @@ export default function PersonalizedROI({ onOpenBrief }: { onOpenBrief: () => vo
             border:"1px dashed rgba(255,255,255,.08)",
             borderRadius:"16px",
           }}>
-            <div style={{ fontSize:"36px", marginBottom:"12px", opacity:.3 }}>👆</div>
+            <div style={{ display:"flex", justifyContent:"center", marginBottom:"12px", opacity:.3, color:"rgba(255,255,255,.5)" }}><MousePointerClick size={36} strokeWidth={1} /></div>
             <p style={{ fontFamily:"var(--mono)", fontSize:"13px", color:"rgba(255,255,255,.25)" }}>
               Sélectionnez votre profil pour voir votre simulation personnalisée
             </p>
@@ -207,7 +232,7 @@ export default function PersonalizedROI({ onOpenBrief }: { onOpenBrief: () => vo
                         borderRadius:"8px",
                       }}>
                         <span style={{ fontFamily:"Arial, sans-serif", fontSize:"13px", color:"rgba(255,255,255,.6)" }}>
-                          {g.icon} {g.label}
+                          <span style={{ display: "inline-flex", alignItems: "center", gap: "5px", color: profile!.color }}>{GAIN_ICON_MAP[g.icon] ?? null}</span> {g.label}
                         </span>
                         <span style={{
                           fontFamily:"var(--mono)", fontWeight:700, fontSize:"13px",

@@ -2,6 +2,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { Zap, Loader2, Clipboard, Check, ClipboardList, AlertTriangle } from "lucide-react";
+
+const stripEmoji = (s: string) => s.replace(/^[\p{Extended_Pictographic}][\uFE0F]?\u20E3?\s*/u, "");
 
 /* ── Translations ────────────────────────────────────────── */
 const EMAIL_TRANS: Record<string, {
@@ -362,7 +365,9 @@ export default function EmailGeneratorSection() {
                 gap:          "6px",
               }}
             >
-              {loading ? <>{tr.generating}<LoadingDots /></> : tr.generateBtn}
+              {loading
+                ? <><Loader2 size={13} style={{ animation: "spin 1s linear infinite" }} /> {stripEmoji(tr.generating)}<LoadingDots /></>
+                : <><Zap size={13} /> {stripEmoji(tr.generateBtn)}</>}
             </button>
 
             {/* Error */}
@@ -376,7 +381,7 @@ export default function EmailGeneratorSection() {
                 fontSize:     "11px",
                 color:        "var(--red)",
               }}>
-                ⚠ {error}
+                <AlertTriangle size={11} style={{ display: "inline", verticalAlign: "middle", marginRight: "4px" }} />{error}
               </div>
             )}
           </div>
@@ -480,7 +485,9 @@ export default function EmailGeneratorSection() {
                       onMouseEnter={e => { if (!copied) { (e.currentTarget as HTMLElement).style.background = "rgba(0,255,200,0.1)"; (e.currentTarget as HTMLElement).style.color = "var(--cyan)"; } }}
                       onMouseLeave={e => { if (!copied) { (e.currentTarget as HTMLElement).style.background = "rgba(0,255,200,0.06)"; (e.currentTarget as HTMLElement).style.color = "var(--text-dim)"; } }}
                     >
-                      {copied ? tr.copiedBtn : tr.copyBtn}
+                      {copied
+                        ? <><Check size={12} /> {stripEmoji(tr.copiedBtn)}</>
+                        : <><Clipboard size={12} /> {stripEmoji(tr.copyBtn)}</>}
                     </button>
 
                     <a
@@ -504,7 +511,7 @@ export default function EmailGeneratorSection() {
                       onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = "rgba(0,255,200,0.1)"; (e.currentTarget as HTMLElement).style.color = "var(--cyan)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,0.4)"; }}
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = "rgba(0,255,200,0.06)"; (e.currentTarget as HTMLElement).style.color = "var(--text-dim)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,0.2)"; }}
                     >
-                      {tr.ctaBtn}
+                      <ClipboardList size={12} style={{ marginRight: "5px" }} />{stripEmoji(tr.ctaBtn)}
                     </a>
                   </div>
                 </>

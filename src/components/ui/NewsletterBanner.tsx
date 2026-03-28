@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Lock, CheckCircle2 } from "lucide-react";
 
 const TEXTS = {
   fr: {
@@ -8,7 +9,7 @@ const TEXTS = {
     sub:    "Concret, applicable, gratuit. Rejoignez 200+ dirigeants qui automatisent leur business.",
     placeholder: "votre@email.com",
     cta:    "S'inscrire →",
-    ok:     "✓ Vous êtes inscrit ! Premier email dans 24h.",
+    ok:     "Vous êtes inscrit ! Premier email dans 24h.",
     count:  "200+ abonnés",
   },
   en: {
@@ -17,7 +18,7 @@ const TEXTS = {
     sub:    "Concrete, actionable, free. Join 200+ leaders automating their business.",
     placeholder: "your@email.com",
     cta:    "Subscribe →",
-    ok:     "✓ You're in! First email in 24h.",
+    ok:     "You're in! First email in 24h.",
     count:  "200+ subscribers",
   },
   ar: {
@@ -26,7 +27,7 @@ const TEXTS = {
     sub:    "عملية، قابلة للتطبيق، مجانية. انضم إلى 200+ مدير يؤتمتون أعمالهم.",
     placeholder: "بريدك@الإلكتروني.com",
     cta:    "← اشترك",
-    ok:     "✓ أنت مشترك! أول بريد خلال 24 ساعة.",
+    ok:     "أنت مشترك! أول بريد خلال 24 ساعة.",
     count:  "+200 مشترك",
   },
   es: {
@@ -35,7 +36,7 @@ const TEXTS = {
     sub:    "Concreto, aplicable, gratuito. Únete a 200+ directivos que automatizan su negocio.",
     placeholder: "tu@email.com",
     cta:    "Suscribirse →",
-    ok:     "✓ ¡Estás dentro! Primer email en 24h.",
+    ok:     "¡Estás dentro! Primer email en 24h.",
     count:  "200+ suscriptores",
   },
   nl: {
@@ -44,7 +45,7 @@ const TEXTS = {
     sub:    "Concreet, toepasbaar, gratis. Sluit je aan bij 200+ directeuren die hun bedrijf automatiseren.",
     placeholder: "uw@email.com",
     cta:    "Abonneren →",
-    ok:     "✓ Je bent aangemeld! Eerste e-mail binnen 24u.",
+    ok:     "Je bent aangemeld! Eerste e-mail binnen 24u.",
     count:  "200+ abonnees",
   },
 };
@@ -114,8 +115,9 @@ export default function NewsletterBanner({ lang = "fr" }: { lang?: string }) {
           borderRadius: "8px",
           fontFamily: "'Courier New',monospace", fontSize: "13px",
           color: "#00ffc8", fontWeight: 700,
+          display: "flex", alignItems: "center", gap: "6px",
         }}>
-          {tx.ok}
+          <CheckCircle2 size={14} />{tx.ok}
         </div>
       ) : (
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
@@ -154,7 +156,7 @@ export default function NewsletterBanner({ lang = "fr" }: { lang?: string }) {
         fontFamily: "'Courier New',monospace", fontSize: "10px",
         color: "rgba(255,255,255,.2)", marginTop: "12px",
       }}>
-        🔒 {lang==="en" ? "Zero spam. Unsubscribe in 1 click." : lang==="ar" ? "صفر بريد مزعج. إلغاء الاشتراك بنقرة." : lang==="es" ? "Cero spam. Darse de baja en 1 clic." : lang==="nl" ? "Nul spam. Afmelden in 1 klik." : "Zéro spam. Désabonnement en 1 clic."} {tx.count}.
+        <Lock size={10} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{lang==="en" ? "Zero spam. Unsubscribe in 1 click." : lang==="ar" ? "صفر بريد مزعج. إلغاء الاشتراك بنقرة." : lang==="es" ? "Cero spam. Darse de baja en 1 clic." : lang==="nl" ? "Nul spam. Afmelden in 1 klik." : "Zéro spam. Désabonnement en 1 clic."} {tx.count}.
       </p>
     </div>
   );

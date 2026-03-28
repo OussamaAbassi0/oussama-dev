@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useLang } from "@/lib/LangContext";
+import { Clock } from "lucide-react";
 
 const HOURLY_RATE = 35;
 
@@ -28,8 +29,8 @@ function TimeLostWidget() {
       border:"1px solid rgba(255,77,109,.15)", borderRadius:"10px",
       textAlign:"center", maxWidth:"420px", margin:"0 auto 24px",
     }}>
-      <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(255,77,109,.7)", letterSpacing:".15em", marginBottom:"6px" }}>
-        ⏱ {t.footer.lost}
+      <p style={{ fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(255,77,109,.7)", letterSpacing:".15em", marginBottom:"6px", display:"flex", alignItems:"center", justifyContent:"center", gap:"4px" }}>
+        <Clock size={9} />{t.footer.lost}
       </p>
       <div style={{ display:"flex", alignItems:"center", justifyContent:"center", gap:"12px" }}>
         <span style={{ fontFamily:"var(--mono)", fontWeight:700, fontSize:"22px", color:"#ff4d6d" }}>{time}</span>

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef, useId } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
+import { AlertTriangle, Loader2, Zap, Diamond } from "lucide-react";
 
 /* ══════════════════════════════════════════════════════════
    QUICK EXAMPLES
@@ -91,7 +92,7 @@ function MermaidDiagram({ code }: { code: string }) {
         color: "#ff4d6d", background: "rgba(255,77,109,0.06)",
         border: "1px solid rgba(255,77,109,0.2)", borderRadius: "8px",
       }}>
-        ⚠ {error}
+        <AlertTriangle size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{error}
       </div>
     );
   }
@@ -147,9 +148,9 @@ function ScanLoader() {
         background: "rgba(0,229,255,.08)",
         border: "1px solid rgba(0,229,255,.25)",
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: "24px", animation: "bpPulse 1.5s ease infinite", zIndex: 1,
+        animation: "bpPulse 1.5s ease infinite", zIndex: 1, color: "rgba(0,229,255,.7)",
       }}>
-        🔷
+        <Diamond size={24} />
       </div>
 
       <div style={{ zIndex: 1, textAlign: "center" }}>
@@ -269,7 +270,7 @@ export default function BlueprintGenerator() {
                   marginBottom: "20px",
                 }}
               >
-                {phase === "loading" ? "⏳ Génération..." : "🔷 Générer le blueprint →"}
+                {phase === "loading" ? <><Loader2 size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Génération...</> : <><Diamond size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Générer le blueprint →</>}
               </button>
 
               {/* Hint Ctrl+Enter */}
@@ -282,7 +283,7 @@ export default function BlueprintGenerator() {
               {/* Quick examples */}
               <div>
                 <p style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,.25)", letterSpacing: ".15em", textTransform: "uppercase", marginBottom: "10px" }}>
-                  ⚡ Exemples rapides
+                  <Zap size={9} style={{ display:"inline", verticalAlign:"middle", marginRight:"3px" }} />Exemples rapides
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                   {EXAMPLES.map((ex, i) => (
@@ -353,7 +354,7 @@ export default function BlueprintGenerator() {
               <div style={{ padding: phase === "idle" ? "0" : "20px", minHeight: "260px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {phase === "idle" && (
                   <div style={{ padding: "40px 24px", textAlign: "center", width: "100%" }}>
-                    <div style={{ fontSize: "36px", marginBottom: "16px", opacity: .3 }}>🔷</div>
+                    <div style={{ marginBottom: "16px", opacity: .3, display:"flex", justifyContent:"center", color: "rgba(0,229,255,.7)" }}><Diamond size={36} /></div>
                     <p style={{ fontFamily: "'Courier New',monospace", fontSize: "12px", color: "rgba(255,255,255,.2)" }}>
                       Le schéma d&apos;architecture apparaîtra ici
                     </p>
@@ -364,7 +365,7 @@ export default function BlueprintGenerator() {
 
                 {phase === "error" && (
                   <div style={{ width: "100%", padding: "24px", fontFamily: "'Courier New',monospace", fontSize: "12px", color: "#ff4d6d" }}>
-                    ⚠ {errMsg}
+                    <AlertTriangle size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{errMsg}
                   </div>
                 )}
 

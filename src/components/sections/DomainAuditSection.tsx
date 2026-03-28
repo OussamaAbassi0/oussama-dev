@@ -2,6 +2,10 @@
 import { useState, useRef, useEffect } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { Search, Brain, Zap, BarChart3, AlertTriangle, Globe, Trophy, DollarSign } from "lucide-react";
+
+const stripEmoji = (s: string) => s.replace(/^[\p{Extended_Pictographic}][\uFE0F]?\u20E3?\s*/u, "");
+const LOADING_ICONS = [<Search key="s" size={12} />, <Brain key="b" size={12} />, <Search key="s2" size={12} />, <Zap key="z" size={12} />, <BarChart3 key="c" size={12} />];
 
 /* ─── Types ──────────────────────────────────────────────────── */
 interface AuditOpportunity {
@@ -387,8 +391,9 @@ export default function DomainAuditSection() {
                     fontSize:   "12px",
                     color:      i === loadStep ? "white" : "rgba(255,255,255,.4)",
                     transition: "color .3s",
+                    display: "flex", alignItems: "center", gap: "6px",
                   }}>
-                    {step}
+                    {LOADING_ICONS[i]} {stripEmoji(step)}
                   </span>
                 </div>
               ))}
@@ -409,7 +414,7 @@ export default function DomainAuditSection() {
             color:    "#ff8080",
             marginTop: "16px",
           }}>
-            ⚠ {errorMsg}
+            <AlertTriangle size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{errorMsg}
             <button
               onClick={() => { setPhase("idle"); setErrorMsg(""); }}
               style={{ marginLeft: "16px", background: "none", border: "none", color: "var(--cyan)", cursor: "pointer", textDecoration: "underline", fontFamily: "'Courier New',monospace", fontSize: "13px" }}
@@ -432,8 +437,8 @@ export default function DomainAuditSection() {
               marginBottom: "24px",
               animation:    "auditPop .5s ease",
             }}>
-              <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: ".1em" }}>
-                🌐 {result.domain}
+              <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", marginBottom: "8px", textTransform: "uppercase", letterSpacing: ".1em", display: "flex", alignItems: "center", gap: "5px" }}>
+                <Globe size={11} /> {result.domain}
               </p>
               <h3 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "clamp(18px,2.5vw,26px)", color: "white", lineHeight: 1.3 }}>
                 {result.headline}
@@ -452,8 +457,8 @@ export default function DomainAuditSection() {
                   border:       "1px solid rgba(255,255,255,.06)",
                   borderRadius: "12px",
                 }}>
-                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "14px" }}>
-                    🔎 {tx.detected}
+                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "14px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <Search size={11} /> {tx.detected}
                   </p>
                   {result.detected && result.detected.length > 0 ? (
                     <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
@@ -486,8 +491,8 @@ export default function DomainAuditSection() {
                   border:       "1px solid rgba(255,255,255,.06)",
                   borderRadius: "12px",
                 }}>
-                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "14px" }}>
-                    📊 {tx.maturity}
+                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "14px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <BarChart3 size={11} /> {tx.maturity}
                   </p>
                   <MaturityBar score={result.maturityScore ?? 2} low={tx.maturityLow} high={tx.maturityHigh} />
                 </div>
@@ -499,8 +504,8 @@ export default function DomainAuditSection() {
                   border:       "1px solid rgba(245,166,35,.2)",
                   borderRadius: "12px",
                 }}>
-                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(245,166,35,.7)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "10px" }}>
-                    {tx.roi}
+                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(245,166,35,.7)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "10px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <DollarSign size={11} /> {stripEmoji(tx.roi)}
                   </p>
                   <p style={{ fontFamily: "'Syne',sans-serif", fontWeight: 800, fontSize: "clamp(16px,2vw,22px)", color: "#f5a623", lineHeight: 1.3 }}>
                     {result.roiEstimate}
@@ -518,8 +523,8 @@ export default function DomainAuditSection() {
                   border:       "1px solid rgba(255,255,255,.06)",
                   borderRadius: "12px",
                 }}>
-                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "14px" }}>
-                    ⚡ {tx.opportunities}
+                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "11px", color: "rgba(0,255,200,.6)", textTransform: "uppercase", letterSpacing: ".1em", marginBottom: "14px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <Zap size={11} /> {tx.opportunities}
                   </p>
                   <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
                     {(result.opportunities ?? []).map((opp, i) => (
@@ -554,8 +559,8 @@ export default function DomainAuditSection() {
                   border:       "1px solid rgba(0,255,200,.15)",
                   borderRadius: "12px",
                 }}>
-                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "12px", color: "#00ffc8", fontWeight: 700, marginBottom: "8px" }}>
-                    {tx.quickWin}
+                  <p style={{ fontFamily: "'Courier New',monospace", fontSize: "12px", color: "#00ffc8", fontWeight: 700, marginBottom: "8px", display: "flex", alignItems: "center", gap: "5px" }}>
+                    <Trophy size={12} /> {stripEmoji(tx.quickWin)}
                   </p>
                   <p style={{ fontFamily: "Arial,sans-serif", fontSize: "13px", color: "rgba(255,255,255,.7)", lineHeight: 1.6 }}>
                     {result.quickWin}

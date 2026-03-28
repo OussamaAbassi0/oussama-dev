@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { ARTICLES } from "@/lib/articles";
 import { useLang } from "@/lib/LangContext";
+import { BookOpen } from "lucide-react";
 
 export default function BlogPreviewSection() {
   const ref = useFadeIn<HTMLDivElement>();
@@ -144,8 +145,8 @@ export default function BlogPreviewSection() {
           fontFamily:"'Courier New',monospace", fontSize:"11px",
           color:"rgba(255,255,255,.25)",
         }}>
-          📖 {t.blog.available}{" "}
-          {["🇫🇷 Français","🇬🇧 English","🇸🇦 العربية","🇪🇸 Español","🇳🇱 Nederlands"].map((l, i, arr) => (
+          <BookOpen size={11} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />{t.blog.available}{" "}
+          {["Français","English","العربية","Español","Nederlands"].map((l, i, arr) => (
             <span key={l}>
               <span style={{ color:"rgba(255,255,255,.45)" }}>{l}</span>
               {i < arr.length - 1 ? " · " : ""}

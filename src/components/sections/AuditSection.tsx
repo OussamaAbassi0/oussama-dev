@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { MOCK_AUDITS, QUICK_AUDIT_TARGETS, type MockAuditData, type Bottleneck } from "@/lib/mock-audits";
+import { Clock, Wrench, AlertCircle, AlertTriangle, Search, Zap, CheckCircle2, DollarSign, Loader2, Send, Lock, Globe, Microscope } from "lucide-react";
 
 /* ── Terminal logs ───────────────────────────────────────── */
 const LOGS_MOCK = [
@@ -108,15 +109,15 @@ function AuditReportCard({ report }: { report: MockAuditData }) {
           {/* Metrics strip */}
           <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
             {[
-              { icon: "⏱", val: report.automationPotential, label: "potentiel" },
-              { icon: "🔧", val: `${totalHours}h/mois`, label: "récupérables" },
-              { icon: "🔴", val: `${report.bottlenecks.filter(b => b.difficulty === "easy").length} quick wins`, label: "immédiats" },
+              { icon: <Clock size={12} />, val: report.automationPotential, label: "potentiel" },
+              { icon: <Wrench size={12} />, val: `${totalHours}h/mois`, label: "récupérables" },
+              { icon: <AlertCircle size={12} />, val: `${report.bottlenecks.filter(b => b.difficulty === "easy").length} quick wins`, label: "immédiats" },
             ].map(m => (
               <div key={m.label} style={{
                 padding: "6px 12px", borderRadius: "6px",
                 background: "var(--bg3)", border: "1px solid rgba(0,255,200,0.1)",
               }}>
-                <div style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--cyan)", fontWeight: 700 }}>
+                <div style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--cyan)", fontWeight: 700, display: "flex", alignItems: "center", gap: "4px" }}>
                   {m.icon} {m.val}
                 </div>
                 <div style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "var(--text-dim)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
@@ -162,7 +163,7 @@ function AuditReportCard({ report }: { report: MockAuditData }) {
               transition: "all 0.15s",
             }}
           >
-            {t === "issues" ? "🔍 Problèmes" : t === "bottlenecks" ? "⚡ Goulots" : "✅ Quick Wins"}
+            {t === "issues" ? <><Search size={11} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Problèmes</> : t === "bottlenecks" ? <><Zap size={11} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Goulots</> : <><CheckCircle2 size={11} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Quick Wins</>}
           </button>
         ))}
       </div>
@@ -176,8 +177,8 @@ function AuditReportCard({ report }: { report: MockAuditData }) {
               background: issue.type === "critical" ? "rgba(255,77,109,0.06)" : issue.type === "warning" ? "rgba(245,166,35,0.06)" : "var(--bg3)",
               border: `1px solid ${issue.type === "critical" ? "rgba(255,77,109,0.2)" : issue.type === "warning" ? "rgba(245,166,35,0.2)" : "rgba(0,255,200,0.12)"}`,
             }}>
-              <div style={{ fontWeight: 600, fontSize: "13px", color: "white", marginBottom: "6px" }}>
-                {issue.type === "critical" ? "🔴" : issue.type === "warning" ? "🟡" : "🔵"} {issue.label}
+              <div style={{ fontWeight: 600, fontSize: "13px", color: "white", marginBottom: "6px", display: "flex", alignItems: "center", gap: "6px" }}>
+                {issue.type === "critical" ? <AlertCircle size={13} style={{ color: "var(--red)", flexShrink: 0 }} /> : issue.type === "warning" ? <AlertTriangle size={13} style={{ color: "var(--amber)", flexShrink: 0 }} /> : <CheckCircle2 size={13} style={{ color: "var(--cyan)", flexShrink: 0 }} />} {issue.label}
               </div>
               <div style={{ fontFamily: "var(--mono)", fontSize: "12px", color: "var(--text-dim)", lineHeight: 1.6 }}>
                 {issue.detail}
@@ -235,8 +236,9 @@ function AuditReportCard({ report }: { report: MockAuditData }) {
         marginTop: "20px", padding: "14px 18px", borderRadius: "8px",
         background: "rgba(0,255,200,0.06)", border: "1px solid rgba(0,255,200,0.2)",
         fontFamily: "var(--mono)", fontSize: "12px", color: "var(--cyan)", lineHeight: 1.6,
+        display: "flex", alignItems: "center", gap: "6px",
       }}>
-        💰 {report.roi}
+        <DollarSign size={13} /> {report.roi}
       </div>
 
       {/* CTA */}
@@ -253,7 +255,7 @@ function AuditReportCard({ report }: { report: MockAuditData }) {
         onMouseEnter={e => (e.currentTarget.style.boxShadow = "0 0 20px rgba(0,255,200,0.3)")}
         onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}
       >
-        📨 Obtenir mon plan d&apos;action complet →
+        <Send size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"6px" }} />Obtenir mon plan d&apos;action complet →
       </button>
     </div>
   );
@@ -290,7 +292,7 @@ function AuditCaptureBlock({ url }: { url: string }) {
         border: "1px solid rgba(0,255,200,0.25)",
         boxShadow: "0 0 40px rgba(0,255,200,0.08)",
       }}>
-        <div style={{ fontSize: "48px", marginBottom: "16px" }}>✅</div>
+        <div style={{ color: "var(--cyan)", marginBottom: "16px", display: "flex", justifyContent: "center" }}><CheckCircle2 size={48} strokeWidth={1.5} /></div>
         <h3 style={{ fontFamily: "var(--sans)", fontWeight: 800, fontSize: "20px", color: "white", marginBottom: "10px" }}>
           Demande d&apos;audit envoyée !
         </h3>
@@ -321,9 +323,9 @@ function AuditCaptureBlock({ url }: { url: string }) {
         <div style={{
           width: "40px", height: "40px", borderRadius: "10px", flexShrink: 0,
           background: "rgba(245,166,35,0.1)", border: "1px solid rgba(245,166,35,0.25)",
-          display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px",
+          display: "flex", alignItems: "center", justifyContent: "center", color: "var(--amber)",
         }}>
-          🔬
+          <Microscope size={20} />
         </div>
         <div>
           <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--amber)", letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "2px" }}>
@@ -343,7 +345,7 @@ function AuditCaptureBlock({ url }: { url: string }) {
         fontFamily: "var(--mono)", fontSize: "11px", color: "var(--amber)",
         maxWidth: "100%", overflow: "hidden",
       }}>
-        <span>🌐</span>
+        <Globe size={11} />
         <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{url}</span>
       </div>
 
@@ -397,18 +399,18 @@ function AuditCaptureBlock({ url }: { url: string }) {
             transition: "all 0.2s", whiteSpace: "nowrap",
           }}
         >
-          {status === "sending" ? "⏳ Envoi..." : "🔍 Recevoir mon Audit Gratuit"}
+          {status === "sending" ? <><Loader2 size={12} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Envoi...</> : <><Search size={12} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Recevoir mon Audit Gratuit</>}
         </button>
       </div>
 
       {status === "error" && (
-        <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--red)", marginTop: "10px" }}>
-          ⚠ {errMsg}
+        <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--red)", marginTop: "10px", display: "flex", alignItems: "center", gap: "4px" }}>
+          <AlertTriangle size={11} /> {errMsg}
         </p>
       )}
 
       <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: "var(--text-dim)", marginTop: "12px", opacity: 0.7 }}>
-        🔒 Analyse confidentielle · Aucun spam · Réponse sous 2h
+        <Lock size={10} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Analyse confidentielle · Aucun spam · Réponse sous 2h
       </p>
     </div>
   );
@@ -516,7 +518,7 @@ export default function AuditSection() {
               transition: "opacity 0.2s",
             }}
           >
-            {phase === "scanning" ? "⏳ Analyse..." : "🔍 Auditer"}
+            {phase === "scanning" ? <><Loader2 size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Analyse...</> : <><Search size={13} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Auditer</>}
           </button>
         </div>
 
@@ -526,7 +528,7 @@ export default function AuditSection() {
             fontFamily: "var(--mono)", fontSize: "12px",
             color: "rgba(0,255,200,0.75)", marginBottom: "10px", letterSpacing: "0.03em",
           }}>
-            ⚡ Voir l&apos;audit en direct{" "}
+            <Zap size={12} style={{ display:"inline", verticalAlign:"middle", marginRight:"4px" }} />Voir l&apos;audit en direct{" "}
             <span style={{ color: "rgba(0,255,200,0.45)" }}>(Démos gratuites) :</span>
           </p>
           <style>{`

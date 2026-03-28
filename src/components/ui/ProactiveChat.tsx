@@ -2,6 +2,10 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useLang } from "@/lib/LangContext";
 import { trackPageVisit, buildPersonalizedWelcome } from "@/lib/sessionTracker";
+import { BookOpen, Rocket, Zap, Briefcase, DollarSign } from "lucide-react";
+
+const stripEmoji = (s: string) => s.replace(/^[\p{Extended_Pictographic}][\uFE0F]?\u20E3?\s*/u, "");
+const SUGGESTION_ICONS = [<BookOpen key="b" size={13} />, <Rocket key="r" size={13} />, <Zap key="z" size={13} />, <Briefcase key="br" size={13} />, <DollarSign key="d" size={13} />];
 
 /* ══════════════════════════════════════════════════════════
    TYPES
@@ -128,11 +132,11 @@ function RichText({ text }: { text: string }) {
    I18N
 ══════════════════════════════════════════════════════════ */
 const WELCOME: Record<string, string> = {
-  fr: "Bonjour ! 👋 Je connais tout le site. Posez-moi n'importe quelle question ou choisissez une suggestion ⬇️",
-  en: "Hello! 👋 I know the whole site. Ask me anything or pick a suggestion ⬇️",
-  ar: "مرحباً! 👋 أعرف كل شيء عن الموقع. اسألني أي سؤال أو اختر من الاقتراحات ⬇️",
-  es: "¡Hola! 👋 Conozco todo el sitio. Hazme cualquier pregunta o elige una sugerencia ⬇️",
-  nl: "Hallo! 👋 Ik ken de hele site. Stel een vraag of kies een suggestie ⬇️",
+  fr: "Bonjour ! Je connais tout le site. Posez-moi n'importe quelle question ou choisissez une suggestion ci-dessous",
+  en: "Hello! I know the whole site. Ask me anything or pick a suggestion below",
+  ar: "مرحباً! أعرف كل شيء عن الموقع. اسألني أي سؤال أو اختر من الاقتراحات أدناه",
+  es: "¡Hola! Conozco todo el sitio. Hazme cualquier pregunta o elige una sugerencia abajo",
+  nl: "Hallo! Ik ken de hele site. Stel een vraag of kies een suggestie hieronder",
 };
 
 const SUGGESTIONS: Record<string, Array<{ label: string; q: string }>> = {
@@ -453,7 +457,7 @@ export default function ProactiveChat() {
                             (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
                           }}
                         >
-                          {a.label} →
+                          {stripEmoji(a.label)} →
                         </a>
                       ))}
                     </div>
@@ -491,8 +495,8 @@ export default function ProactiveChat() {
                         (e.currentTarget as HTMLElement).style.color = "rgba(255,255,255,.7)";
                       }}
                     >
-                      <span style={{ fontSize:"14px" }}>{s.label.split(" ").slice(0,1).join("")}</span>
-                      <span>{s.label.split(" ").slice(1).join(" ")}</span>
+                      <span style={{ color: "rgba(0,229,255,.7)", display:"flex" }}>{SUGGESTION_ICONS[i]}</span>
+                      <span>{stripEmoji(s.label)}</span>
                     </button>
                   ))}
                 </div>

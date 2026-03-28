@@ -37,12 +37,12 @@ const easeIn  = (t: number) => Math.pow(t, 3);
 
 /* ── Nœuds du workflow ───────────────────────────────────── */
 const NODES_DEF: Omit<Node, "visible" | "scale" | "glow">[] = [
-  { id:"webhook", label:"Webhook",  icon:"⚡", color:"#00ffc8", x:0.18, y:0.52 },
-  { id:"ai",      label:"GPT-4o",   icon:"🧠", color:"#a78bfa", x:0.38, y:0.35 },
-  { id:"filter",  label:"Filter",   icon:"🔍", color:"#f5a623", x:0.38, y:0.68 },
-  { id:"crm",     label:"CRM",      icon:"📊", color:"#00e5ff", x:0.58, y:0.35 },
-  { id:"email",   label:"Email",    icon:"📧", color:"#ff4d6d", x:0.58, y:0.68 },
-  { id:"slack",   label:"Slack",    icon:"💬", color:"#4ade80", x:0.78, y:0.52 },
+  { id:"webhook", label:"Webhook",  icon:"~>", color:"#00ffc8", x:0.18, y:0.52 },
+  { id:"ai",      label:"GPT-4o",   icon:"AI", color:"#a78bfa", x:0.38, y:0.35 },
+  { id:"filter",  label:"Filter",   icon:"≡",  color:"#f5a623", x:0.38, y:0.68 },
+  { id:"crm",     label:"CRM",      icon:"DB", color:"#00e5ff", x:0.58, y:0.35 },
+  { id:"email",   label:"Email",    icon:"@",  color:"#ff4d6d", x:0.58, y:0.68 },
+  { id:"slack",   label:"Slack",    icon:"#",  color:"#4ade80", x:0.78, y:0.52 },
 ];
 
 const EDGES = [
@@ -163,15 +163,23 @@ export default function CinematicIntro({ onDone }: { onDone: () => void }) {
           ctx.translate(em.x, em.y);
           ctx.rotate((em.rot * Math.PI) / 180);
           ctx.globalAlpha = em.opacity * act1;
-          ctx.font = `${em.size}px serif`;
-          ctx.fillText("✉️", -em.size / 2, em.size / 2);
+          // Draw envelope shape
+          const hw = em.size * 0.6, hh = em.size * 0.4;
+          ctx.strokeStyle = em.color;
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(-hw / 2, -hh / 2, hw, hh);
+          ctx.beginPath();
+          ctx.moveTo(-hw / 2, -hh / 2);
+          ctx.lineTo(0, hh * 0.1);
+          ctx.lineTo(hw / 2, -hh / 2);
+          ctx.stroke();
           ctx.globalAlpha = 1;
           ctx.restore();
         });
 
         /* Alertes rouges clignotantes */
         if (elapsed > 400) {
-          const alerts = ["⚠️ 247 emails non lus", "🔴 3h perdues aujourd'hui", "❌ Leads non suivis: 89"];
+          const alerts = ["[!] 247 emails non lus", "[●] 3h perdues aujourd'hui", "[x] Leads non suivis: 89"];
           alerts.forEach((txt, i) => {
             const blink = Math.sin((elapsed / 300) + i) > 0;
             ctx.globalAlpha = blink ? 0.9 * act1 : 0.3 * act1;
