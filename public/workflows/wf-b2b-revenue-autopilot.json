@@ -1,5 +1,5 @@
 {
-  "name": "🚀 B2B Revenue Intelligence & Outreach Autopilot",
+  "name": "B2B Revenue Autopilot — Prospection & Outreach IA",
   "nodes": [
     {
       "parameters": {
@@ -8,38 +8,40 @@
         }
       },
       "id": "b2b-001",
-      "name": "Schedule — Daily 08:00",
+      "name": "Schedule — Daily 08h00",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1,
       "position": [240, 400]
     },
     {
       "parameters": {
-        "method": "POST",
+        "content": "## Étape 1 — Recherche de prospects ICP\nAppel Apollo.io pour récupérer des leads qualifiés (CEO/CTO/Founder, 11-1000 employés, France/Belgique/Suisse/Canada)",
+        "height": 180,
+        "width": 340
+      },
+      "id": "note-01",
+      "name": "Note — Prospection ICP",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [420, 220]
+    },
+    {
+      "parameters": {
         "url": "https://api.apollo.io/v1/mixed_people/search",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Content-Type", "value": "application/json" },
-            { "name": "Cache-Control", "value": "no-cache" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ api_key: $env.APOLLO_API_KEY, q_organization_num_employees_ranges: ['11,200','201,1000'], person_titles: ['CEO','CTO','COO','Head of Operations','VP Sales','Founder'], person_locations: ['France','Belgium','Switzerland','Canada'], contact_email_status: ['verified','likely to engage'], page: 1, per_page: 25 }) }}"
+        "method": "POST"
       },
       "id": "b2b-002",
       "name": "HTTP — Apollo Fetch ICP Leads",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
+      "typeVersion": 1,
       "position": [460, 400]
     },
     {
       "parameters": {
-        "jsCode": "const leads = $input.first().json.people || [];\nconsole.log('[Apollo] ' + leads.length + ' leads fetched');\nreturn leads.map(p => ({ json: {\n  apollo_id: p.id,\n  first_name: p.first_name || '',\n  last_name: p.last_name || '',\n  full_name: (p.first_name || '') + ' ' + (p.last_name || ''),\n  email: p.email || '',\n  title: p.title || '',\n  linkedin_url: p.linkedin_url || '',\n  company: p.organization?.name || '',\n  company_domain: p.organization?.primary_domain || '',\n  company_size: p.organization?.num_employees || 0,\n  company_industry: p.organization?.industry || '',\n  company_country: p.organization?.country || '',\n  company_technologies: p.organization?.technology_names || [],\n  seniority: p.seniority || '',\n  fetched_at: new Date().toISOString()\n}}));"
+        "jsCode": "const leads = $input.first().json.people || [];\nconsole.log('[Apollo] ' + leads.length + ' leads fetched');\nreturn leads.map(p => ({ json: {\n  apollo_id: p.id || 'unknown',\n  first_name: p.first_name || '',\n  last_name: p.last_name || '',\n  full_name: (p.first_name || '') + ' ' + (p.last_name || ''),\n  email: p.email || '',\n  title: p.title || '',\n  linkedin_url: p.linkedin_url || '',\n  company: p.organization ? p.organization.name : '',\n  company_domain: p.organization ? p.organization.primary_domain : '',\n  company_size: p.organization ? p.organization.num_employees : 0,\n  company_industry: p.organization ? p.organization.industry : '',\n  company_country: p.organization ? p.organization.country : '',\n  seniority: p.seniority || '',\n  fetched_at: new Date().toISOString()\n}}));"
       },
       "id": "b2b-003",
-      "name": "Code — Extract & Normalize Leads",
+      "name": "Code — Normaliser Leads",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [680, 400]
@@ -50,7 +52,7 @@
         "options": {}
       },
       "id": "b2b-004",
-      "name": "Split In Batches",
+      "name": "SplitInBatches — 1 Lead à la fois",
       "type": "n8n-nodes-base.splitInBatches",
       "typeVersion": 2,
       "position": [900, 400]
@@ -67,557 +69,553 @@
         }
       },
       "id": "b2b-005",
-      "name": "IF — Has Email?",
+      "name": "IF — Email valide?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
       "position": [1120, 400]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.HUBSPOT_TOKEN }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ filterGroups: [{ filters: [{ propertyName: 'email', operator: 'EQ', value: $json.email }] }], properties: ['email', 'hs_lead_status', 'lifecyclestage'], limit: 1 }) }}"
+        "content": "## Étape 2 — Enrichissement LinkedIn\nScraping LinkedIn pour obtenir les dernières activités, publications et signaux d'intention du prospect",
+        "height": 180,
+        "width": 340
+      },
+      "id": "note-02",
+      "name": "Note — Enrichissement",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1300, 220]
+    },
+    {
+      "parameters": {
+        "url": "https://nubela.co/proxycurl/api/v2/linkedin",
+        "method": "GET"
       },
       "id": "b2b-006",
-      "name": "HTTP — HubSpot Check Duplicate",
+      "name": "HTTP — Proxycurl LinkedIn Profile",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [1340, 320]
+      "typeVersion": 1,
+      "position": [1340, 340]
     },
     {
       "parameters": {
-        "conditions": {
-          "number": [
-            {
-              "value1": "={{ $json.total }}",
-              "operation": "equal",
-              "value2": 0
-            }
-          ]
-        }
+        "url": "https://nubela.co/proxycurl/api/v2/linkedin/company/job",
+        "method": "GET"
       },
       "id": "b2b-007",
-      "name": "IF — New Lead?",
-      "type": "n8n-nodes-base.if",
+      "name": "HTTP — Proxycurl Company Jobs",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [1560, 320]
+      "position": [1340, 500]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.2, max_tokens: 500, messages: [{ role: 'system', content: 'You are a B2B sales intelligence expert for AI/automation services targeting SMBs. Score this prospect and return ONLY valid JSON: {\"icp_score\":75,\"icp_segment\":\"HOT\",\"pain_points\":[\"pain1\",\"pain2\"],\"automation_opportunities\":[\"opp1\"],\"personalization_hook\":\"one compelling opening line\",\"recommended_service\":\"n8n_automation\",\"email_subject\":\"subject line\",\"email_tone\":\"executive\"}. Segments: HOT(>=80), WARM(60-79), COLD(40-59). Score based on: company size 20-500(+20pts), tech industry(+20pts), decision-maker title(+20pts), known tech stack(+15pts), intent signals(+25pts).' }, { role: 'user', content: 'Score: Name=' + $json.full_name + ' Title=' + $json.title + ' Company=' + $json.company + '(' + $json.company_industry + ',' + $json.company_size + ' employees) Country=' + $json.company_country + ' Tech=' + ($json.company_technologies || []).join(',') }] }) }}"
+        "jsCode": "const profile = $('HTTP — Proxycurl LinkedIn Profile').first().json;\nconst jobs = $('HTTP — Proxycurl Company Jobs').first().json;\nconst lead = $('IF — Email valide?').first().json;\n\nconst recent_posts = profile.activities ? profile.activities.slice(0, 3).map(a => a.title || '').join(' | ') : '';\nconst headline = profile.headline || '';\nconst summary = profile.summary || '';\nconst company_desc = profile.experiences && profile.experiences[0] ? profile.experiences[0].description || '' : '';\nconst hiring = jobs.job ? true : false;\n\nreturn [{ json: {\n  ...lead,\n  linkedin_headline: headline,\n  linkedin_summary: summary.slice(0, 300),\n  recent_posts: recent_posts,\n  company_description: company_desc.slice(0, 300),\n  is_hiring: hiring,\n  enriched_at: new Date().toISOString()\n}}];"
       },
       "id": "b2b-008",
-      "name": "HTTP — GPT-4o ICP Score & Intel",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [1780, 240]
-    },
-    {
-      "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst raw = item.choices?.[0]?.message?.content || '{}';\nlet scoring = {};\ntry {\n  const m = raw.match(/\\{[\\s\\S]*\\}/);\n  scoring = m ? JSON.parse(m[0]) : {};\n} catch(e) {\n  scoring = { icp_score: 0, icp_segment: 'COLD', pain_points: [], error: true };\n}\nreturn [{ json: {\n  ...item,\n  icp_score: scoring.icp_score || 0,\n  icp_segment: scoring.icp_segment || 'COLD',\n  pain_points: scoring.pain_points || [],\n  automation_opportunities: scoring.automation_opportunities || [],\n  personalization_hook: scoring.personalization_hook || '',\n  recommended_service: scoring.recommended_service || 'n8n_automation',\n  email_subject: scoring.email_subject || 'Automatisation pour ' + item.company,\n  email_tone: scoring.email_tone || 'professional'\n}}];"
-      },
-      "id": "b2b-009",
-      "name": "Code — Parse ICP Scoring",
+      "name": "Code — Fusionner Données Enrichies",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2000, 240]
+      "position": [1560, 400]
     },
     {
       "parameters": {
-        "conditions": {
-          "number": [
-            {
-              "value1": "={{ $json.icp_score }}",
-              "operation": "largerEqual",
-              "value2": 40
-            }
+        "content": "## Étape 3 — Score IA du prospect\nGPT-4o analyse le profil complet et attribue un score ICP de 0 à 100 + identifie les pain points pertinents",
+        "height": 180,
+        "width": 340
+      },
+      "id": "note-03",
+      "name": "Note — Scoring IA",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [1760, 220]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST"
+      },
+      "id": "b2b-009",
+      "name": "HTTP — GPT-4o Score ICP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [1800, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const resp = $input.first().json;\nconst lead = $('Code — Fusionner Données Enrichies').first().json;\n\nlet score = 0;\nlet pain_points = [];\nlet opportunity = '';\nlet icp_tier = 'C';\n\ntry {\n  const content = resp.choices[0].message.content;\n  const parsed = JSON.parse(content);\n  score = parsed.score || 0;\n  pain_points = parsed.pain_points || [];\n  opportunity = parsed.opportunity || '';\n  if (score >= 80) icp_tier = 'A';\n  else if (score >= 60) icp_tier = 'B';\n  else icp_tier = 'C';\n} catch(e) {\n  score = 0;\n  pain_points = ['analyse indisponible'];\n}\n\nreturn [{ json: {\n  ...lead,\n  icp_score: score,\n  icp_tier: icp_tier,\n  pain_points: pain_points,\n  opportunity_summary: opportunity,\n  scored_at: new Date().toISOString()\n}}];"
+      },
+      "id": "b2b-010",
+      "name": "Code — Parser Score ICP",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2020, 400]
+    },
+    {
+      "parameters": {
+        "dataType": "number",
+        "value1": "={{ $json.icp_score }}",
+        "rules": {
+          "rules": [
+            { "operation": "largerEqual", "value2": 80, "output": 0 },
+            { "operation": "largerEqual", "value2": 60, "output": 1 },
+            { "operation": "smaller", "value2": 60, "output": 2 }
           ]
         }
       },
-      "id": "b2b-010",
-      "name": "IF — Score >= 40? (Not Disqualified)",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 1,
-      "position": [2220, 240]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.hubapi.com/crm/v3/objects/contacts",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.HUBSPOT_TOKEN }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ properties: { email: $json.email, firstname: $json.first_name, lastname: $json.last_name, jobtitle: $json.title, company: $json.company, hs_lead_status: $json.icp_segment, hubspot_score: $json.icp_score, lifecyclestage: $json.icp_score >= 80 ? 'salesqualifiedlead' : 'lead', website: 'https://' + ($json.company_domain || ''), source: 'apollo_autopilot' } }) }}"
-      },
       "id": "b2b-011",
-      "name": "HTTP — HubSpot Create Contact",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [2440, 160]
+      "name": "Switch — Tier A / B / C",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [2240, 400]
     },
     {
       "parameters": {
-        "method": "POST",
+        "content": "## Étape 4 — Rédaction email ultra-personnalisé\nGPT-4o rédige un email cold outreach basé sur les pain points identifiés, les posts LinkedIn récents et le contexte de l'entreprise",
+        "height": 200,
+        "width": 360
+      },
+      "id": "note-04",
+      "name": "Note — Rédaction Email",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [2460, 180]
+    },
+    {
+      "parameters": {
         "url": "https://api.openai.com/v1/chat/completions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.7, max_tokens: 300, messages: [{ role: 'system', content: 'You are Oussama Abassi, an expert n8n automation and AI agent developer. Write a highly personalized cold email in French (max 100 words). Rules: start with the personalization hook directly, mention their specific company/situation, one concrete problem, one specific solution, one CTA (15-min call). Conversational peer-to-peer tone, not salesy. End with: Oussama A. | Automation & IA | oussama.dev. Return ONLY the email body text, no subject.' }, { role: 'user', content: 'Write email for: ' + $json.first_name + ', ' + $json.title + ' at ' + $json.company + '(' + $json.company_industry + '). Pain points: ' + ($json.pain_points || []).join(', ') + '. Hook: ' + $json.personalization_hook + '. Service: ' + $json.recommended_service }] }) }}"
+        "method": "POST"
       },
       "id": "b2b-012",
-      "name": "HTTP — GPT-4o Generate Email",
+      "name": "HTTP — GPT-4o Email Tier A",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [2660, 160]
+      "typeVersion": 1,
+      "position": [2480, 300]
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst emailBody = item.choices?.[0]?.message?.content || '';\nreturn [{ json: { ...item, email_body: emailBody } }];"
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST"
       },
       "id": "b2b-013",
-      "name": "Code — Extract Email Body",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [2880, 160]
+      "name": "HTTP — GPT-4o Email Tier B",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [2480, 460]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.sendgrid.com/v3/mail/send",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.SENDGRID_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
+        "values": {
+          "string": [
+            { "name": "skip_reason", "value": "ICP score too low — under 60" },
+            { "name": "icp_tier", "value": "={{ $json.icp_tier }}" },
+            { "name": "full_name", "value": "={{ $json.full_name }}" }
           ]
         },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ personalizations: [{ to: [{ email: $json.email, name: $json.full_name }] }], from: { email: 'oussama@oussama.dev', name: 'Oussama A.' }, reply_to: { email: 'oussama@oussama.dev' }, subject: $json.email_subject, content: [{ type: 'text/plain', value: $json.email_body }] }) }}"
+        "options": {}
       },
       "id": "b2b-014",
-      "name": "HTTP — SendGrid Send Email #1",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [3100, 160]
+      "name": "Set — Marquer Skip Tier C",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [2480, 620]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "={{ 'https://sheets.googleapis.com/v4/spreadsheets/' + $env.OUTREACH_SHEET_ID + '/values/Outreach_Log!A1:append?valueInputOption=USER_ENTERED' }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.GDRIVE_ACCESS_TOKEN }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ values: [[ $json.apollo_id, $json.full_name, $json.email, $json.company, $json.company_industry, $json.title, $json.icp_score, $json.icp_segment, $json.recommended_service, new Date().toISOString(), '1', 'SENT', ($json.pain_points || []).join(' | ') ]] }) }}"
+        "jsCode": "const email_resp = $input.first().json;\nconst lead = $('Switch — Tier A / B / C').first().json;\n\nlet subject = '';\nlet body = '';\n\ntry {\n  const content = email_resp.choices[0].message.content;\n  const parsed = JSON.parse(content);\n  subject = parsed.subject || 'Collaboration automation';\n  body = parsed.body || '';\n} catch(e) {\n  subject = 'Automatiser vos processus — ' + (lead.company || '');\n  body = 'Bonjour ' + (lead.first_name || '') + ', ...';\n}\n\nreturn [{ json: {\n  ...lead,\n  email_subject: subject,\n  email_body: body,\n  email_generated_at: new Date().toISOString()\n}}];"
       },
       "id": "b2b-015",
-      "name": "HTTP — Google Sheets Log Outreach",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [3320, 160]
+      "name": "Code — Parser Email Généré",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2720, 380]
     },
     {
       "parameters": {
-        "amount": 3,
-        "unit": "days"
+        "content": "## Étape 5 — Vérification anti-spam\nAnalyse du score spam, vérification des règles de conformité RGPD et validation du ton avant envoi",
+        "height": 160,
+        "width": 320
+      },
+      "id": "note-05",
+      "name": "Note — Anti-Spam",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [2940, 200]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST"
       },
       "id": "b2b-016",
-      "name": "Wait — 3 Days",
-      "type": "n8n-nodes-base.wait",
+      "name": "HTTP — GPT-4o Spam Check",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [3540, 160]
+      "position": [2960, 380]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.HUBSPOT_TOKEN }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ filterGroups: [{ filters: [{ propertyName: 'email', operator: 'EQ', value: $json.email }] }], properties: ['hs_email_open', 'hs_email_click', 'hs_sales_email_last_replied'], limit: 1 }) }}"
+        "jsCode": "const check = $input.first().json;\nconst lead = $('Code — Parser Email Généré').first().json;\n\nlet spam_score = 0;\nlet is_compliant = true;\nlet improvements = [];\n\ntry {\n  const content = check.choices[0].message.content;\n  const parsed = JSON.parse(content);\n  spam_score = parsed.spam_score || 0;\n  is_compliant = parsed.is_compliant !== false;\n  improvements = parsed.improvements || [];\n} catch(e) {\n  spam_score = 5;\n}\n\nreturn [{ json: {\n  ...lead,\n  spam_score: spam_score,\n  is_compliant: is_compliant,\n  email_improvements: improvements,\n  ready_to_send: spam_score < 30 && is_compliant\n}}];"
       },
       "id": "b2b-017",
-      "name": "HTTP — Check Email Engagement",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [3760, 160]
+      "name": "Code — Parser Spam Check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3180, 380]
     },
     {
       "parameters": {
         "conditions": {
-          "string": [
+          "boolean": [
             {
-              "value1": "={{ $json.results[0]?.properties?.hs_email_open || '' }}",
-              "operation": "equal",
-              "value2": "1"
+              "value1": "={{ $json.ready_to_send }}",
+              "value2": true
             }
           ]
         }
       },
       "id": "b2b-018",
-      "name": "IF — Email Opened?",
+      "name": "IF — Prêt à envoyer?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [3980, 160]
+      "position": [3400, 380]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.7, max_tokens: 200, messages: [{ role: 'system', content: 'Write a short follow-up email in French (max 60 words). Reference the first email naturally. Add new value with a specific use case. End with a low-commitment CTA (yes/no question or 15-min call). Conversational tone. Return ONLY the email body.' }, { role: 'user', content: 'Follow-up for ' + $json.first_name + ' at ' + $json.company + '(' + $json.company_industry + '). First email was about: ' + $json.recommended_service + ' for: ' + ($json.pain_points || [])[0] }] }) }}"
+        "content": "## Étape 6 — Envoi & CRM\nEnvoi via SendGrid + enregistrement dans Pipedrive CRM + ajout dans Google Sheets dashboard",
+        "height": 160,
+        "width": 340
+      },
+      "id": "note-06",
+      "name": "Note — Envoi CRM",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [3620, 180]
+    },
+    {
+      "parameters": {
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "method": "POST"
       },
       "id": "b2b-019",
-      "name": "HTTP — GPT-4o Follow-up Email",
+      "name": "HTTP — SendGrid Envoi Email",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [4200, 80]
+      "typeVersion": 1,
+      "position": [3640, 320]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.sendgrid.com/v3/mail/send",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.SENDGRID_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ personalizations: [{ to: [{ email: $json.email, name: $json.full_name }] }], from: { email: 'oussama@oussama.dev', name: 'Oussama A.' }, subject: 'Re: ' + $json.email_subject, content: [{ type: 'text/plain', value: $json.choices?.[0]?.message?.content || '' }] }) }}"
+        "url": "https://api.pipedrive.com/v1/persons",
+        "method": "POST"
       },
       "id": "b2b-020",
-      "name": "HTTP — SendGrid Follow-up J+3",
+      "name": "HTTP — Pipedrive Créer Contact",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [4420, 80]
+      "typeVersion": 1,
+      "position": [3640, 480]
     },
     {
       "parameters": {
-        "amount": 4,
-        "unit": "days"
+        "url": "https://api.pipedrive.com/v1/leads",
+        "method": "POST"
       },
       "id": "b2b-021",
-      "name": "Wait — 4 More Days",
-      "type": "n8n-nodes-base.wait",
+      "name": "HTTP — Pipedrive Créer Lead",
+      "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 1,
-      "position": [4640, 80]
+      "position": [3860, 400]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "https://api.hubapi.com/crm/v3/objects/contacts/search",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.HUBSPOT_TOKEN }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ filterGroups: [{ filters: [{ propertyName: 'email', operator: 'EQ', value: $json.email }] }], properties: ['hs_sales_email_last_replied'], limit: 1 }) }}"
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Outreach!A1:append",
+        "method": "POST"
       },
       "id": "b2b-022",
-      "name": "HTTP — Check Reply",
+      "name": "HTTP — Sheets Logger Outreach",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [4860, 80]
+      "typeVersion": 1,
+      "position": [4080, 400]
+    },
+    {
+      "parameters": {
+        "content": "## Étape 7 — Tracking & Follow-up\nSuivi des ouvertures/clics via Webhook + planification automatique des relances J+3, J+7, J+14",
+        "height": 180,
+        "width": 360
+      },
+      "id": "note-07",
+      "name": "Note — Follow-up",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [4300, 180]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "email-events",
+        "responseMode": "onReceived",
+        "responseData": "noData"
+      },
+      "id": "b2b-023",
+      "name": "Webhook — Email Events SendGrid",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [4320, 400]
+    },
+    {
+      "parameters": {
+        "jsCode": "const events = $input.all();\nconst opens = events.filter(e => e.json.event === 'open');\nconst clicks = events.filter(e => e.json.event === 'click');\nconst bounces = events.filter(e => e.json.event === 'bounce');\nconst unsubscribes = events.filter(e => e.json.event === 'unsubscribe');\n\nreturn [{ json: {\n  total_events: events.length,\n  opens: opens.length,\n  clicks: clicks.length,\n  bounces: bounces.length,\n  unsubscribes: unsubscribes.length,\n  open_rate: events.length > 0 ? Math.round(opens.length / events.length * 100) : 0,\n  click_rate: opens.length > 0 ? Math.round(clicks.length / opens.length * 100) : 0,\n  processed_at: new Date().toISOString()\n}}];"
+      },
+      "id": "b2b-024",
+      "name": "Code — Agréger Métriques Email",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [4540, 400]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.should_followup }}",
+        "rules": {
+          "rules": [
+            { "value2": "day3", "output": 0 },
+            { "value2": "day7", "output": 1 },
+            { "value2": "day14", "output": 2 },
+            { "value2": "no", "output": 3 }
+          ]
+        }
+      },
+      "id": "b2b-025",
+      "name": "Switch — Relance J+3/J+7/J+14",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [4760, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST"
+      },
+      "id": "b2b-026",
+      "name": "HTTP — GPT-4o Relance J+3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [4980, 240]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST"
+      },
+      "id": "b2b-027",
+      "name": "HTTP — GPT-4o Relance J+7",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [4980, 400]
+    },
+    {
+      "parameters": {
+        "url": "https://api.openai.com/v1/chat/completions",
+        "method": "POST"
+      },
+      "id": "b2b-028",
+      "name": "HTTP — GPT-4o Relance J+14",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [4980, 560]
+    },
+    {
+      "parameters": {
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "method": "POST"
+      },
+      "id": "b2b-029",
+      "name": "HTTP — SendGrid Envoyer Relance",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [5200, 400]
+    },
+    {
+      "parameters": {
+        "content": "## Étape 8 — Dashboard & Alertes\nMise à jour du Notion Dashboard avec les métriques de la campagne + alerte Slack si un prospect Tier A ouvre ou clique",
+        "height": 180,
+        "width": 360
+      },
+      "id": "note-08",
+      "name": "Note — Dashboard",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [5420, 180]
+    },
+    {
+      "parameters": {
+        "url": "https://api.notion.com/v1/pages",
+        "method": "POST"
+      },
+      "id": "b2b-030",
+      "name": "HTTP — Notion Update Dashboard",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [5440, 360]
     },
     {
       "parameters": {
         "conditions": {
           "string": [
             {
-              "value1": "={{ $json.results[0]?.properties?.hs_sales_email_last_replied || '' }}",
-              "operation": "isNotEmpty"
+              "value1": "={{ $json.icp_tier }}",
+              "value2": "A"
             }
           ]
         }
       },
-      "id": "b2b-023",
-      "name": "IF — Reply Received?",
+      "id": "b2b-031",
+      "name": "IF — Tier A ouvert/cliqué?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 1,
-      "position": [5080, 80]
+      "position": [5440, 520]
     },
     {
       "parameters": {
-        "method": "POST",
-        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ text: '🔥 *HOT LEAD — Réponse reçue !*\\n\\n*Prospect:* ' + $json.full_name + '\\n*Titre:* ' + $json.title + ' @ ' + $json.company + '\\n*Score ICP:* ' + $json.icp_score + '/100 (' + $json.icp_segment + ')\\n*Service recommandé:* ' + $json.recommended_service + '\\n\\n*Pain points:*\\n' + ($json.pain_points || []).map(p => '• ' + p).join('\\n') + '\\n\\nLinkedIn: ' + $json.linkedin_url }) }}"
+        "url": "https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK",
+        "method": "POST"
       },
-      "id": "b2b-024",
-      "name": "HTTP — Slack Hot Lead Alert",
+      "id": "b2b-032",
+      "name": "HTTP — Slack Alerte Hot Lead",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [5300, 40]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.hubapi.com/crm/v3/objects/deals",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.HUBSPOT_TOKEN }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ properties: { dealname: $json.company + ' — ' + $json.recommended_service, dealstage: 'appointmentscheduled', pipeline: 'default', amount: $json.icp_score >= 80 ? 1500 : 800, closedate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0], deal_source: 'apollo_autopilot' } }) }}"
-      },
-      "id": "b2b-025",
-      "name": "HTTP — HubSpot Create Deal",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [5520, 40]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.sendgrid.com/v3/mail/send",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.SENDGRID_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ personalizations: [{ to: [{ email: $json.email, name: $json.full_name }] }], from: { email: 'oussama@oussama.dev', name: 'Oussama A.' }, subject: '📅 15 minutes — ' + $json.company + ' × Oussama', content: [{ type: 'text/html', value: '<p>Bonjour ' + $json.first_name + ',</p><p>Merci pour votre retour. Je serais ravi d'échanger 15 minutes pour vous montrer concrètement comment j'aborderais votre situation chez ' + $json.company + '.</p><p><a href=\"https://calendly.com/oussamaabassi/15min\" style=\"background:#00ffc8;color:#000;padding:12px 24px;text-decoration:none;border-radius:6px;font-weight:bold;display:inline-block\">→ Choisir un créneau (15 min)</a></p><p>À très vite,<br><strong>Oussama A.</strong><br>Automation & IA | oussama.dev</p>' }] }) }}"
-      },
-      "id": "b2b-026",
-      "name": "HTTP — SendGrid Calendly Link",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [5740, 40]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.openai.com/v1/chat/completions",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.4, max_tokens: 400, messages: [{ role: 'system', content: 'Generate a concise pre-meeting briefing (max 200 words) for a sales call. Include: company overview, 3 likely challenges, 3 talking points, 3 qualifying questions, recommended solution angle.' }, { role: 'user', content: 'Brief for: ' + $json.full_name + ', ' + $json.title + ' at ' + $json.company + '. Industry: ' + $json.company_industry + '. Size: ' + $json.company_size + ' employees. Tech: ' + ($json.company_technologies || []).join(', ') + '. Pain points: ' + ($json.pain_points || []).join(', ') + '. Service: ' + $json.recommended_service }] }) }}"
-      },
-      "id": "b2b-027",
-      "name": "HTTP — GPT-4o Pre-Meeting Brief",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [5960, 40]
-    },
-    {
-      "parameters": {
-        "method": "POST",
-        "url": "https://api.sendgrid.com/v3/mail/send",
-        "sendHeaders": true,
-        "headerParameters": {
-          "parameters": [
-            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.SENDGRID_API_KEY }}" },
-            { "name": "Content-Type", "value": "application/json" }
-          ]
-        },
-        "sendBody": true,
-        "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ personalizations: [{ to: [{ email: 'oussama@oussama.dev' }] }], from: { email: 'oussama@oussama.dev', name: 'Pipeline B2B' }, subject: '📋 Brief pré-RDV — ' + $json.full_name + ' / ' + $json.company, content: [{ type: 'text/html', value: '<h2>Brief pré-RDV</h2><p><strong>' + $json.title + '</strong> @ ' + $json.company + ' (' + $json.company_industry + ', ' + $json.company_size + ' emp.)</p><p><strong>Score ICP:</strong> ' + $json.icp_score + '/100 | <strong>Service:</strong> ' + $json.recommended_service + '</p><hr><h3>Analyse IA :</h3><p>' + ($json.choices?.[0]?.message?.content || '') + '</p><p>LinkedIn: <a href=\"' + $json.linkedin_url + '\">' + $json.linkedin_url + '</a></p>' }] }) }}"
-      },
-      "id": "b2b-028",
-      "name": "HTTP — Email Brief to Oussama",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.1,
-      "position": [6180, 40]
-    },
-    {
-      "parameters": {
-        "content": "## 🚀 B2B Revenue Intelligence & Outreach Autopilot\n\n**Variables d'env requises (Settings > Variables) :**\n• OPENAI_API_KEY\n• APOLLO_API_KEY\n• HUBSPOT_TOKEN\n• SENDGRID_API_KEY\n• GDRIVE_ACCESS_TOKEN\n• OUTREACH_SHEET_ID\n• SLACK_WEBHOOK_URL\n\n**Flux principal :**\n1. Schedule 08h → Apollo fetch leads ICP\n2. Code normalize leads\n3. Split 1 par 1\n4. IF email présent?\n5. HubSpot check doublons\n6. IF nouveau lead?\n7. GPT-4o ICP score 0-100\n8. IF score >= 40?\n9. HubSpot créer contact\n10. GPT-4o email ultra-personnalisé\n11. SendGrid envoi email #1\n12. Google Sheets log\n13. Wait 3 jours\n14. HubSpot check ouverture\n15. IF ouvert → follow-up GPT-4o J+3\n16. Wait 4 jours\n17. HubSpot check réponse\n18. IF réponse → Slack alert + Deal + Calendly\n19. GPT-4o brief pré-RDV\n20. Email brief à Oussama",
-        "height": 500,
-        "width": 480,
-        "color": 5
-      },
-      "id": "b2b-029",
-      "name": "📋 Documentation",
-      "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [240, 660]
+      "position": [5660, 460]
+    },
+    {
+      "parameters": {
+        "url": "https://sheets.googleapis.com/v4/spreadsheets/SPREADSHEET_ID/values/Metrics!A1:append",
+        "method": "POST"
+      },
+      "id": "b2b-033",
+      "name": "HTTP — Sheets KPIs Campagne",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [5660, 320]
     }
   ],
   "connections": {
-    "Schedule — Daily 08:00": {
+    "Schedule — Daily 08h00": {
       "main": [[{ "node": "HTTP — Apollo Fetch ICP Leads", "type": "main", "index": 0 }]]
     },
     "HTTP — Apollo Fetch ICP Leads": {
-      "main": [[{ "node": "Code — Extract & Normalize Leads", "type": "main", "index": 0 }]]
+      "main": [[{ "node": "Code — Normaliser Leads", "type": "main", "index": 0 }]]
     },
-    "Code — Extract & Normalize Leads": {
-      "main": [[{ "node": "Split In Batches", "type": "main", "index": 0 }]]
+    "Code — Normaliser Leads": {
+      "main": [[{ "node": "SplitInBatches — 1 Lead à la fois", "type": "main", "index": 0 }]]
     },
-    "Split In Batches": {
-      "main": [[{ "node": "IF — Has Email?", "type": "main", "index": 0 }]]
+    "SplitInBatches — 1 Lead à la fois": {
+      "main": [[{ "node": "IF — Email valide?", "type": "main", "index": 0 }]]
     },
-    "IF — Has Email?": {
+    "IF — Email valide?": {
       "main": [
-        [{ "node": "HTTP — HubSpot Check Duplicate", "type": "main", "index": 0 }],
-        [{ "node": "Split In Batches", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — Proxycurl LinkedIn Profile", "type": "main", "index": 0 }],
+        []
       ]
     },
-    "HTTP — HubSpot Check Duplicate": {
-      "main": [[{ "node": "IF — New Lead?", "type": "main", "index": 0 }]]
+    "HTTP — Proxycurl LinkedIn Profile": {
+      "main": [[{ "node": "HTTP — Proxycurl Company Jobs", "type": "main", "index": 0 }]]
     },
-    "IF — New Lead?": {
+    "HTTP — Proxycurl Company Jobs": {
+      "main": [[{ "node": "Code — Fusionner Données Enrichies", "type": "main", "index": 0 }]]
+    },
+    "Code — Fusionner Données Enrichies": {
+      "main": [[{ "node": "HTTP — GPT-4o Score ICP", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Score ICP": {
+      "main": [[{ "node": "Code — Parser Score ICP", "type": "main", "index": 0 }]]
+    },
+    "Code — Parser Score ICP": {
+      "main": [[{ "node": "Switch — Tier A / B / C", "type": "main", "index": 0 }]]
+    },
+    "Switch — Tier A / B / C": {
       "main": [
-        [{ "node": "HTTP — GPT-4o ICP Score & Intel", "type": "main", "index": 0 }],
-        [{ "node": "Split In Batches", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — GPT-4o Email Tier A", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Email Tier B", "type": "main", "index": 0 }],
+        [{ "node": "Set — Marquer Skip Tier C", "type": "main", "index": 0 }]
       ]
     },
-    "HTTP — GPT-4o ICP Score & Intel": {
-      "main": [[{ "node": "Code — Parse ICP Scoring", "type": "main", "index": 0 }]]
+    "HTTP — GPT-4o Email Tier A": {
+      "main": [[{ "node": "Code — Parser Email Généré", "type": "main", "index": 0 }]]
     },
-    "Code — Parse ICP Scoring": {
-      "main": [[{ "node": "IF — Score >= 40? (Not Disqualified)", "type": "main", "index": 0 }]]
+    "HTTP — GPT-4o Email Tier B": {
+      "main": [[{ "node": "Code — Parser Email Généré", "type": "main", "index": 0 }]]
     },
-    "IF — Score >= 40? (Not Disqualified)": {
+    "Code — Parser Email Généré": {
+      "main": [[{ "node": "HTTP — GPT-4o Spam Check", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Spam Check": {
+      "main": [[{ "node": "Code — Parser Spam Check", "type": "main", "index": 0 }]]
+    },
+    "Code — Parser Spam Check": {
+      "main": [[{ "node": "IF — Prêt à envoyer?", "type": "main", "index": 0 }]]
+    },
+    "IF — Prêt à envoyer?": {
       "main": [
-        [{ "node": "HTTP — HubSpot Create Contact", "type": "main", "index": 0 }],
-        [{ "node": "Split In Batches", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — SendGrid Envoi Email", "type": "main", "index": 0 }],
+        []
       ]
     },
-    "HTTP — HubSpot Create Contact": {
-      "main": [[{ "node": "HTTP — GPT-4o Generate Email", "type": "main", "index": 0 }]]
+    "HTTP — SendGrid Envoi Email": {
+      "main": [[{ "node": "HTTP — Pipedrive Créer Contact", "type": "main", "index": 0 }]]
     },
-    "HTTP — GPT-4o Generate Email": {
-      "main": [[{ "node": "Code — Extract Email Body", "type": "main", "index": 0 }]]
+    "HTTP — Pipedrive Créer Contact": {
+      "main": [[{ "node": "HTTP — Pipedrive Créer Lead", "type": "main", "index": 0 }]]
     },
-    "Code — Extract Email Body": {
-      "main": [[{ "node": "HTTP — SendGrid Send Email #1", "type": "main", "index": 0 }]]
+    "HTTP — Pipedrive Créer Lead": {
+      "main": [[{ "node": "HTTP — Sheets Logger Outreach", "type": "main", "index": 0 }]]
     },
-    "HTTP — SendGrid Send Email #1": {
-      "main": [[{ "node": "HTTP — Google Sheets Log Outreach", "type": "main", "index": 0 }]]
+    "Webhook — Email Events SendGrid": {
+      "main": [[{ "node": "Code — Agréger Métriques Email", "type": "main", "index": 0 }]]
     },
-    "HTTP — Google Sheets Log Outreach": {
-      "main": [[{ "node": "Wait — 3 Days", "type": "main", "index": 0 }]]
+    "Code — Agréger Métriques Email": {
+      "main": [[{ "node": "Switch — Relance J+3/J+7/J+14", "type": "main", "index": 0 }]]
     },
-    "Wait — 3 Days": {
-      "main": [[{ "node": "HTTP — Check Email Engagement", "type": "main", "index": 0 }]]
-    },
-    "HTTP — Check Email Engagement": {
-      "main": [[{ "node": "IF — Email Opened?", "type": "main", "index": 0 }]]
-    },
-    "IF — Email Opened?": {
+    "Switch — Relance J+3/J+7/J+14": {
       "main": [
-        [{ "node": "HTTP — GPT-4o Follow-up Email", "type": "main", "index": 0 }],
-        [{ "node": "Split In Batches", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — GPT-4o Relance J+3", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Relance J+7", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Relance J+14", "type": "main", "index": 0 }],
+        []
       ]
     },
-    "HTTP — GPT-4o Follow-up Email": {
-      "main": [[{ "node": "HTTP — SendGrid Follow-up J+3", "type": "main", "index": 0 }]]
+    "HTTP — GPT-4o Relance J+3": {
+      "main": [[{ "node": "HTTP — SendGrid Envoyer Relance", "type": "main", "index": 0 }]]
     },
-    "HTTP — SendGrid Follow-up J+3": {
-      "main": [[{ "node": "Wait — 4 More Days", "type": "main", "index": 0 }]]
+    "HTTP — GPT-4o Relance J+7": {
+      "main": [[{ "node": "HTTP — SendGrid Envoyer Relance", "type": "main", "index": 0 }]]
     },
-    "Wait — 4 More Days": {
-      "main": [[{ "node": "HTTP — Check Reply", "type": "main", "index": 0 }]]
+    "HTTP — GPT-4o Relance J+14": {
+      "main": [[{ "node": "HTTP — SendGrid Envoyer Relance", "type": "main", "index": 0 }]]
     },
-    "HTTP — Check Reply": {
-      "main": [[{ "node": "IF — Reply Received?", "type": "main", "index": 0 }]]
+    "HTTP — SendGrid Envoyer Relance": {
+      "main": [[{ "node": "HTTP — Notion Update Dashboard", "type": "main", "index": 0 }]]
     },
-    "IF — Reply Received?": {
+    "HTTP — Notion Update Dashboard": {
+      "main": [[{ "node": "IF — Tier A ouvert/cliqué?", "type": "main", "index": 0 }]]
+    },
+    "IF — Tier A ouvert/cliqué?": {
       "main": [
-        [{ "node": "HTTP — Slack Hot Lead Alert", "type": "main", "index": 0 }],
-        [{ "node": "Split In Batches", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — Slack Alerte Hot Lead", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — Sheets KPIs Campagne", "type": "main", "index": 0 }]
       ]
     },
-    "HTTP — Slack Hot Lead Alert": {
-      "main": [[{ "node": "HTTP — HubSpot Create Deal", "type": "main", "index": 0 }]]
-    },
-    "HTTP — HubSpot Create Deal": {
-      "main": [[{ "node": "HTTP — SendGrid Calendly Link", "type": "main", "index": 0 }]]
-    },
-    "HTTP — SendGrid Calendly Link": {
-      "main": [[{ "node": "HTTP — GPT-4o Pre-Meeting Brief", "type": "main", "index": 0 }]]
-    },
-    "HTTP — GPT-4o Pre-Meeting Brief": {
-      "main": [[{ "node": "HTTP — Email Brief to Oussama", "type": "main", "index": 0 }]]
+    "HTTP — Slack Alerte Hot Lead": {
+      "main": [[{ "node": "HTTP — Sheets KPIs Campagne", "type": "main", "index": 0 }]]
     }
   },
-  "active": false,
   "settings": {
     "executionOrder": "v1",
-    "saveManualExecutions": true
+    "saveManualExecutions": true,
+    "callerPolicy": "workflowsFromSameOwner",
+    "errorWorkflow": ""
   },
-  "id": "wf-b2b-revenue-autopilot-v2",
-  "meta": {
-    "templateCredsSetupCompleted": false
-  }
+  "staticData": null,
+  "tags": ["b2b", "outreach", "ia", "automation", "prospection"],
+  "triggerCount": 0,
+  "updatedAt": "2025-01-01T00:00:00.000Z",
+  "versionId": "b2b-revenue-autopilot-v1"
 }

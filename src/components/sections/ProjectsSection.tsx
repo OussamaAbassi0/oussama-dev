@@ -433,7 +433,7 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
       </button>
 
       {/* Metrics */}
-      <div style={{ padding: "0 20px 14px", display: "flex", gap: "8px" }}>
+      <div style={{ padding: "0 20px 12px", display: "flex", gap: "8px" }}>
         {wf.metrics.map((m) => (
           <div key={m.label} style={{
             flex: 1, padding: "8px", borderRadius: "8px", textAlign: "center",
@@ -443,6 +443,23 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
             <div style={{ fontFamily: "var(--sans)", fontSize: "9px", color: "rgba(255,255,255,.3)", marginTop: "2px" }}>{m.label}</div>
           </div>
         ))}
+      </div>
+
+      {/* Voir la page dédiée — toujours visible */}
+      <div style={{ padding: "0 20px 14px", display: "flex", gap: "8px", alignItems: "center" }}>
+        <Link href={`/projets/${wf.id}`} style={{
+          display: "inline-flex", alignItems: "center", gap: "6px",
+          padding: "8px 16px", borderRadius: "8px",
+          background: `${wf.color}14`, border: `1px solid ${wf.color}30`,
+          fontFamily: "var(--mono)", fontWeight: 700, fontSize: "11px",
+          color: wf.color, textDecoration: "none", letterSpacing: ".06em",
+          transition: "all .25s ease",
+        }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = `${wf.color}28`; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = `${wf.color}14`; }}
+        >
+          {lang === "fr" ? "Voir la page dédiée →" : "View full case study →"}
+        </Link>
       </div>
 
       {/* Expandable */}
@@ -470,20 +487,6 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
               }}>{s}</span>
             ))}
           </div>
-          {/* Lien vers page dédiée — PAS dans la zone cliquable du toggle */}
-          <Link href={`/projets/${wf.id}`} style={{
-            display: "inline-flex", alignItems: "center", gap: "6px", marginTop: "6px",
-            padding: "9px 16px", borderRadius: "8px",
-            background: `${wf.color}14`, border: `1px solid ${wf.color}30`,
-            fontFamily: "var(--mono)", fontWeight: 700, fontSize: "11px",
-            color: wf.color, textDecoration: "none", letterSpacing: ".06em",
-            transition: "all .25s ease", width: "fit-content",
-          }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.background = `${wf.color}24`; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.background = `${wf.color}14`; }}
-          >
-            Voir la page dédiée →
-          </Link>
         </div>
       </div>
     </div>
