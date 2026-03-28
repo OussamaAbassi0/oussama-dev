@@ -12,6 +12,7 @@
     "@ai-sdk/anthropic": "^3.0.54",
     "@anthropic-ai/sdk": "^0.78.0",
     "@mendable/firecrawl-js": "^4.15.2",
+    "@phosphor-icons/react": "^2.1.10",
     "ai": "^6.0.111",
     "clsx": "^2.1.1",
     "framer-motion": "^12.35.0",

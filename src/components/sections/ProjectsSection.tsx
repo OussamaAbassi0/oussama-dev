@@ -4,58 +4,61 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
+import { CheckCircle2, Settings, X } from "lucide-react";
 import {
-  Calendar, Rocket, Wrench, Star, Clock, Package, Bot, Mail, Link2,
-  Zap, TrendingDown, ClipboardList, DollarSign, Brain, TrendingUp,
-  Target, Flame, Send, Users, Tag, ShoppingCart, Radio, BarChart3,
-  CreditCard, ShoppingBag, Activity, FileText, Lock, Smartphone,
-  CheckCircle2, Settings, X, Circle,
-} from "lucide-react";
+  Timer, Package, Robot, Envelope, LinkSimple, Lightning, TrendDown,
+  ClipboardText, Wrench, Money, Brain, TrendUp, Target, Fire,
+  CalendarBlank, CheckCircle, NotePencil, Clock, Circle, Star,
+  ChartBar, Lock, ShoppingCart, DeviceMobile, Handshake,
+  Rocket, UsersThree, Ticket, Broadcast, ChartLine,
+  CreditCard, ShoppingBag, Heartbeat, PaperPlaneTilt,
+} from "@phosphor-icons/react";
 
-/* ── Emoji → Lucide maps ─────────────────────────────────── */
+/* ── Emoji → Phosphor Duotone maps ──────────────────────── */
+const D = "duotone"; // shorthand weight
 const METRIC_ICON_MAP: Record<string, React.ReactNode> = {
-  "⏱":  <Clock size={12} />,
-  "📦":  <Package size={12} />,
-  "🆓":  <Star size={12} />,
-  "🤖":  <Bot size={12} />,
-  "📧":  <Mail size={12} />,
-  "🔗":  <Link2 size={12} />,
-  "⚡":  <Zap size={12} />,
-  "📉":  <TrendingDown size={12} />,
-  "📋":  <ClipboardList size={12} />,
-  "🛠":  <Wrench size={12} />,
-  "💰":  <DollarSign size={12} />,
-  "🧠":  <Brain size={12} />,
-  "📈":  <TrendingUp size={12} />,
-  "🎯":  <Target size={12} />,
-  "🔥":  <Flame size={12} />,
-  "📅":  <Calendar size={12} />,
-  "✅":  <CheckCircle2 size={12} />,
-  "📝":  <FileText size={12} />,
-  "🕐":  <Clock size={12} />,
-  "🔴":  <Circle size={12} />,
-  "⭐":  <Star size={12} />,
-  "📊":  <BarChart3 size={12} />,
-  "🔒":  <Lock size={12} />,
-  "🛒":  <ShoppingCart size={12} />,
-  "📱":  <Smartphone size={12} />,
-  "🤝":  <Users size={12} />,
+  "⏱":  <Timer     size={14} weight={D} />,
+  "📦":  <Package   size={14} weight={D} />,
+  "🆓":  <Star      size={14} weight={D} />,
+  "🤖":  <Robot     size={14} weight={D} />,
+  "📧":  <Envelope  size={14} weight={D} />,
+  "🔗":  <LinkSimple size={14} weight={D} />,
+  "⚡":  <Lightning size={14} weight={D} />,
+  "📉":  <TrendDown size={14} weight={D} />,
+  "📋":  <ClipboardText size={14} weight={D} />,
+  "🛠":  <Wrench    size={14} weight={D} />,
+  "💰":  <Money     size={14} weight={D} />,
+  "🧠":  <Brain     size={14} weight={D} />,
+  "📈":  <TrendUp   size={14} weight={D} />,
+  "🎯":  <Target    size={14} weight={D} />,
+  "🔥":  <Fire      size={14} weight={D} />,
+  "📅":  <CalendarBlank size={14} weight={D} />,
+  "✅":  <CheckCircle   size={14} weight={D} />,
+  "📝":  <NotePencil    size={14} weight={D} />,
+  "🕐":  <Clock     size={14} weight={D} />,
+  "🔴":  <Circle    size={14} weight="fill" style={{ color:"#ff4d6d" }} />,
+  "⭐":  <Star      size={14} weight={D} />,
+  "📊":  <ChartBar  size={14} weight={D} />,
+  "🔒":  <Lock      size={14} weight={D} />,
+  "🛒":  <ShoppingCart  size={14} weight={D} />,
+  "📱":  <DeviceMobile  size={14} weight={D} />,
+  "🤝":  <Handshake     size={14} weight={D} />,
 };
 
 const N8N_EMOJI_MAP: Record<string, React.ReactNode> = {
-  "🎯":  <Target size={20} />,
-  "🔥":  <Flame size={20} />,
-  "📨":  <Send size={20} />,
-  "👥":  <Users size={20} />,
-  "🚀":  <Rocket size={20} />,
-  "🎫":  <Tag size={20} />,
-  "🛒":  <ShoppingCart size={20} />,
-  "📡":  <Radio size={20} />,
-  "📊":  <BarChart3 size={20} />,
-  "💳":  <CreditCard size={20} />,
-  "🛍️": <ShoppingBag size={20} />,
-  "⚡":  <Zap size={20} />,
-  "🏥":  <Activity size={20} />,
+  "🎯":  <Target       size={20} weight={D} />,
+  "🔥":  <Fire         size={20} weight={D} />,
+  "📨":  <PaperPlaneTilt size={20} weight={D} />,
+  "👥":  <UsersThree   size={20} weight={D} />,
+  "🚀":  <Rocket       size={20} weight={D} />,
+  "🎫":  <Ticket       size={20} weight={D} />,
+  "🛒":  <ShoppingCart size={20} weight={D} />,
+  "📡":  <Broadcast    size={20} weight={D} />,
+  "📊":  <ChartLine    size={20} weight={D} />,
+  "💳":  <CreditCard   size={20} weight={D} />,
+  "🛍️": <ShoppingBag  size={20} weight={D} />,
+  "⚡":  <Lightning    size={20} weight={D} />,
+  "🏥":  <Heartbeat    size={20} weight={D} />,
 };
 import {
   SAAS_PROJECTS, N8N_PROJECTS, STACK_COLORS,
@@ -230,7 +233,7 @@ function BentoCard({
               background: `${project.color}0c`,
               border: `1px solid ${project.color}22`,
             }}>
-              <span style={{ display:"flex", alignItems:"center" }}>{METRIC_ICON_MAP[m.icon] ?? <Zap size={12} />}</span>
+              <span style={{ display:"flex", alignItems:"center" }}>{METRIC_ICON_MAP[m.icon] ?? <Lightning size={12} weight={D} />}</span>
               <span style={{
                 fontFamily: "var(--mono)", fontWeight: 700,
                 fontSize: "12px", color: project.color,
@@ -372,7 +375,7 @@ function FullSaasCard({ project, lang, index }: { project: SaasProject; lang: st
               padding: "10px 8px", borderRadius: "10px", textAlign: "center",
               background: `${project.color}08`, border: `1px solid ${project.color}1a`,
             }}>
-              <div style={{ display:"flex", justifyContent:"center", marginBottom: "2px" }}>{METRIC_ICON_MAP[m.icon] ?? <Zap size={12} />}</div>
+              <div style={{ display:"flex", justifyContent:"center", marginBottom: "2px" }}>{METRIC_ICON_MAP[m.icon] ?? <Lightning size={12} weight={D} />}</div>
               <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "13px", color: project.color }}>{m.value}</div>
               <div style={{ fontFamily: "var(--sans)", fontSize: "9px", color: "rgba(255,255,255,.3)", marginTop: "2px", lineHeight: 1.3 }}>{m.label}</div>
             </div>
@@ -461,7 +464,7 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
           background: `${wf.color}12`, border: `1px solid ${wf.color}22`,
           color: wf.color,
         }}>
-          {N8N_EMOJI_MAP[wf.emoji] ?? <Zap size={20} />}
+          {N8N_EMOJI_MAP[wf.emoji] ?? <Lightning size={20} weight={D} />}
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -721,10 +724,10 @@ export default function ProjectsSection({ featured = false }: { featured?: boole
           justifyContent: "center", gap: "48px", flexWrap: "wrap",
         }}>
           {[
-            { icon: <Calendar size={20} />, val: "2022", label: l({ fr: "Dans ce domaine depuis", en: "In this field since" }) },
-            { icon: <Rocket size={20} />,   val: "17+",  label: l({ fr: "Projets livrés", en: "Projects delivered" }) },
-            { icon: <Wrench size={20} />,   val: "20+",  label: l({ fr: "Technologies maîtrisées", en: "Technologies mastered" }) },
-            { icon: <Star size={20} />,     val: "5/5",  label: l({ fr: "Note Malt & Upwork", en: "Malt & Upwork rating" }) },
+            { icon: <CalendarBlank size={24} weight={D} />, val: "2022", label: l({ fr: "Dans ce domaine depuis", en: "In this field since" }) },
+            { icon: <Rocket        size={24} weight={D} />, val: "17+",  label: l({ fr: "Projets livrés", en: "Projects delivered" }) },
+            { icon: <Wrench        size={24} weight={D} />, val: "20+",  label: l({ fr: "Technologies maîtrisées", en: "Technologies mastered" }) },
+            { icon: <Star          size={24} weight={D} />, val: "5/5",  label: l({ fr: "Note Malt & Upwork", en: "Malt & Upwork rating" }) },
           ].map((s, idx) => (
             <div key={idx} style={{ textAlign: "center" }}>
               <div style={{ color: "var(--cyan)", display: "flex", justifyContent: "center", marginBottom: "6px" }}>{s.icon}</div>
