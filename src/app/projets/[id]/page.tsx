@@ -3,10 +3,41 @@ import { useParams } from "next/navigation";
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Clock, Package, Gift, Bot, Mail, Link2, Zap, TrendingDown, ClipboardList, Wrench, DollarSign, Brain, TrendingUp, Target, Flame, Users, FileText, CheckCircle2, Calendar, AlertCircle, Star, BarChart3, Lock, ShoppingCart, Smartphone, Activity, Search, Rocket, Shield, X, Check } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { useLang } from "@/lib/LangContext";
 import { SAAS_PROJECTS, N8N_PROJECTS, STACK_COLORS, SaasProject, N8nProject } from "@/data/projects";
+
+/* Emoji → Lucide icon mapping for metric stat boxes */
+const METRIC_ICON_MAP: Record<string, React.ReactNode> = {
+  "⏱": <Clock size={24} />, "🕐": <Clock size={24} />,
+  "📦": <Package size={24} />,
+  "🆓": <Gift size={24} />,
+  "🤖": <Bot size={24} />,
+  "📧": <Mail size={24} />,
+  "🔗": <Link2 size={24} />,
+  "⚡": <Zap size={24} />,
+  "📉": <TrendingDown size={24} />,
+  "📋": <ClipboardList size={24} />,
+  "🛠": <Wrench size={24} />,
+  "💰": <DollarSign size={24} />,
+  "🧠": <Brain size={24} />,
+  "📈": <TrendingUp size={24} />,
+  "🎯": <Target size={24} />,
+  "🔥": <Flame size={24} />,
+  "🤝": <Users size={24} />,
+  "📝": <FileText size={24} />,
+  "✅": <CheckCircle2 size={24} />,
+  "📅": <Calendar size={24} />,
+  "🔴": <AlertCircle size={24} />,
+  "⭐": <Star size={24} />,
+  "📊": <BarChart3 size={24} />,
+  "🔒": <Lock size={24} />,
+  "🛒": <ShoppingCart size={24} />,
+  "📱": <Smartphone size={24} />,
+  "🏥": <Activity size={24} />,
+};
 
 /* ──────────────────────────────────────────────
    HOOKS
@@ -118,7 +149,7 @@ function StackRow({ stack, color }: { stack: string[]; color: string }) {
 /* ──────────────────────────────────────────────
    WORKFLOW FLOW VISUALIZER (pour n8n)
 ────────────────────────────────────────────── */
-function WorkflowFlow({ steps, color }: { steps: { icon: string; label: string; sub: string }[]; color: string }) {
+function WorkflowFlow({ steps, color }: { steps: { icon: React.ReactNode; label: string; sub: string }[]; color: string }) {
   const { ref, visible } = useInView<HTMLDivElement>(0.2);
   const [active, setActive] = useState(-1);
 
@@ -153,7 +184,7 @@ function WorkflowFlow({ steps, color }: { steps: { icon: string; label: string; 
               transform: visible ? "scale(1)" : "scale(0.85)",
               transitionDelay: `${i * 0.15}s`,
             }}>
-              <span style={{ fontSize: "22px" }}>{step.icon}</span>
+              <span style={{ display:"flex", color: active >= i ? color : "rgba(255,255,255,.4)" }}>{step.icon}</span>
               <span style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "11px", color: active >= i ? color : "rgba(255,255,255,.3)", textAlign: "center", letterSpacing: ".05em" }}>
                 {step.label}
               </span>
@@ -209,8 +240,8 @@ function BeforeAfter({ before, after, color, lang }: { before: string; after: st
   return (
     <div ref={ref} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px" }}>
       {[
-        { label: lang === "fr" ? "Avant" : "Before", text: before, accent: "#ff4d6d", icon: "❌" },
-        { label: lang === "fr" ? "Après" : "After", text: after, accent: color, icon: "✅" },
+        { label: lang === "fr" ? "Avant" : "Before", text: before, accent: "#ff4d6d", icon: <X size={16} strokeWidth={2.5} /> },
+        { label: lang === "fr" ? "Après" : "After", text: after, accent: color, icon: <CheckCircle2 size={16} strokeWidth={2} /> },
       ].map((side, i) => (
         <div key={side.label} style={{
           padding: "24px", borderRadius: "14px",
@@ -220,7 +251,7 @@ function BeforeAfter({ before, after, color, lang }: { before: string; after: st
           transition: `opacity .6s ease ${i * 0.15}s, transform .6s ease ${i * 0.15}s`,
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
-            <span style={{ fontSize: "16px" }}>{side.icon}</span>
+            <span style={{ color: side.accent, display:"flex" }}>{side.icon}</span>
             <span style={{ fontFamily: "var(--mono)", fontSize: "10px", color: side.accent, letterSpacing: ".15em", textTransform: "uppercase", fontWeight: 700 }}>
               {side.label}
             </span>
@@ -252,7 +283,7 @@ function StatBox({ icon, rawValue, label, color, delay = 0 }: { icon: string; ra
       opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(20px)",
       transition: `opacity .6s ease ${delay}s, transform .6s ease ${delay}s`,
     }}>
-      <div style={{ fontSize: "28px", marginBottom: "12px" }}>{icon}</div>
+      <div style={{ marginBottom: "12px", color, display:"flex", justifyContent:"center", opacity:.8 }}>{METRIC_ICON_MAP[icon] ?? <Zap size={24} />}</div>
       <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "34px", color, lineHeight: 1, letterSpacing: "-.02em" }}>
         {prefix}{num !== null ? counted : rawValue}{num !== null ? suffix : ""}
       </div>
@@ -383,13 +414,13 @@ function SaasPage({ p }: { p: SaasProject }) {
   const [imgErr, setImgErr] = useState(false);
 
   // Thème visuel par projet
-  const themes: Record<string, { bgPattern: string; heroEmoji: string }> = {
-    flowaudit:   { bgPattern: "radial", heroEmoji: "⚡" },
-    leadscout:   { bgPattern: "matrix", heroEmoji: "🔍" },
-    talentscout: { bgPattern: "grid",   heroEmoji: "🧠" },
-    darkosclaw:  { bgPattern: "cyber",  heroEmoji: "🖤" },
+  const themes: Record<string, { bgPattern: string; iconSm: React.ReactNode; iconLg: React.ReactNode }> = {
+    flowaudit:   { bgPattern: "radial", iconSm: <Zap size={14} />,    iconLg: <Zap size={56} /> },
+    leadscout:   { bgPattern: "matrix", iconSm: <Search size={14} />, iconLg: <Search size={56} /> },
+    talentscout: { bgPattern: "grid",   iconSm: <Brain size={14} />,  iconLg: <Brain size={56} /> },
+    darkosclaw:  { bgPattern: "cyber",  iconSm: <Shield size={14} />, iconLg: <Shield size={56} /> },
   };
-  const theme = themes[p.id] ?? { bgPattern: "radial", heroEmoji: "🚀" };
+  const theme = themes[p.id] ?? { bgPattern: "radial", iconSm: <Rocket size={14} />, iconLg: <Rocket size={56} /> };
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--bg)" }}>
@@ -429,7 +460,7 @@ function SaasPage({ p }: { p: SaasProject }) {
                 background: `${p.color}14`, border: `1px solid ${p.color}30`,
                 fontFamily: "var(--mono)", fontSize: "10px", color: p.color, letterSpacing: ".12em",
               }}>
-                <span style={{ fontSize: "14px" }}>{theme.heroEmoji}</span>
+                <span style={{ display:"flex", color: p.color }}>{theme.iconSm}</span>
                 {p.type === "saas" ? "SaaS · Full-Stack" : "Agent IA · Autonome"}
               </div>
 
@@ -517,7 +548,7 @@ function SaasPage({ p }: { p: SaasProject }) {
               />
             ) : (
               <div style={{ height: "320px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "16px" }}>
-                <div style={{ fontSize: "56px" }}>{theme.heroEmoji}</div>
+                <div style={{ color: p.color, display:"flex" }}>{theme.iconLg}</div>
                 <p style={{ fontFamily: "var(--mono)", fontSize: "14px", color: p.color }}>{p.name}</p>
               </div>
             )}
@@ -586,33 +617,35 @@ function N8nPage({ wf }: { wf: N8nProject }) {
   const { lang } = useLang();
   const L = (o: Record<string, string>) => o[lang] ?? o.en ?? "";
 
+  // eslint-disable-next-line @next/next/no-img-element
+  const si = (slug: string) => <img src={`https://cdn.simpleicons.org/${slug}`} width={20} height={20} alt={slug} style={{display:"block"}} />;
   // Steps du workflow déduits de la stack
   const buildSteps = () => {
-    const steps: { icon: string; label: string; sub: string }[] = [];
+    const steps: { icon: React.ReactNode; label: string; sub: string }[] = [];
     // Trigger
-    if (wf.stack.includes("LinkedIn"))     steps.push({ icon: "🔗", label: "LinkedIn",      sub: "Trigger" });
-    else if (wf.stack.includes("Typeform")) steps.push({ icon: "📋", label: "Typeform",      sub: "Formulaire" });
-    else if (wf.stack.includes("Gmail"))    steps.push({ icon: "📧", label: "Gmail",          sub: "Trigger" });
-    else if (wf.stack.includes("Stripe"))   steps.push({ icon: "💳", label: "Stripe",         sub: "Paiement" });
-    else if (wf.stack.includes("Shopify"))  steps.push({ icon: "🛒", label: "Shopify",        sub: "Événement" });
-    else if (wf.stack.includes("Twitter/X")) steps.push({ icon: "📡", label: "Social",        sub: "Scan" });
-    else                                    steps.push({ icon: "⚡", label: "Trigger",         sub: "Entrée" });
+    if (wf.stack.includes("LinkedIn"))      steps.push({ icon: si("linkedin"),    label: "LinkedIn",  sub: "Trigger" });
+    else if (wf.stack.includes("Typeform")) steps.push({ icon: si("typeform"),    label: "Typeform",  sub: "Formulaire" });
+    else if (wf.stack.includes("Gmail"))    steps.push({ icon: si("gmail"),       label: "Gmail",     sub: "Trigger" });
+    else if (wf.stack.includes("Stripe"))   steps.push({ icon: si("stripe"),      label: "Stripe",    sub: "Paiement" });
+    else if (wf.stack.includes("Shopify"))  steps.push({ icon: si("shopify"),     label: "Shopify",   sub: "Événement" });
+    else if (wf.stack.includes("Twitter/X")) steps.push({ icon: si("x"),          label: "Social",    sub: "Scan" });
+    else                                    steps.push({ icon: <Zap size={20} />, label: "Trigger",   sub: "Entrée" });
     // Process n8n
-    steps.push({ icon: "⚙️", label: "n8n", sub: "Workflow" });
+    steps.push({ icon: si("n8n"), label: "n8n", sub: "Workflow" });
     // IA si présente
     if (wf.stack.some(s => s.includes("GPT") || s.includes("OpenAI")))
-      steps.push({ icon: "🧠", label: "GPT-4o", sub: "Analyse IA" });
+      steps.push({ icon: si("openai"), label: "GPT-4o", sub: "Analyse IA" });
     if (wf.stack.includes("Apollo"))
-      steps.push({ icon: "🎯", label: "Apollo", sub: "Enrichissement" });
+      steps.push({ icon: si("apollographql"), label: "Apollo", sub: "Enrichissement" });
     // Outputs
-    if (wf.stack.includes("HubSpot"))      steps.push({ icon: "📊", label: "HubSpot",       sub: "CRM" });
-    if (wf.stack.includes("Slack"))        steps.push({ icon: "💬", label: "Slack",          sub: "Alerte" });
-    if (wf.stack.includes("Notion"))       steps.push({ icon: "📝", label: "Notion",         sub: "Base" });
-    if (wf.stack.includes("Calendly"))     steps.push({ icon: "📅", label: "Calendly",       sub: "RDV" });
-    if (wf.stack.includes("Zendesk"))      steps.push({ icon: "🎫", label: "Zendesk",        sub: "Ticket" });
-    if (wf.stack.includes("Twilio"))       steps.push({ icon: "📱", label: "Twilio",         sub: "SMS" });
+    if (wf.stack.includes("HubSpot"))  steps.push({ icon: si("hubspot"),  label: "HubSpot",  sub: "CRM" });
+    if (wf.stack.includes("Slack"))    steps.push({ icon: si("slack"),    label: "Slack",    sub: "Alerte" });
+    if (wf.stack.includes("Notion"))   steps.push({ icon: si("notion"),   label: "Notion",   sub: "Base" });
+    if (wf.stack.includes("Calendly")) steps.push({ icon: <Calendar size={20} />, label: "Calendly", sub: "RDV" });
+    if (wf.stack.includes("Zendesk"))  steps.push({ icon: si("zendesk"),  label: "Zendesk",  sub: "Ticket" });
+    if (wf.stack.includes("Twilio"))   steps.push({ icon: si("twilio"),   label: "Twilio",   sub: "SMS" });
     // Result
-    steps.push({ icon: "✅", label: "Résultat", sub: "Automatisé" });
+    steps.push({ icon: <CheckCircle2 size={20} />, label: "Résultat", sub: "Automatisé" });
     return steps.slice(0, 7); // max 7 nœuds
   };
 

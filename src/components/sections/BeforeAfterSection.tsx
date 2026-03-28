@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { Mail, Target, Users, BarChart3, X, Check } from "lucide-react";
 import { useLang } from "@/lib/LangContext";
 
 export default function BeforeAfterSection() {
@@ -9,9 +10,16 @@ export default function BeforeAfterSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
 
+  const COMPARISON_ICONS = [
+    <Mail key="mail" size={14} />,
+    <Target key="target" size={14} />,
+    <Users key="users" size={14} />,
+    <BarChart3 key="bar" size={14} />,
+  ];
+
   const COMPARISONS = [
     {
-      icon: "📧", topicKey: "topic1" as const,
+      icon: <Mail size={14} />, topicKey: "topic1" as const,
       before: {
         items: {
           fr:["4h de tri emails / jour","Réponses oubliées","Stress permanent","Priorités mélangées"],
@@ -30,7 +38,7 @@ export default function BeforeAfterSection() {
       },
     },
     {
-      icon: "🎯", topicKey: "topic2" as const,
+      icon: <Target size={14} />, topicKey: "topic2" as const,
       before: {
         items: {
           fr:["15 leads / semaine manuels","3h de recherche / jour","Données souvent fausses","Suivi impossible à tenir"],
@@ -49,7 +57,7 @@ export default function BeforeAfterSection() {
       },
     },
     {
-      icon: "👥", topicKey: "topic3" as const,
+      icon: <Users size={14} />, topicKey: "topic3" as const,
       before: {
         items: {
           fr:["2 jours de tri CVs","3 personnes mobilisées","Bons profils passés à la trappe","Entretiens mal organisés"],
@@ -68,7 +76,7 @@ export default function BeforeAfterSection() {
       },
     },
     {
-      icon: "📊", topicKey: "topic4" as const,
+      icon: <BarChart3 size={14} />, topicKey: "topic4" as const,
       before: {
         items: {
           fr:["6h de consolidation / semaine","Excel mis à jour à la main","Données toujours en retard","Erreurs fréquentes"],
@@ -129,8 +137,9 @@ export default function BeforeAfterSection() {
               border:      `1px solid ${active===i ? "var(--cyan)" : "rgba(255,255,255,.1)"}`,
               fontFamily:"Arial,sans-serif", fontSize:"13px", fontWeight:active===i?700:400,
               cursor:"pointer", transition:"all .2s",
+              display:"flex", alignItems:"center", gap:"6px",
             }}>
-              {c.icon} {t.ba[c.topicKey]}
+              {COMPARISON_ICONS[i]} {t.ba[c.topicKey]}
             </button>
           ))}
         </div>
@@ -145,24 +154,24 @@ export default function BeforeAfterSection() {
           style={{ position:"relative", borderRadius:"16px", overflow:"hidden", cursor:"ew-resize", userSelect:"none", height:"300px" }}
         >
           <div style={{ position:"absolute", inset:0, background:"linear-gradient(135deg,#1a0610,#0d0208)", border:"1px solid rgba(255,77,109,.2)", display:"flex", flexDirection:"column", justifyContent:"center", padding:"32px" }}>
-            <p style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"#ff4d6d", letterSpacing:".2em", marginBottom:"20px" }}>
-              😩 {t.ba.before} — {t.ba[comp.topicKey]}
+            <p style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"#ff4d6d", letterSpacing:".2em", marginBottom:"20px", display:"flex", alignItems:"center", gap:"6px" }}>
+              <X size={12} strokeWidth={2.5} /> {t.ba.before} — {t.ba[comp.topicKey]}
             </p>
             {items_before.map((item: string, i: number) => (
               <div key={i} style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"10px" }}>
-                <span style={{ color:"#ff4d6d", fontSize:"14px" }}>✗</span>
+                <span style={{ color:"#ff4d6d", display:"flex" }}><X size={13} strokeWidth={2.5} /></span>
                 <span style={{ fontFamily:"Arial,sans-serif", fontSize:"14px", color:"rgba(255,255,255,.7)" }}>{item}</span>
               </div>
             ))}
           </div>
 
           <div style={{ position:"absolute", inset:0, clipPath:`inset(0 ${100-sliderX}% 0 0)`, background:"linear-gradient(135deg,#041210,#060f12)", border:"1px solid rgba(0,255,200,.25)", display:"flex", flexDirection:"column", justifyContent:"center", padding:"32px", transition:"clip-path .05s" }}>
-            <p style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"#00ffc8", letterSpacing:".2em", marginBottom:"20px" }}>
-              ✅ {t.ba.after} — {t.ba[comp.topicKey]}
+            <p style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"#00ffc8", letterSpacing:".2em", marginBottom:"20px", display:"flex", alignItems:"center", gap:"6px" }}>
+              <Check size={12} strokeWidth={2.5} /> {t.ba.after} — {t.ba[comp.topicKey]}
             </p>
             {items_after.map((item: string, i: number) => (
               <div key={i} style={{ display:"flex", alignItems:"center", gap:"10px", marginBottom:"10px" }}>
-                <span style={{ color:"#00ffc8", fontSize:"14px" }}>✓</span>
+                <span style={{ color:"#00ffc8", display:"flex" }}><Check size={13} strokeWidth={2.5} /></span>
                 <span style={{ fontFamily:"Arial,sans-serif", fontSize:"14px", color:"rgba(255,255,255,.85)", fontWeight:500 }}>{item}</span>
               </div>
             ))}

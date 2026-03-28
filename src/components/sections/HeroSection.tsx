@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Lightbulb } from "lucide-react";
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import { useLang } from "@/lib/LangContext";
 
@@ -339,7 +340,7 @@ export default function HeroSection() {
           animation:   mounted ? "heroFadeUp .7s .55s ease forwards" : "none",
           animationFillMode:"both",
         }}>
-          <span style={{ fontSize:"11px", opacity:.3 }}>💡</span>
+          <span style={{ opacity:.3, color:"rgba(0,229,255,.6)", display:"flex" }}><Lightbulb size={11} /></span>
           <p style={{ fontFamily:"'Courier New',monospace", fontSize:"11px", color:"rgba(255,255,255,.22)" }}>
             {t.hero.hint}{" "}
             <kbd style={{ padding:"1px 7px", background:"rgba(0,229,255,.08)", border:"1px solid rgba(0,229,255,.2)", borderRadius:"4px", color:"rgba(0,229,255,.55)", fontSize:"11px" }}>

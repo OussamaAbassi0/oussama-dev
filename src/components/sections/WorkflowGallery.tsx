@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Target, Flame, Send, Users, Rocket, Ticket, ShoppingCart, Radio, BarChart3, CreditCard, ShoppingBag, Zap, Mail, Clock, TrendingDown } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
@@ -26,162 +27,162 @@ const WORKFLOWS = [
   /* ── Prospection & Sales ───────────────────────────────── */
   {
     id:     "linkedin-crm",
-    emoji:  "🎯",
+    emoji:  <Target size={20} />,
     title:  "LinkedIn → CRM Auto-Enrich",
     desc:   "Nouvelle connexion LinkedIn → Apollo enrichit le profil → score ICP calculé → si score > 70 : email personnalisé + lead HubSpot créé automatiquement.",
     tags:   ["LinkedIn", "Apollo", "HubSpot", "OpenAI"],
     time:   "4–5 jours",
     saving: "15h/sem",
     color:  "#00ffc8",
-    nodes:  ["🔗 LinkedIn", "🔍 Apollo", "📊 Score ICP", "📧 Email IA", "🗂 HubSpot"],
+    nodes:  ["LinkedIn", "Apollo", "Score ICP", "Email IA", "HubSpot"],
     brief:  "Je veux automatiser : quand un prospect accepte ma connexion LinkedIn, enrichir son profil avec Apollo, calculer un score ICP et envoyer un email personnalisé si le score est élevé.",
   },
   {
     id:     "inbound-qualifier",
-    emoji:  "🔥",
+    emoji:  <Flame size={20} />,
     title:  "Inbound Lead Qualifier IA",
     desc:   "Formulaire rempli → GPT-4o classe Chaud/Tiède/Froid → alerte Slack immédiate + email de réponse auto en moins de 2 minutes pour les leads chauds.",
     tags:   ["Typeform", "OpenAI", "Slack", "Gmail"],
     time:   "2–3 jours",
     saving: "8h/sem",
     color:  "#ff4d6d",
-    nodes:  ["📋 Typeform", "🧠 GPT-4o", "🔥 Score", "💬 Slack", "📧 Réponse auto"],
+    nodes:  ["Typeform", "GPT-4o", "Score IA", "Slack", "Réponse auto"],
     brief:  "Je veux automatiser : qualifier automatiquement mes leads entrants avec GPT-4o et alerter mon équipe sur Slack en temps réel pour les leads chauds.",
   },
   {
     id:     "cold-email-machine",
-    emoji:  "📨",
+    emoji:  <Send size={20} />,
     title:  "Cold Email Machine B2B",
     desc:   "CSV importé → Apollo enrichit chaque contact → GPT génère un email ultra-personnalisé par secteur → envoi séquencé → RDV Calendly créés automatiquement.",
     tags:   ["Apollo", "OpenAI", "Instantly", "Calendly"],
     time:   "5–7 jours",
     saving: "25h/sem",
     color:  "#00e5ff",
-    nodes:  ["📂 CSV", "🔍 Apollo", "🧠 GPT Email", "📧 Instantly", "📅 Calendly"],
+    nodes:  ["CSV", "Apollo", "GPT Email", "Instantly", "Calendly"],
     brief:  "Je veux automatiser : importer une liste de prospects, les enrichir, générer des emails personnalisés par IA et planifier des RDV automatiquement sur les réponses positives.",
   },
   /* ── RH & Recrutement ──────────────────────────────────── */
   {
     id:     "cv-screening",
-    emoji:  "👥",
+    emoji:  <Users size={20} />,
     title:  "CV Screener IA",
     desc:   "CV reçu par email → GPT score selon vos critères (0–100) → si >75 : convocation auto + Calendly → si <40 : email de refus poli → ATS mis à jour.",
     tags:   ["Gmail", "OpenAI", "Calendly", "Notion"],
     time:   "5–7 jours",
     saving: "20h/recrutement",
     color:  "#a78bfa",
-    nodes:  ["📧 Gmail", "🧠 GPT Score", "✅ >75 Convoc.", "❌ <40 Refus", "📝 ATS"],
+    nodes:  ["Gmail", "GPT Score", ">75 Convoc.", "<40 Refus", "ATS"],
     brief:  "Je veux automatiser : le tri de CVs reçus par email avec scoring IA selon mes critères, les convocations automatiques pour les bons profils et les refus polis.",
   },
   {
     id:     "onboarding-bot",
-    emoji:  "🚀",
+    emoji:  <Rocket size={20} />,
     title:  "Employee Onboarding Automatisé",
     desc:   "Contrat signé → comptes Slack/Notion/Google créés → email de bienvenue → parcours d'intégration envoyé jour par jour sur 2 semaines → manager notifié.",
     tags:   ["Google Workspace", "Slack", "Notion", "Gmail"],
     time:   "5–7 jours",
     saving: "10h/recrutement",
     color:  "#4ade80",
-    nodes:  ["✍️ Contrat signé", "🔐 Comptes", "📧 Bienvenue", "📚 J+1→J+14", "✅ Suivi manager"],
+    nodes:  ["Contrat signé", "Comptes", "Bienvenue", "J+1→J+14", "Suivi manager"],
     brief:  "Je veux automatiser : tout le processus d'onboarding d'un nouveau salarié — création des accès, email de bienvenue et parcours d'intégration progressif sur 2 semaines.",
   },
   /* ── Support & Communication ───────────────────────────── */
   {
     id:     "support-triage",
-    emoji:  "🎫",
+    emoji:  <Ticket size={20} />,
     title:  "Support Client Auto-Triage",
     desc:   "Email reçu → GPT classifie (Urgence/Technique/Commercial/Spam) → assigné au bon agent → réponse auto aux questions simples → ticket Zendesk créé.",
     tags:   ["Gmail", "OpenAI", "Zendesk", "Slack"],
     time:   "3–5 jours",
     saving: "18h/sem",
     color:  "#f5a623",
-    nodes:  ["📧 Email entrant", "🧠 GPT Classify", "🎫 Zendesk", "👤 Assignation", "💬 Slack"],
+    nodes:  ["Email entrant", "GPT Classify", "Zendesk", "Assignation", "Slack"],
     brief:  "Je veux automatiser : le tri de mes emails de support, la classification par priorité avec IA, l'assignation aux bons agents et les réponses auto aux questions simples.",
   },
   {
     id:     "ecom-support",
-    emoji:  "🛒",
+    emoji:  <ShoppingCart size={20} />,
     title:  "Support E-commerce 24/7",
     desc:   "Agent IA répond aux questions clients (commandes, retours, stock), gère les cas simples en autonomie et escalade uniquement les situations complexes.",
     tags:   ["Shopify", "OpenAI", "Intercom", "Slack"],
     time:   "7–10 jours",
     saving: "35h/sem",
     color:  "#ff8c42",
-    nodes:  ["🛍️ Shopify", "🤖 Agent IA", "💬 Réponse auto", "📦 Commandes", "📩 Escalade"],
+    nodes:  ["Shopify", "Agent IA", "Réponse auto", "Commandes", "Escalade"],
     brief:  "Je veux automatiser : le support client de ma boutique avec un agent IA qui répond 24/7 aux questions courantes et n'escalade que les cas complexes.",
   },
   {
     id:     "social-listening",
-    emoji:  "📡",
+    emoji:  <Radio size={20} />,
     title:  "Social Listening & Réponse IA",
     desc:   "Mention détectée sur Twitter/LinkedIn → GPT analyse le sentiment → si négatif : alerte Slack + suggestion de réponse → si positif : demande de témoignage auto.",
     tags:   ["Twitter/X", "OpenAI", "Slack", "Notion"],
     time:   "3–4 jours",
     saving: "12h/sem",
     color:  "#00ffc8",
-    nodes:  ["📡 Mention", "🧠 Sentiment IA", "🔴 Alerte Slack", "💬 Réponse", "⭐ Témoignage"],
+    nodes:  ["Mention", "Sentiment IA", "Alerte Slack", "Réponse", "Témoignage"],
     brief:  "Je veux automatiser : la veille de ma marque sur les réseaux sociaux avec analyse de sentiment IA et suggestions de réponse adaptées au contexte.",
   },
   /* ── Ops & Finance ─────────────────────────────────────── */
   {
     id:     "rapport-hebdo",
-    emoji:  "📊",
+    emoji:  <BarChart3 size={20} />,
     title:  "Business Report Automatique",
     desc:   "Chaque vendredi 17h → collecte KPIs (GA4 + Stripe + CRM) → GPT rédige un rapport narratif → PDF envoyé aux dirigeants + archivé dans Notion.",
     tags:   ["Google Analytics", "Stripe", "OpenAI", "Notion"],
     time:   "3–4 jours",
     saving: "6h/sem",
     color:  "#a78bfa",
-    nodes:  ["⏰ Vendredi 17h", "📈 GA4 + Stripe", "🧠 GPT Rédige", "📄 PDF", "📬 Email + Notion"],
+    nodes:  ["Vendredi 17h", "GA4 + Stripe", "GPT Rédige", "PDF", "Email + Notion"],
     brief:  "Je veux automatiser : la génération d'un rapport hebdomadaire consolidant mes KPIs avec une rédaction narrative IA, envoyé automatiquement chaque vendredi.",
   },
   {
     id:     "invoice-relance",
-    emoji:  "💳",
+    emoji:  <CreditCard size={20} />,
     title:  "Facturation & Relances Auto",
     desc:   "Facture Stripe créée → envoi auto → J+7 non payée : relance douce → J+14 : relance ferme → J+21 : alerte équipe + suspension d'accès automatique.",
     tags:   ["Stripe", "Gmail", "Slack", "n8n"],
     time:   "3–4 jours",
     saving: "6h/sem",
     color:  "#f5a623",
-    nodes:  ["💰 Facture", "📧 Envoi auto", "⏰ J+7 Relance", "🚨 J+14 Ferme", "🔒 J+21 Suspend"],
+    nodes:  ["Facture", "Envoi auto", "J+7 Relance", "J+14 Ferme", "J+21 Suspend"],
     brief:  "Je veux automatiser : l'envoi de mes factures et les relances progressives avec escalade automatique et suspension d'accès en cas de non-paiement prolongé.",
   },
   /* ── E-commerce & Marketing ────────────────────────────── */
   {
     id:     "abandoned-cart",
-    emoji:  "🛍️",
+    emoji:  <ShoppingBag size={20} />,
     title:  "Abandoned Cart Recovery",
     desc:   "Panier abandonné → 1h d'attente → email avec contenu du panier → SMS de rappel J+1 → code promo ciblé J+3 → stats conversions envoyées au marketing.",
     tags:   ["Shopify", "Klaviyo", "Twilio", "n8n"],
     time:   "4–5 jours",
     saving: "+15% conversions",
     color:  "#ff4d6d",
-    nodes:  ["🛒 Panier", "⏱ 1h wait", "📧 Email rappel", "📱 SMS J+1", "🎁 Promo J+3"],
+    nodes:  ["Panier", "1h wait", "Email rappel", "SMS J+1", "Promo J+3"],
     brief:  "Je veux automatiser : la récupération des paniers abandonnés avec une séquence email + SMS progressive et des codes promo ciblés pour maximiser mes conversions.",
   },
   {
     id:     "lead-scoring",
-    emoji:  "⚡",
+    emoji:  <Zap size={20} />,
     title:  "Lead Scoring & Nurturing IA",
     desc:   "Lead entrant → score ICP calculé par IA → segmenté par maturité → séquence email personnalisée déclenchée → CRM mis à jour en temps réel.",
     tags:   ["HubSpot", "OpenAI", "Brevo", "n8n"],
     time:   "5–6 jours",
     saving: "12h/sem",
     color:  "#4ade80",
-    nodes:  ["🎯 Lead entrant", "🧠 Score ICP", "📊 Segment", "📧 Séquence", "🗂 CRM sync"],
+    nodes:  ["Lead entrant", "Score ICP", "Segment", "Séquence", "CRM sync"],
     brief:  "Je veux automatiser : le scoring IA de mes leads entrants, leur segmentation par niveau de maturité et le déclenchement automatique de séquences email personnalisées.",
   },
   {
     id:     "email-stripe",
-    emoji:  "✉️",
+    emoji:  <Mail size={20} />,
     title:  "Paiement → Ticket → Notification",
     desc:   "Chaque paiement Stripe crée automatiquement un ticket Jira, notifie l'équipe sur Slack et envoie une facture personnalisée au client.",
     tags:   ["Stripe", "Jira", "Slack", "Gmail"],
     time:   "2–3 jours",
     saving: "4h/sem",
     color:  "#00e5ff",
-    nodes:  ["💳 Stripe", "🎫 Jira", "💬 Slack", "📧 Facture client"],
+    nodes:  ["Stripe", "Jira", "Slack", "Facture client"],
     brief:  "Je veux automatiser : quand je reçois un paiement Stripe, créer un ticket Jira, notifier mon équipe sur Slack et envoyer une facture automatiquement au client.",
   },
 ];
@@ -245,7 +246,8 @@ function WorkflowCard({
         <div style={{
           width:  "44px", height: "44px", borderRadius: "10px", flexShrink: 0,
           background:`${wf.color}12`, border:`1px solid ${wf.color}25`,
-          display:"flex", alignItems:"center", justifyContent:"center", fontSize:"20px",
+          display:"flex", alignItems:"center", justifyContent:"center",
+          color: wf.color,
         }}>
           {wf.emoji}
         </div>
@@ -254,11 +256,11 @@ function WorkflowCard({
             {wf.title}
           </h3>
           <div style={{ display:"flex", gap:"8px" }}>
-            <span style={{ fontFamily:"var(--mono)", fontSize:"10px", color:wf.color, opacity:.7 }}>
-              ⏱ {wf.time}
+            <span style={{ fontFamily:"var(--mono)", fontSize:"10px", color:wf.color, opacity:.7, display:"flex", alignItems:"center", gap:"3px" }}>
+              <Clock size={9} /> {wf.time}
             </span>
-            <span style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"#4ade80", opacity:.7 }}>
-              💰 -{wf.saving}
+            <span style={{ fontFamily:"var(--mono)", fontSize:"10px", color:"#4ade80", opacity:.7, display:"flex", alignItems:"center", gap:"3px" }}>
+              <TrendingDown size={9} /> -{wf.saving}
             </span>
           </div>
         </div>

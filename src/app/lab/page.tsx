@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Target, FolderOpen, Mail, Settings, Zap, DollarSign, Search } from "lucide-react";
 import Navbar               from "@/components/layout/Navbar";
 import Footer               from "@/components/layout/Footer";
 import LeadHunterSection      from "@/components/sections/LeadHunterSection";
@@ -105,13 +106,13 @@ export default function LabPage() {
           flexWrap:       "wrap", position: "relative", zIndex: 1,
         }}>
           {[
-            { anchor: "#lead-hunter", emoji: "🎯", label: "Lead Hunter" },
-            { anchor: "#gallery",     emoji: "🗂️", label: "Workflow Gallery" },
-            { anchor: "#email-gen",   emoji: "✉️", label: "Email Generator" },
-            { anchor: "#workflow",    emoji: "⚙️", label: "Workflow Builder" },
-            { anchor: "#automation",  emoji: "⚡", label: "Live Pipeline" },
-            { anchor: "#roi",          emoji: "💰", label: "ROI Calculator" },
-            { anchor: "#domain-audit", emoji: "🔎", label: "Domain Audit" },
+            { anchor: "#lead-hunter",  icon: <Target size={13} />,     label: "Lead Hunter" },
+            { anchor: "#gallery",      icon: <FolderOpen size={13} />, label: "Workflow Gallery" },
+            { anchor: "#email-gen",    icon: <Mail size={13} />,       label: "Email Generator" },
+            { anchor: "#workflow",     icon: <Settings size={13} />,   label: "Workflow Builder" },
+            { anchor: "#automation",   icon: <Zap size={13} />,        label: "Live Pipeline" },
+            { anchor: "#roi",          icon: <DollarSign size={13} />, label: "ROI Calculator" },
+            { anchor: "#domain-audit", icon: <Search size={13} />,     label: "Domain Audit" },
           ].map(item => (
             <a key={item.anchor} href={item.anchor} style={{
               padding:        "10px 20px",
@@ -132,7 +133,7 @@ export default function LabPage() {
                 (e.currentTarget as HTMLElement).style.borderColor = "rgba(0,255,200,.2)";
               }}
             >
-              {item.emoji} {item.label}
+              {item.icon} {item.label}
             </a>
           ))}
         </div>

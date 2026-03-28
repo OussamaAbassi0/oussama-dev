@@ -1,10 +1,11 @@
 "use client";
+import { Activity, Bus } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
 const CASES = [
   {
-    emoji: "🏥",
+    emoji: <Activity size={24} />,
     client: "Matys · PLATINUMAAA",
     platform: "Upwork",
     platformColor: "#14a800",
@@ -39,7 +40,7 @@ const CASES = [
     stars: 5,
   },
   {
-    emoji: "🚌",
+    emoji: <Bus size={24} />,
     client: "Mouna BAATOUT",
     platform: "Malt",
     platformColor: "#ff5e3a",
@@ -134,7 +135,7 @@ export default function CaseStudiesSection() {
                 borderBottom: `1px solid ${c.color}15`,
                 display: "flex", alignItems: "center", gap: "14px", flexWrap: "wrap",
               }}>
-                <span style={{ fontSize: "28px" }}>{c.emoji}</span>
+                <span style={{ display:"flex", color: c.color }}>{c.emoji}</span>
                 <div>
                   <p style={{ fontFamily: "var(--sans)", fontWeight: 700, fontSize: "16px", color: "white", margin: 0 }}>{c.client}</p>
                   <p style={{ fontFamily: "var(--mono)", fontSize: "10px", color: `${c.color}80`, letterSpacing: ".1em", margin: 0 }}>

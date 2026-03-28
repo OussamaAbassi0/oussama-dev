@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { Megaphone, Target, Users, DollarSign, Settings, Monitor, Clock, CalendarDays, Calendar } from "lucide-react";
 import { useLang } from "@/lib/LangContext";
 
 /* ─────────────────────────────────────────────────────────────────────
@@ -13,51 +14,60 @@ import { useLang } from "@/lib/LangContext";
 ───────────────────────────────────────────────────────────────────── */
 
 interface Sector {
-  emoji: string;
+  icon: React.ReactNode;
   label: string;
   costPerSec: number; /* € perdus / seconde pour une équipe ~10 */
 }
 
+const SECTOR_ICONS = [
+  <Megaphone key="meg" size={11} />,
+  <Target    key="tgt" size={11} />,
+  <Users     key="usr" size={11} />,
+  <DollarSign key="dlr" size={11} />,
+  <Settings  key="set" size={11} />,
+  <Monitor   key="mon" size={11} />,
+];
+
 const SECTORS: Record<string, Sector[]> = {
   fr: [
-    { emoji: "📣", label: "Marketing",   costPerSec: 0.0311 }, // 10p × €35/h × 40% / 3600
-    { emoji: "🎯", label: "Ventes/CRM",  costPerSec: 0.0422 }, // 10p × €38/h × 40% / 3600
-    { emoji: "👥", label: "RH",          costPerSec: 0.0278 }, // 10p × €32/h × 31% / 3600
-    { emoji: "💰", label: "Finance",     costPerSec: 0.0389 }, // 10p × €42/h × 33% / 3600
-    { emoji: "⚙️", label: "Ops/Logis.",  costPerSec: 0.0400 }, // 10p × €32/h × 45% / 3600
-    { emoji: "💻", label: "Tech/IT",     costPerSec: 0.0458 }, // 10p × €55/h × 30% / 3600
+    { icon: SECTOR_ICONS[0], label: "Marketing",   costPerSec: 0.0311 },
+    { icon: SECTOR_ICONS[1], label: "Ventes/CRM",  costPerSec: 0.0422 },
+    { icon: SECTOR_ICONS[2], label: "RH",          costPerSec: 0.0278 },
+    { icon: SECTOR_ICONS[3], label: "Finance",     costPerSec: 0.0389 },
+    { icon: SECTOR_ICONS[4], label: "Ops/Logis.",  costPerSec: 0.0400 },
+    { icon: SECTOR_ICONS[5], label: "Tech/IT",     costPerSec: 0.0458 },
   ],
   en: [
-    { emoji: "📣", label: "Marketing",   costPerSec: 0.0311 },
-    { emoji: "🎯", label: "Sales/CRM",   costPerSec: 0.0422 },
-    { emoji: "👥", label: "HR",          costPerSec: 0.0278 },
-    { emoji: "💰", label: "Finance",     costPerSec: 0.0389 },
-    { emoji: "⚙️", label: "Ops/Logis.",  costPerSec: 0.0400 },
-    { emoji: "💻", label: "Tech/IT",     costPerSec: 0.0458 },
+    { icon: SECTOR_ICONS[0], label: "Marketing",   costPerSec: 0.0311 },
+    { icon: SECTOR_ICONS[1], label: "Sales/CRM",   costPerSec: 0.0422 },
+    { icon: SECTOR_ICONS[2], label: "HR",          costPerSec: 0.0278 },
+    { icon: SECTOR_ICONS[3], label: "Finance",     costPerSec: 0.0389 },
+    { icon: SECTOR_ICONS[4], label: "Ops/Logis.",  costPerSec: 0.0400 },
+    { icon: SECTOR_ICONS[5], label: "Tech/IT",     costPerSec: 0.0458 },
   ],
   ar: [
-    { emoji: "📣", label: "التسويق",     costPerSec: 0.0311 },
-    { emoji: "🎯", label: "المبيعات",    costPerSec: 0.0422 },
-    { emoji: "👥", label: "الموارد البشرية", costPerSec: 0.0278 },
-    { emoji: "💰", label: "المالية",     costPerSec: 0.0389 },
-    { emoji: "⚙️", label: "العمليات",   costPerSec: 0.0400 },
-    { emoji: "💻", label: "تقنية المعلومات", costPerSec: 0.0458 },
+    { icon: SECTOR_ICONS[0], label: "التسويق",         costPerSec: 0.0311 },
+    { icon: SECTOR_ICONS[1], label: "المبيعات",        costPerSec: 0.0422 },
+    { icon: SECTOR_ICONS[2], label: "الموارد البشرية", costPerSec: 0.0278 },
+    { icon: SECTOR_ICONS[3], label: "المالية",         costPerSec: 0.0389 },
+    { icon: SECTOR_ICONS[4], label: "العمليات",        costPerSec: 0.0400 },
+    { icon: SECTOR_ICONS[5], label: "تقنية المعلومات", costPerSec: 0.0458 },
   ],
   es: [
-    { emoji: "📣", label: "Marketing",   costPerSec: 0.0311 },
-    { emoji: "🎯", label: "Ventas/CRM",  costPerSec: 0.0422 },
-    { emoji: "👥", label: "RRHH",        costPerSec: 0.0278 },
-    { emoji: "💰", label: "Finanzas",    costPerSec: 0.0389 },
-    { emoji: "⚙️", label: "Operaciones", costPerSec: 0.0400 },
-    { emoji: "💻", label: "Tech/IT",     costPerSec: 0.0458 },
+    { icon: SECTOR_ICONS[0], label: "Marketing",   costPerSec: 0.0311 },
+    { icon: SECTOR_ICONS[1], label: "Ventas/CRM",  costPerSec: 0.0422 },
+    { icon: SECTOR_ICONS[2], label: "RRHH",        costPerSec: 0.0278 },
+    { icon: SECTOR_ICONS[3], label: "Finanzas",    costPerSec: 0.0389 },
+    { icon: SECTOR_ICONS[4], label: "Operaciones", costPerSec: 0.0400 },
+    { icon: SECTOR_ICONS[5], label: "Tech/IT",     costPerSec: 0.0458 },
   ],
   nl: [
-    { emoji: "📣", label: "Marketing",   costPerSec: 0.0311 },
-    { emoji: "🎯", label: "Sales/CRM",   costPerSec: 0.0422 },
-    { emoji: "👥", label: "HR",          costPerSec: 0.0278 },
-    { emoji: "💰", label: "Financiën",   costPerSec: 0.0389 },
-    { emoji: "⚙️", label: "Ops/Logis.",  costPerSec: 0.0400 },
-    { emoji: "💻", label: "Tech/IT",     costPerSec: 0.0458 },
+    { icon: SECTOR_ICONS[0], label: "Marketing",   costPerSec: 0.0311 },
+    { icon: SECTOR_ICONS[1], label: "Sales/CRM",   costPerSec: 0.0422 },
+    { icon: SECTOR_ICONS[2], label: "HR",          costPerSec: 0.0278 },
+    { icon: SECTOR_ICONS[3], label: "Financiën",   costPerSec: 0.0389 },
+    { icon: SECTOR_ICONS[4], label: "Ops/Logis.",  costPerSec: 0.0400 },
+    { icon: SECTOR_ICONS[5], label: "Tech/IT",     costPerSec: 0.0458 },
   ],
 };
 
@@ -323,8 +333,9 @@ export default function AutomationCostClock({
               fontSize:    "clamp(13px, 1.5vw, 16px)",
               color:       "rgba(255,255,255,.4)",
               marginBottom: "16px",
+              display:     "flex", alignItems: "center", gap: "6px",
             }}>
-              ⏱ {fmtTime(elapsed)}
+              <Clock size={14} /> {fmtTime(elapsed)}
             </div>
 
             {/* Big money counter */}
@@ -401,7 +412,7 @@ export default function AutomationCostClock({
                       }
                     }}
                   >
-                    {s.emoji} {s.label}
+                    <span style={{display:"flex",alignItems:"center",gap:"5px"}}>{s.icon} {s.label}</span>
                   </button>
                 ))}
               </div>
@@ -414,8 +425,8 @@ export default function AutomationCostClock({
               gap:          "12px",
             }}>
               {[
-                { label: tx.perWeek, val: weekLoss, icon: "📅" },
-                { label: tx.perYear, val: yearLoss, icon: "📆" },
+                { label: tx.perWeek, val: weekLoss, icon: <CalendarDays size={10} /> },
+                { label: tx.perYear, val: yearLoss, icon: <Calendar size={10} /> },
               ].map(item => (
                 <div key={item.label} style={{
                   background:   "rgba(255,255,255,.03)",
@@ -440,7 +451,7 @@ export default function AutomationCostClock({
                     textTransform: "uppercase",
                     letterSpacing: ".08em",
                   }}>
-                    {item.icon} {item.label}
+                    <span style={{display:"flex",alignItems:"center",gap:"4px"}}>{item.icon} {item.label}</span>
                   </div>
                 </div>
               ))}

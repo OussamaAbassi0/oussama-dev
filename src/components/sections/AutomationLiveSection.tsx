@@ -1,21 +1,26 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { Target, BarChart3, CheckCircle2, Zap, Mail } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
 /* ── Viewport constants ─────────────────────────────────── */
 const VW = 960, VH = 320;
 
-interface PN { id:string; icon:string; label:string; sub:string; color:string; x:number; y:number }
+interface PN { id:string; icon:React.ReactNode; label:string; sub:string; color:string; x:number; y:number }
 
 const NODES: PN[] = [
-  { id:"trigger", icon:"🎯", label:"Prospect",   sub:"Auto-détecté",  color:"#00ffc8", x:62,  y:100 },
-  { id:"enrich",  icon:"🔬", label:"Enrichi",    sub:"Apollo · email",color:"#a78bfa", x:218, y:100 },
-  { id:"score",   icon:"📊", label:"Score IA",   sub:"ICP 94/100",    color:"#f5a623", x:383, y:100 },
-  { id:"email",   icon:"✉️", label:"Email IA",   sub:"1.2s · GPT-4o",color:"#00e5ff", x:550, y:100 },
-  { id:"crm",     icon:"🗂", label:"HubSpot",    sub:"Deal créé",     color:"#4ade80", x:455, y:250 },
-  { id:"slack",   icon:"💬", label:"Slack",      sub:"#commercial",   color:"#f59e0b", x:655, y:250 },
-  { id:"deal",    icon:"🚀", label:"Deal actif", sub:"+1 lead ✓",     color:"#00ffc8", x:840, y:100 },
+  { id:"trigger", icon:<Target size={16} />,   label:"Prospect",   sub:"Auto-détecté",  color:"#00ffc8", x:62,  y:100 },
+  // eslint-disable-next-line @next/next/no-img-element
+  { id:"enrich",  icon:<img src="https://cdn.simpleicons.org/apollographql" width={16} height={16} alt="Apollo" style={{display:"block"}} />, label:"Enrichi", sub:"Apollo · email", color:"#a78bfa", x:218, y:100 },
+  { id:"score",   icon:<BarChart3 size={16} />, label:"Score IA",   sub:"ICP 94/100",    color:"#f5a623", x:383, y:100 },
+  // eslint-disable-next-line @next/next/no-img-element
+  { id:"email",   icon:<img src="https://cdn.simpleicons.org/openai" width={16} height={16} alt="OpenAI" style={{display:"block"}} />, label:"Email IA", sub:"1.2s · GPT-4o", color:"#00e5ff", x:550, y:100 },
+  // eslint-disable-next-line @next/next/no-img-element
+  { id:"crm",     icon:<img src="https://cdn.simpleicons.org/hubspot" width={16} height={16} alt="HubSpot" style={{display:"block"}} />, label:"HubSpot", sub:"Deal créé", color:"#4ade80", x:455, y:250 },
+  // eslint-disable-next-line @next/next/no-img-element
+  { id:"slack",   icon:<img src="https://cdn.simpleicons.org/slack" width={16} height={16} alt="Slack" style={{display:"block"}} />, label:"Slack", sub:"#commercial", color:"#f59e0b", x:655, y:250 },
+  { id:"deal",    icon:<CheckCircle2 size={16} />, label:"Deal actif", sub:"+1 lead", color:"#00ffc8", x:840, y:100 },
 ];
 const nMap = Object.fromEntries(NODES.map(n => [n.id, n]));
 
@@ -35,7 +40,7 @@ const SEQ = [
   { id:"score",   at:2000, feed:"→ GPT-4o: ICP 94/100 — seuil 80 atteint ✓",    fc:"#f5a623" },
   { id:"email",   at:2800, feed:"→ Email personnalisé généré en 1.2s",            fc:"#00e5ff" },
   { id:"crm",     at:3400, feed:"→ HubSpot: deal créé · pipeline Commercial",     fc:"#4ade80" },
-  { id:"slack",   at:3600, feed:"→ Slack #commercial: 🔥 lead chaud notifié",    fc:"#f59e0b" },
+  { id:"slack",   at:3600, feed:"→ Slack #commercial: lead chaud notifié",    fc:"#f59e0b" },
   { id:"deal",    at:4300, feed:"✓ Terminé en 4.3s · 0 intervention humaine",    fc:"#00ffc8" },
 ];
 
@@ -117,7 +122,7 @@ export default function AutomationLiveSection() {
     s1:      lang==="en" ? "Leads processed" : lang==="ar" ? "عملاء معالجون" : lang==="es" ? "Leads procesados" : lang==="nl" ? "Leads verwerkt" : "Leads traités",
     s2:      lang==="en" ? "Hours saved" : lang==="ar" ? "ساعات موفرة" : lang==="es" ? "Horas ahorradas" : lang==="nl" ? "Uren bespaard" : "Heures économisées",
     s3:      lang==="en" ? "Human actions" : lang==="ar" ? "إجراءات بشرية" : lang==="es" ? "Acciones humanas" : lang==="nl" ? "Menselijke acties" : "Actions humaines",
-    tag:     lang==="en" ? "⚡ Real: 4.3s · Manual: 2h 40min" : lang==="ar" ? "⚡ حقيقي: 4.3s · يدوي: 2h 40min" : lang==="es" ? "⚡ Real: 4.3s · Manual: 2h 40min" : lang==="nl" ? "⚡ Echt: 4.3s · Handmatig: 2u 40" : "⚡ Temps réel : 4.3s · Manuel : 2h 40min",
+    tag:     lang==="en" ? "Real: 4.3s · Manual: 2h 40min" : lang==="ar" ? "حقيقي: 4.3s · يدوي: 2h 40min" : lang==="es" ? "Real: 4.3s · Manual: 2h 40min" : lang==="nl" ? "Echt: 4.3s · Handmatig: 2u 40" : "Temps réel : 4.3s · Manuel : 2h 40min",
     waiting: lang==="en" ? "Waiting for next cycle..." : lang==="ar" ? "في انتظار الدورة التالية..." : lang==="es" ? "Esperando el próximo ciclo..." : lang==="nl" ? "Wachten op volgende cyclus..." : "En attente du prochain cycle...",
   };
 
@@ -260,8 +265,15 @@ export default function AutomationLiveSection() {
                       animation: on && isDeal ? "dealWin 1.8s ease-in-out infinite" : "none",
                       transition:"border-color .3s, box-shadow .3s",
                     }}>
-                      <div style={{ fontSize:"18px", marginBottom:"4px", filter:on?`drop-shadow(0 0 5px ${node.color})`:"none", transition:"filter .3s" }}>
-                        {on && isDeal ? "✅" : node.icon}
+                      <div style={{
+                        marginBottom:"4px",
+                        filter: on ? `drop-shadow(0 0 5px ${node.color})` : "none",
+                        opacity: on ? 1 : 0.35,
+                        transition:"filter .3s, opacity .3s",
+                        display:"flex", alignItems:"center", justifyContent:"center",
+                        color: node.color, height:"20px",
+                      }}>
+                        {node.icon}
                       </div>
                       <div style={{ fontFamily:"var(--mono)", fontWeight:700, fontSize:"9.5px", color:on?"white":"rgba(255,255,255,0.28)", marginBottom:"2px", transition:"color .3s" }}>
                         {node.label}
@@ -275,8 +287,8 @@ export default function AutomationLiveSection() {
               })}
 
               {/* Time tag */}
-              <div style={{ position:"absolute", bottom:"8px", right:"12px", fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(0,255,200,.22)", letterSpacing:".07em", pointerEvents:"none" }}>
-                {T.tag}
+              <div style={{ position:"absolute", bottom:"8px", right:"12px", fontFamily:"var(--mono)", fontSize:"9px", color:"rgba(0,255,200,.22)", letterSpacing:".07em", pointerEvents:"none", display:"flex", alignItems:"center", gap:"4px" }}>
+                <Zap size={8} />{T.tag}
               </div>
             </div>
           </div>

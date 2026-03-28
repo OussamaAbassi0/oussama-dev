@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { CheckCircle2, Mic, Loader2, AlertTriangle, Send, Zap, Lock, Target } from "lucide-react";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
 
@@ -289,7 +290,7 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
         {phase === "success" ? (
           /* ── Success state ── */
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontSize: "52px", marginBottom: "20px" }}>✅</div>
+            <div style={{ marginBottom: "20px", color: "#00ffc8", display:"flex", justifyContent:"center" }}><CheckCircle2 size={52} strokeWidth={1.5} /></div>
             <h3 style={{ fontFamily: "var(--sans)", fontWeight: 800, fontSize: "24px", color: "white", marginBottom: "12px" }}>
               Brief reçu !
             </h3>
@@ -360,8 +361,8 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
                     ))}
                   </span>
                 ) : (
-                  <span style={{ fontSize: "16px" }}>
-                    {voicePhase === "processing" ? "⏳" : "🎙️"}
+                  <span style={{ color: voicePhase === "processing" ? "#ffaa00" : "var(--cyan)", display:"flex" }}>
+                    {voicePhase === "processing" ? <Loader2 size={16} style={{animation:"spin 1s linear infinite"}} /> : <Mic size={16} />}
                   </span>
                 )}
                 <span style={{
@@ -382,8 +383,8 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
 
               {/* Error */}
               {voiceError && (
-                <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--red)", marginTop: "6px" }}>
-                  ⚠ {voiceError}
+                <p style={{ fontFamily: "var(--mono)", fontSize: "11px", color: "var(--red)", marginTop: "6px", display:"flex", alignItems:"center", gap:"4px" }}>
+                  <AlertTriangle size={11} /> {voiceError}
                 </p>
               )}
 
@@ -461,8 +462,9 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
                 marginBottom: "16px", padding: "12px 16px", borderRadius: "6px",
                 background: "rgba(255,77,109,0.08)", border: "1px solid rgba(255,77,109,0.2)",
                 fontFamily: "var(--mono)", fontSize: "12px", color: "var(--red)",
+                display:"flex", alignItems:"center", gap:"6px",
               }}>
-                ⚠ {submitError} — Vérifiez votre connexion ou contactez-moi directement.
+                <AlertTriangle size={12} /> {submitError} — Vérifiez votre connexion ou contactez-moi directement.
               </div>
             )}
 
@@ -481,7 +483,9 @@ function ProjectBriefModal({ onClose }: { onClose: () => void }) {
                 boxShadow: form.name && form.email && form.problem ? "0 0 20px rgba(0,255,200,0.2)" : "none",
               }}
             >
-              {phase === "sending" ? "⏳ Envoi en cours..." : "📨 Envoyer mon brief →"}
+              <span style={{display:"flex",alignItems:"center",gap:"8px",justifyContent:"center"}}>
+                {phase === "sending" ? <><Loader2 size={14} style={{animation:"spin 1s linear infinite"}} /> Envoi en cours...</> : <><Send size={14} /> Envoyer mon brief →</>}
+              </span>
             </button>
 
   
@@ -540,6 +544,7 @@ export default function CTASection({
               letterSpacing: "0.05em",
               boxShadow: "0 0 30px rgba(0,255,200,0.4), 0 0 60px rgba(0,255,200,0.1)",
               transition: "transform 0.2s, box-shadow 0.2s",
+              display: "inline-flex", alignItems: "center", gap: "10px",
             }}
             onMouseEnter={e => {
               (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
@@ -550,21 +555,21 @@ export default function CTASection({
               (e.currentTarget as HTMLElement).style.boxShadow = "0 0 30px rgba(0,255,200,0.4), 0 0 60px rgba(0,255,200,0.1)";
             }}
           >
-            📨 {t.cta.send}
-            </button>
+            <Send size={15} /> {t.cta.send}
+          </button>
 
           {/* Trust signals */}
           <div style={{ marginTop: "32px", display: "flex", justifyContent: "center", gap: "28px", flexWrap: "wrap" }}>
             {[
-              { icon: "⚡", text: lang==="en" ? "Reply within 24h" : lang==="ar" ? "رد خلال 24 ساعة" : lang==="es" ? "Respuesta en 24h" : lang==="nl" ? "Reactie binnen 24u" : "Réponse sous 24h" },
-              { icon: "🔒", text: lang==="en" ? "NDA available on request" : lang==="ar" ? "اتفاقية سرية متاحة" : lang==="es" ? "NDA disponible bajo petición" : lang==="nl" ? "NDA beschikbaar op aanvraag" : "NDA disponible sur demande" },
-              { icon: "🎯", text: lang==="en" ? "Free & no-commitment quote" : lang==="ar" ? "عرض سعر مجاني بدون التزام" : lang==="es" ? "Presupuesto gratuito sin compromiso" : lang==="nl" ? "Gratis offerte zonder verplichting" : "Devis gratuit & sans engagement" },
-            ].map((s: {icon:string;text:string}) => (
-              <div key={s.text} style={{
+              { icon: <Zap size={13} />, text: lang==="en" ? "Reply within 24h" : lang==="ar" ? "رد خلال 24 ساعة" : lang==="es" ? "Respuesta en 24h" : lang==="nl" ? "Reactie binnen 24u" : "Réponse sous 24h" },
+              { icon: <Lock size={13} />, text: lang==="en" ? "NDA available on request" : lang==="ar" ? "اتفاقية سرية متاحة" : lang==="es" ? "NDA disponible bajo petición" : lang==="nl" ? "NDA beschikbaar op aanvraag" : "NDA disponible sur demande" },
+              { icon: <Target size={13} />, text: lang==="en" ? "Free & no-commitment quote" : lang==="ar" ? "عرض سعر مجاني بدون التزام" : lang==="es" ? "Presupuesto gratuito sin compromiso" : lang==="nl" ? "Gratis offerte zonder verplichting" : "Devis gratuit & sans engagement" },
+            ].map((s, idx) => (
+              <div key={idx} style={{
                 display: "flex", alignItems: "center", gap: "6px",
                 fontFamily: "var(--mono)", fontSize: "11px", color: "var(--text-dim)",
               }}>
-                <span>{s.icon}</span>
+                <span style={{ color: "rgba(0,255,200,.6)" }}>{s.icon}</span>
                 <span>{s.text}</span>
               </div>
             ))}

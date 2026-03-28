@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Send, Search, ClipboardList, Rocket, CheckCircle2, Check } from "lucide-react";
 
 const STEPS = [
-  { icon: "📨", title: "Brief reçu",            desc: "Votre message est arrivé. Oussama l'a lu." },
-  { icon: "🔍", title: "Analyse sous 24h",      desc: "Analyse de votre besoin et identification de la solution optimale." },
-  { icon: "📋", title: "Plan d'action concret", desc: "Vous recevez un chiffrage précis et un plan étape par étape." },
-  { icon: "🚀", title: "On démarre",            desc: "Si tout vous convient, on lance le projet. Zéro surprise." },
+  { icon: <Send size={16} />,         title: "Brief reçu",            desc: "Votre message est arrivé. Oussama l'a lu." },
+  { icon: <Search size={16} />,        title: "Analyse sous 24h",      desc: "Analyse de votre besoin et identification de la solution optimale." },
+  { icon: <ClipboardList size={16} />, title: "Plan d'action concret", desc: "Vous recevez un chiffrage précis et un plan étape par étape." },
+  { icon: <Rocket size={16} />,        title: "On démarre",            desc: "Si tout vous convient, on lance le projet. Zéro surprise." },
 ];
 
 export default function MerciPage() {
@@ -86,11 +87,12 @@ export default function MerciPage() {
           background: "linear-gradient(135deg,rgba(0,255,200,.15),rgba(0,229,255,.1))",
           border: "2px solid rgba(0,255,200,.4)",
           display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: "40px", margin: "0 auto 32px",
+          margin: "0 auto 32px",
           boxShadow: "0 0 40px rgba(0,255,200,.2)",
           animation: visible ? "fadeUp .6s ease both, pulse 3s 1s ease-in-out infinite" : "none",
+          color: "#00ffc8",
         }}>
-          ✅
+          <CheckCircle2 size={40} strokeWidth={1.5} />
         </div>
 
         {/* Titre */}
@@ -155,7 +157,8 @@ export default function MerciPage() {
                 background: i === 0 ? "rgba(0,255,200,.15)" : "rgba(255,255,255,.04)",
                 border: `1px solid ${i === 0 ? "rgba(0,255,200,.3)" : "rgba(255,255,255,.06)"}`,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "18px", flexShrink: 0,
+                color: i === 0 ? "#00ffc8" : "rgba(255,255,255,.4)",
+                flexShrink: 0,
               }}>
                 {step.icon}
               </div>
@@ -174,7 +177,7 @@ export default function MerciPage() {
                       background: "rgba(0,255,200,.1)", padding: "2px 8px",
                       borderRadius: "10px", letterSpacing: ".06em",
                     }}>
-                      ✓ FAIT
+                      <Check size={10} strokeWidth={2.5} style={{display:"inline",verticalAlign:"middle"}} /> FAIT
                     </span>
                   )}
                 </p>
