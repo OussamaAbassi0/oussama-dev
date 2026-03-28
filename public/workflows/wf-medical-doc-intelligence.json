@@ -8,617 +8,654 @@
         "responseMode": "responseNode",
         "options": {}
       },
-      "id": "a1b2c3d4-0001-4000-8000-000000000001",
+      "id": "med-001",
       "name": "Webhook — Receive Document",
       "type": "n8n-nodes-base.webhook",
-      "typeVersion": 2,
-      "position": [200, 400]
+      "typeVersion": 1,
+      "position": [240, 400]
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            { "id": "f1", "name": "doc_id", "value": "={{ $now.toMillis() }}", "type": "string" },
-            { "id": "f2", "name": "received_at", "value": "={{ $now.toISO() }}", "type": "string" },
-            { "id": "f3", "name": "source", "value": "={{ $json.source ?? 'webhook' }}", "type": "string" },
-            { "id": "f4", "name": "file_url", "value": "={{ $json.file_url ?? '' }}", "type": "string" },
-            { "id": "f5", "name": "file_base64", "value": "={{ $json.file_base64 ?? '' }}", "type": "string" }
-          ]
-        }
-      },
-      "id": "a1b2c3d4-0002-4000-8000-000000000002",
-      "name": "Set — Init Variables",
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [420, 400]
-    },
-    {
-      "parameters": {
-        "rules": {
-          "rules": [
-            { "outputKey": "url", "conditions": { "options": { "caseSensitive": false }, "conditions": [{ "leftValue": "={{ $json.source }}", "rightValue": "url", "operator": { "type": "string", "operation": "equals" } }] } },
-            { "outputKey": "base64", "conditions": { "options": { "caseSensitive": false }, "conditions": [{ "leftValue": "={{ $json.source }}", "rightValue": "base64", "operator": { "type": "string", "operation": "equals" } }] } },
-            { "outputKey": "gmail", "conditions": { "options": { "caseSensitive": false }, "conditions": [{ "leftValue": "={{ $json.source }}", "rightValue": "gmail", "operator": { "type": "string", "operation": "equals" } }] } }
+        "values": {
+          "string": [
+            { "name": "doc_id", "value": "={{ $now.toMillis().toString() }}" },
+            { "name": "received_at", "value": "={{ $now.toISO() }}" },
+            { "name": "source", "value": "={{ $json.source || 'webhook' }}" },
+            { "name": "file_url", "value": "={{ $json.file_url || '' }}" },
+            { "name": "requester_email", "value": "={{ $json.requester_email || '' }}" }
           ]
         },
         "options": {}
       },
-      "id": "a1b2c3d4-0003-4000-8000-000000000003",
-      "name": "Switch — Source Type",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3,
-      "position": [640, 400]
-    },
-    {
-      "parameters": {
-        "url": "={{ $json.file_url }}",
-        "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "Accept", "value": "application/pdf" }] },
-        "options": { "response": { "response": { "responseFormat": "file" } } }
-      },
-      "id": "a1b2c3d4-0004-4000-8000-000000000004",
-      "name": "HTTP — Download PDF",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [860, 260]
+      "id": "med-002",
+      "name": "Set — Init Variables",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [460, 400]
     },
     {
       "parameters": {
         "method": "POST",
         "url": "https://api.pdf.co/v1/pdf/convert/to/text",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "x-api-key", "value": "={{ $credentials.pdfCoApiKey }}" }] },
-        "sendBody": true,
-        "bodyParameters": {
+        "headerParameters": {
           "parameters": [
-            { "name": "url", "value": "={{ $json.file_url }}" },
-            { "name": "async", "value": "false" },
-            { "name": "profiles", "value": "OCR" }
+            { "name": "x-api-key", "value": "={{ $env.PDFCO_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
           ]
-        }
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ url: $json.file_url, async: false, profiles: 'ocr', lang: 'fra+eng' }) }}"
       },
-      "id": "a1b2c3d4-0005-4000-8000-000000000005",
-      "name": "HTTP — PDF.co Extract Text (OCR)",
+      "id": "med-003",
+      "name": "HTTP — PDF.co OCR Extract",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [860, 400]
+      "typeVersion": 4.1,
+      "position": [680, 400]
     },
     {
       "parameters": {
         "conditions": {
-          "options": { "caseSensitive": false },
-          "conditions": [
-            { "leftValue": "={{ $json.error }}", "rightValue": "", "operator": { "type": "string", "operation": "equals" } },
-            { "leftValue": "={{ $json.body }}", "rightValue": "", "operator": { "type": "string", "operation": "notEquals" } }
-          ],
-          "combinator": "and"
+          "string": [
+            {
+              "value1": "={{ $json.body }}",
+              "operation": "isNotEmpty"
+            }
+          ]
         }
       },
-      "id": "a1b2c3d4-0006-4000-8000-000000000006",
-      "name": "IF — Extraction OK?",
+      "id": "med-004",
+      "name": "IF — OCR Success?",
       "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [1080, 400]
+      "typeVersion": 1,
+      "position": [900, 400]
     },
     {
       "parameters": {
-        "jsCode": "const raw = $input.first().json.body || '';\n// Normalize: remove extra whitespace, fix common OCR errors\nconst cleaned = raw\n  .replace(/\\s+/g, ' ')\n  .replace(/[|]{1}/g, 'I')\n  .replace(/0(?=[a-zA-Z])/g, 'O')\n  .trim();\n\nreturn [{ json: { \n  raw_text: raw,\n  cleaned_text: cleaned,\n  char_count: cleaned.length,\n  word_count: cleaned.split(' ').length,\n  doc_id: $input.first().json.doc_id\n}}];"
+        "jsCode": "const raw = $input.first().json.body || '';\nconst docMeta = $input.first().json;\nconst cleaned = raw\n  .replace(/\\s+/g, ' ')\n  .replace(/[|]/g, 'I')\n  .replace(/0(?=[a-zA-Z])/g, 'O')\n  .trim();\nreturn [{ json: {\n  raw_text: raw,\n  cleaned_text: cleaned,\n  char_count: cleaned.length,\n  word_count: cleaned.split(' ').length,\n  doc_id: docMeta.doc_id,\n  source: docMeta.source,\n  file_url: docMeta.file_url,\n  received_at: docMeta.received_at,\n  requester_email: docMeta.requester_email\n}}];"
       },
-      "id": "a1b2c3d4-0007-4000-8000-000000000007",
+      "id": "med-005",
       "name": "Code — Clean & Normalize Text",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1300, 360]
-    },
-    {
-      "parameters": {
-        "resource": "text",
-        "operation": "message",
-        "modelId": { "value": "gpt-4o" },
-        "messages": {
-          "values": [
-            {
-              "role": "system",
-              "content": "You are a medical document classification expert. Analyze the provided medical document text and classify it into exactly one of these categories:\n- PRESCRIPTION: Drug prescriptions, medication orders\n- LAB_RESULT: Blood tests, urine analysis, culture results, pathology\n- IMAGING_REPORT: X-ray, MRI, CT scan, ultrasound reports\n- REFERRAL: Patient referral letters between practitioners\n- DISCHARGE_SUMMARY: Hospital discharge summaries\n- CONSULTATION_NOTE: Doctor consultation notes\n- UNKNOWN: Cannot be classified\n\nRespond with a JSON object: { \"type\": \"CATEGORY\", \"confidence\": 0.95, \"reason\": \"brief reason\", \"language\": \"fr|en|ar\", \"urgency\": \"ROUTINE|URGENT|STAT\" }"
-            },
-            {
-              "role": "user",
-              "content": "Classify this medical document:\n\n{{ $json.cleaned_text }}"
-            }
-          ]
-        },
-        "options": { "temperature": 0.1, "maxTokens": 300 }
-      },
-      "id": "a1b2c3d4-0008-4000-8000-000000000008",
-      "name": "GPT-4o — Classify Document Type",
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1.4,
-      "position": [1520, 360]
-    },
-    {
-      "parameters": {
-        "jsCode": "const response = $input.first().json.message.content;\nlet classification;\ntry {\n  const jsonMatch = response.match(/\\{[\\s\\S]*\\}/);\n  classification = JSON.parse(jsonMatch[0]);\n} catch(e) {\n  classification = { type: 'UNKNOWN', confidence: 0, reason: 'Parse error', urgency: 'ROUTINE', language: 'fr' };\n}\nreturn [{ json: { \n  ...($input.first().json),\n  doc_type: classification.type,\n  doc_confidence: classification.confidence,\n  doc_urgency: classification.urgency,\n  doc_language: classification.language,\n  classification_reason: classification.reason\n}}];"
-      },
-      "id": "a1b2c3d4-0009-4000-8000-000000000009",
-      "name": "Code — Parse Classification",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [1740, 360]
-    },
-    {
-      "parameters": {
-        "rules": {
-          "rules": [
-            { "outputKey": "prescription", "conditions": { "conditions": [{ "leftValue": "={{ $json.doc_type }}", "rightValue": "PRESCRIPTION", "operator": { "type": "string", "operation": "equals" } }] } },
-            { "outputKey": "lab", "conditions": { "conditions": [{ "leftValue": "={{ $json.doc_type }}", "rightValue": "LAB_RESULT", "operator": { "type": "string", "operation": "equals" } }] } },
-            { "outputKey": "imaging", "conditions": { "conditions": [{ "leftValue": "={{ $json.doc_type }}", "rightValue": "IMAGING_REPORT", "operator": { "type": "string", "operation": "equals" } }] } },
-            { "outputKey": "referral", "conditions": { "conditions": [{ "leftValue": "={{ $json.doc_type }}", "rightValue": "REFERRAL", "operator": { "type": "string", "operation": "equals" } }] } },
-            { "outputKey": "other", "conditions": { "conditions": [{ "leftValue": "={{ $json.doc_type }}", "rightValue": "UNKNOWN", "operator": { "type": "string", "operation": "notEquals" } }] } }
-          ]
-        },
-        "options": {}
-      },
-      "id": "a1b2c3d4-0010-4000-8000-000000000010",
-      "name": "Switch — Route by Doc Type",
-      "type": "n8n-nodes-base.switch",
-      "typeVersion": 3,
-      "position": [1960, 360]
-    },
-    {
-      "parameters": {
-        "resource": "text",
-        "operation": "message",
-        "modelId": { "value": "gpt-4o" },
-        "messages": {
-          "values": [
-            {
-              "role": "system",
-              "content": "You are a medical data extraction specialist. Extract ALL information from this prescription document.\n\nReturn a strict JSON with these fields:\n{\n  \"patient\": { \"full_name\": \"\", \"dob\": \"\", \"address\": \"\", \"phone\": \"\", \"social_security\": \"\" },\n  \"prescriber\": { \"full_name\": \"\", \"specialty\": \"\", \"rpps_number\": \"\", \"phone\": \"\", \"address\": \"\", \"date_signed\": \"\" },\n  \"medications\": [\n    { \"name\": \"\", \"inn\": \"\", \"dosage\": \"\", \"form\": \"\", \"route\": \"\", \"frequency\": \"\", \"duration\": \"\", \"quantity\": \"\", \"instructions\": \"\", \"refillable\": false }\n  ],\n  \"diagnosis_hint\": \"\",\n  \"prescription_date\": \"\",\n  \"expiry_date\": \"\",\n  \"is_narcotics\": false,\n  \"is_long_term\": false,\n  \"special_instructions\": \"\",\n  \"extraction_confidence\": 0.95\n}"
-            },
-            {
-              "role": "user",
-              "content": "Extract all data from this prescription:\n\n{{ $json.cleaned_text }}"
-            }
-          ]
-        },
-        "options": { "temperature": 0.0, "maxTokens": 1500 }
-      },
-      "id": "a1b2c3d4-0011-4000-8000-000000000011",
-      "name": "GPT-4o — Extract Prescription Data",
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1.4,
-      "position": [2180, 200]
-    },
-    {
-      "parameters": {
-        "resource": "text",
-        "operation": "message",
-        "modelId": { "value": "gpt-4o" },
-        "messages": {
-          "values": [
-            {
-              "role": "system",
-              "content": "You are a clinical laboratory data extraction specialist. Extract ALL data from this lab result document.\n\nReturn strict JSON:\n{\n  \"patient\": { \"full_name\": \"\", \"dob\": \"\", \"gender\": \"\", \"sample_id\": \"\" },\n  \"ordering_doctor\": { \"full_name\": \"\", \"specialty\": \"\" },\n  \"lab_info\": { \"lab_name\": \"\", \"accreditation\": \"\", \"analysis_date\": \"\", \"report_date\": \"\" },\n  \"tests\": [\n    { \"name\": \"\", \"code\": \"\", \"value\": \"\", \"unit\": \"\", \"reference_range\": \"\", \"flag\": \"NORMAL|LOW|HIGH|CRITICAL\", \"interpretation\": \"\" }\n  ],\n  \"critical_values\": [],\n  \"overall_interpretation\": \"\",\n  \"recommendations\": \"\",\n  \"extraction_confidence\": 0.95\n}"
-            },
-            {
-              "role": "user",
-              "content": "Extract all data from this lab result:\n\n{{ $json.cleaned_text }}"
-            }
-          ]
-        },
-        "options": { "temperature": 0.0, "maxTokens": 2000 }
-      },
-      "id": "a1b2c3d4-0012-4000-8000-000000000012",
-      "name": "GPT-4o — Extract Lab Results",
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1.4,
-      "position": [2180, 380]
-    },
-    {
-      "parameters": {
-        "resource": "text",
-        "operation": "message",
-        "modelId": { "value": "gpt-4o" },
-        "messages": {
-          "values": [
-            {
-              "role": "system",
-              "content": "You are a radiology report extraction specialist. Extract all structured data from this imaging report.\n\nReturn strict JSON:\n{\n  \"patient\": { \"full_name\": \"\", \"dob\": \"\", \"exam_id\": \"\" },\n  \"radiologist\": { \"full_name\": \"\", \"specialty\": \"\" },\n  \"exam\": { \"type\": \"\", \"modality\": \"\", \"body_part\": \"\", \"date\": \"\", \"clinical_indication\": \"\" },\n  \"findings\": \"\",\n  \"impression\": \"\",\n  \"recommendations\": \"\",\n  \"critical_finding\": false,\n  \"follow_up_required\": false,\n  \"follow_up_delay\": \"\",\n  \"extraction_confidence\": 0.95\n}"
-            },
-            {
-              "role": "user",
-              "content": "Extract all data from this imaging report:\n\n{{ $json.cleaned_text }}"
-            }
-          ]
-        },
-        "options": { "temperature": 0.0, "maxTokens": 1200 }
-      },
-      "id": "a1b2c3d4-0013-4000-8000-000000000013",
-      "name": "GPT-4o — Extract Imaging Report",
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1.4,
-      "position": [2180, 560]
-    },
-    {
-      "parameters": {
-        "jsCode": "const item = $input.first().json;\nconst raw = item.message?.content || '{}';\nlet extracted = {};\ntry {\n  const match = raw.match(/\\{[\\s\\S]*\\}/);\n  extracted = JSON.parse(match[0]);\n} catch(e) { extracted = { extraction_error: true }; }\n\n// Validation rules\nconst errors = [];\nif (!extracted.patient?.full_name) errors.push('MISSING_PATIENT_NAME');\nif (!extracted.prescriber?.full_name && item.doc_type === 'PRESCRIPTION') errors.push('MISSING_PRESCRIBER');\nif (!extracted.prescription_date && item.doc_type === 'PRESCRIPTION') errors.push('MISSING_DATE');\nif (extracted.medications?.length === 0) errors.push('NO_MEDICATIONS_FOUND');\n\nreturn [{ json: {\n  ...item,\n  extracted_data: extracted,\n  validation_errors: errors,\n  is_valid: errors.length === 0,\n  has_critical: (\n    extracted.doc_urgency === 'STAT' || \n    extracted.critical_values?.length > 0 ||\n    extracted.critical_finding === true ||\n    extracted.is_narcotics === true\n  )\n}}];"
-      },
-      "id": "a1b2c3d4-0014-4000-8000-000000000014",
-      "name": "Code — Validate Extracted Data",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [2400, 380]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "conditions": [{ "leftValue": "={{ $json.is_valid }}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } }]
-        }
-      },
-      "id": "a1b2c3d4-0015-4000-8000-000000000015",
-      "name": "IF — Valid Data?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [2620, 380]
-    },
-    {
-      "parameters": {
-        "url": "={{ $env.PATIENT_API_BASE }}/patients/search",
-        "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "Authorization", "value": "Bearer {{ $env.PATIENT_API_TOKEN }}" }, { "name": "Content-Type", "value": "application/json" }] },
-        "sendBody": true,
-        "bodyParameters": {
-          "parameters": [
-            { "name": "name", "value": "={{ $json.extracted_data.patient.full_name }}" },
-            { "name": "dob", "value": "={{ $json.extracted_data.patient.dob }}" }
-          ]
-        }
-      },
-      "id": "a1b2c3d4-0016-4000-8000-000000000016",
-      "name": "HTTP — Search Patient in System",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [2840, 320]
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "conditions": [{ "leftValue": "={{ $json.found }}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } }]
-        }
-      },
-      "id": "a1b2c3d4-0017-4000-8000-000000000017",
-      "name": "IF — Patient Exists?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [3060, 320]
+      "position": [1120, 320]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "={{ $env.PATIENT_API_BASE }}/patients",
+        "url": "https://api.openai.com/v1/chat/completions",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "Authorization", "value": "Bearer {{ $env.PATIENT_API_TOKEN }}" }, { "name": "Content-Type", "value": "application/json" }] },
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ full_name: $json.extracted_data.patient.full_name, dob: $json.extracted_data.patient.dob, phone: $json.extracted_data.patient.phone, address: $json.extracted_data.patient.address, created_at: $now.toISO(), source: 'ai_pipeline' }) }}"
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.1, max_tokens: 300, messages: [{ role: 'system', content: 'You are a medical document classifier. Classify the document into exactly one of: PRESCRIPTION, LAB_RESULT, IMAGING_REPORT, REFERRAL, DISCHARGE_SUMMARY, CONSULTATION_NOTE, UNKNOWN. Respond ONLY with valid JSON: {\"type\":\"CATEGORY\",\"confidence\":0.95,\"urgency\":\"ROUTINE\",\"language\":\"fr\"} where urgency is ROUTINE, URGENT, or STAT.' }, { role: 'user', content: $json.cleaned_text.substring(0, 3000) }] }) }}"
       },
-      "id": "a1b2c3d4-0018-4000-8000-000000000018",
-      "name": "HTTP — Create New Patient",
+      "id": "med-006",
+      "name": "HTTP — GPT-4o Classify Document",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [3280, 240]
+      "typeVersion": 4.1,
+      "position": [1340, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst raw = item.choices?.[0]?.message?.content || '{}';\nlet cls = {};\ntry {\n  const m = raw.match(/\\{[\\s\\S]*\\}/);\n  cls = m ? JSON.parse(m[0]) : {};\n} catch(e) {\n  cls = { type: 'UNKNOWN', confidence: 0, urgency: 'ROUTINE', language: 'fr' };\n}\nreturn [{ json: {\n  ...item,\n  doc_type: cls.type || 'UNKNOWN',\n  doc_confidence: cls.confidence || 0,\n  doc_urgency: cls.urgency || 'ROUTINE',\n  doc_language: cls.language || 'fr'\n}}];"
+      },
+      "id": "med-007",
+      "name": "Code — Parse Classification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1560, 320]
+    },
+    {
+      "parameters": {
+        "dataType": "string",
+        "value1": "={{ $json.doc_type }}",
+        "rules": {
+          "rules": [
+            { "value2": "PRESCRIPTION" },
+            { "value2": "LAB_RESULT" },
+            { "value2": "IMAGING_REPORT" },
+            { "value2": "REFERRAL" },
+            { "value2": "DISCHARGE_SUMMARY" }
+          ]
+        },
+        "fallbackOutput": 5
+      },
+      "id": "med-008",
+      "name": "Switch — Route by Doc Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 1,
+      "position": [1780, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.0, max_tokens: 1500, messages: [{ role: 'system', content: 'Extract ALL data from this prescription. Return ONLY valid JSON: {\"patient\":{\"full_name\":\"\",\"dob\":\"\",\"address\":\"\",\"phone\":\"\",\"social_security\":\"\"},\"prescriber\":{\"full_name\":\"\",\"specialty\":\"\",\"rpps_number\":\"\",\"phone\":\"\",\"date_signed\":\"\"},\"medications\":[{\"name\":\"\",\"dosage\":\"\",\"form\":\"\",\"frequency\":\"\",\"duration\":\"\",\"quantity\":\"\",\"instructions\":\"\",\"refillable\":false}],\"prescription_date\":\"\",\"is_narcotics\":false,\"is_long_term\":false,\"special_instructions\":\"\",\"extraction_confidence\":0.95}' }, { role: 'user', content: $json.cleaned_text }] }) }}"
+      },
+      "id": "med-009",
+      "name": "HTTP — GPT-4o Extract Prescription",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2000, 160]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.0, max_tokens: 2000, messages: [{ role: 'system', content: 'Extract ALL data from this lab result. Return ONLY valid JSON: {\"patient\":{\"full_name\":\"\",\"dob\":\"\",\"gender\":\"\",\"sample_id\":\"\"},\"ordering_doctor\":{\"full_name\":\"\",\"specialty\":\"\"},\"lab_info\":{\"lab_name\":\"\",\"analysis_date\":\"\",\"report_date\":\"\"},\"tests\":[{\"name\":\"\",\"code\":\"\",\"value\":\"\",\"unit\":\"\",\"reference_range\":\"\",\"flag\":\"NORMAL\",\"interpretation\":\"\"}],\"critical_values\":[],\"overall_interpretation\":\"\",\"extraction_confidence\":0.95}' }, { role: 'user', content: $json.cleaned_text }] }) }}"
+      },
+      "id": "med-010",
+      "name": "HTTP — GPT-4o Extract Lab Results",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2000, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.0, max_tokens: 1200, messages: [{ role: 'system', content: 'Extract ALL data from this imaging report. Return ONLY valid JSON: {\"patient\":{\"full_name\":\"\",\"dob\":\"\",\"exam_id\":\"\"},\"radiologist\":{\"full_name\":\"\",\"specialty\":\"\"},\"exam\":{\"type\":\"\",\"modality\":\"\",\"body_part\":\"\",\"date\":\"\",\"clinical_indication\":\"\"},\"findings\":\"\",\"impression\":\"\",\"recommendations\":\"\",\"critical_finding\":false,\"follow_up_required\":false,\"follow_up_delay\":\"\",\"extraction_confidence\":0.95}' }, { role: 'user', content: $json.cleaned_text }] }) }}"
+      },
+      "id": "med-011",
+      "name": "HTTP — GPT-4o Extract Imaging",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2000, 480]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.0, max_tokens: 1000, messages: [{ role: 'system', content: 'Extract key medical data from this document. Return ONLY valid JSON: {\"patient\":{\"full_name\":\"\",\"dob\":\"\"},\"document_summary\":\"\",\"key_findings\":[],\"recommendations\":\"\",\"follow_up_required\":false,\"extraction_confidence\":0.90}' }, { role: 'user', content: $json.cleaned_text }] }) }}"
+      },
+      "id": "med-012",
+      "name": "HTTP — GPT-4o Extract Other Doc",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2000, 640]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst raw = item.choices?.[0]?.message?.content || '{}';\nlet extracted = {};\ntry {\n  const m = raw.match(/\\{[\\s\\S]*\\}/);\n  extracted = m ? JSON.parse(m[0]) : { extraction_error: true };\n} catch(e) {\n  extracted = { extraction_error: true, raw_response: raw };\n}\n\nconst errors = [];\nif (!extracted.patient?.full_name) errors.push('MISSING_PATIENT_NAME');\nif (extracted.extraction_error) errors.push('GPT_PARSE_ERROR');\n\nconst hasCritical = (\n  item.doc_urgency === 'STAT' ||\n  extracted.critical_values?.length > 0 ||\n  extracted.critical_finding === true ||\n  extracted.is_narcotics === true\n);\n\nreturn [{ json: {\n  ...item,\n  extracted_data: extracted,\n  validation_errors: errors,\n  is_valid: errors.length === 0,\n  has_critical: hasCritical\n}}];"
+      },
+      "id": "med-013",
+      "name": "Code — Parse + Validate Extracted Data",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2220, 400]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.is_valid }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "med-014",
+      "name": "IF — Valid Data?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2440, 400]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $env.PATIENT_API_BASE + '/patients/search?name=' + encodeURIComponent($json.extracted_data.patient.full_name || '') + '&dob=' + encodeURIComponent($json.extracted_data.patient.dob || '') }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.PATIENT_API_TOKEN }}" }
+          ]
+        }
+      },
+      "id": "med-015",
+      "name": "HTTP — Search Patient in System",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [2660, 320]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.found }}",
+              "value2": true
+            }
+          ]
+        }
+      },
+      "id": "med-016",
+      "name": "IF — Patient Exists?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2880, 320]
     },
     {
       "parameters": {
         "method": "PATCH",
-        "url": "={{ $env.PATIENT_API_BASE }}/patients/{{ $json.patient_id }}",
+        "url": "={{ $env.PATIENT_API_BASE + '/patients/' + $json.patient_id }}",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "Authorization", "value": "Bearer {{ $env.PATIENT_API_TOKEN }}" }, { "name": "Content-Type", "value": "application/json" }] },
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.PATIENT_API_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ JSON.stringify({ last_doc_received: $now.toISO(), last_doc_type: $json.doc_type, documents_count: ($json.documents_count || 0) + 1 }) }}"
+        "jsonBody": "={{ JSON.stringify({ last_doc_received: $now.toISO(), last_doc_type: $json.doc_type }) }}"
       },
-      "id": "a1b2c3d4-0019-4000-8000-000000000019",
-      "name": "HTTP — Update Patient Record",
+      "id": "med-017",
+      "name": "HTTP — Update Existing Patient",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [3280, 400]
+      "typeVersion": 4.1,
+      "position": [3100, 240]
     },
     {
       "parameters": {
         "method": "POST",
-        "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart",
+        "url": "={{ $env.PATIENT_API_BASE + '/patients' }}",
         "sendHeaders": true,
-        "headerParameters": { "parameters": [{ "name": "Authorization", "value": "Bearer {{ $credentials.googleDriveOAuth2.access_token }}" }] },
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.PATIENT_API_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ full_name: $json.extracted_data.patient.full_name, dob: $json.extracted_data.patient.dob, phone: $json.extracted_data.patient.phone || '', address: $json.extracted_data.patient.address || '', source: 'ai_pipeline', created_at: $now.toISO() }) }}"
+      },
+      "id": "med-018",
+      "name": "HTTP — Create New Patient",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [3100, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/drive/v3/files?uploadType=media",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.GDRIVE_ACCESS_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/pdf" },
+            { "name": "X-Upload-Content-Type", "value": "application/pdf" }
+          ]
+        },
         "sendBody": true,
         "bodyParameters": {
           "parameters": [
-            { "name": "name", "value": "={{ $json.doc_type }}_{{ $json.extracted_data.patient.full_name }}_{{ $now.format('YYYY-MM-DD') }}.pdf" },
-            { "name": "parents", "value": "={{ $env.GDRIVE_MEDICAL_FOLDER_ID }}" }
+            { "name": "name", "value": "={{ $json.doc_type + '_' + ($json.extracted_data.patient.full_name || 'unknown') + '_' + $now.format('YYYY-MM-DD') + '.pdf' }}" }
           ]
         }
       },
-      "id": "a1b2c3d4-0020-4000-8000-000000000020",
+      "id": "med-019",
       "name": "HTTP — Archive PDF to Google Drive",
       "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [3500, 320]
+      "typeVersion": 4.1,
+      "position": [3320, 320]
     },
     {
       "parameters": {
-        "operation": "appendOrUpdate",
-        "documentId": { "value": "={{ $env.AUDIT_SHEET_ID }}" },
-        "sheetName": { "value": "Medical_Audit_Log" },
-        "columns": {
-          "mappingMode": "defineBelow",
-          "value": {
-            "doc_id": "={{ $json.doc_id }}",
-            "timestamp": "={{ $json.received_at }}",
-            "doc_type": "={{ $json.doc_type }}",
-            "patient_name": "={{ $json.extracted_data.patient.full_name }}",
-            "prescriber": "={{ $json.extracted_data.prescriber?.full_name ?? $json.extracted_data.ordering_doctor?.full_name ?? '' }}",
-            "urgency": "={{ $json.doc_urgency }}",
-            "confidence": "={{ $json.doc_confidence }}",
-            "validation_errors": "={{ $json.validation_errors.join(', ') }}",
-            "drive_link": "={{ $json.drive_file_url ?? '' }}",
-            "processed_by": "n8n-ai-pipeline"
-          }
-        }
-      },
-      "id": "a1b2c3d4-0021-4000-8000-000000000021",
-      "name": "Google Sheets — Audit Log",
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.4,
-      "position": [3720, 320]
-    },
-    {
-      "parameters": {
-        "resource": "text",
-        "operation": "message",
-        "modelId": { "value": "gpt-4o" },
-        "messages": {
-          "values": [
-            {
-              "role": "system",
-              "content": "You are a medical summarization assistant. Generate a concise, structured clinical summary for healthcare professionals. Use professional medical language. Max 150 words. Include: patient identity, document type, key clinical data, urgency level, and recommended action."
-            },
-            {
-              "role": "user",
-              "content": "Generate a clinical summary for:\nType: {{ $json.doc_type }}\nPatient: {{ $json.extracted_data.patient.full_name }}, {{ $json.extracted_data.patient.dob }}\nUrgency: {{ $json.doc_urgency }}\nData: {{ JSON.stringify($json.extracted_data).substring(0, 800) }}"
-            }
+        "method": "POST",
+        "url": "={{ 'https://sheets.googleapis.com/v4/spreadsheets/' + $env.AUDIT_SHEET_ID + '/values/Medical_Audit_Log!A1:append?valueInputOption=USER_ENTERED' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.GDRIVE_ACCESS_TOKEN }}" },
+            { "name": "Content-Type", "value": "application/json" }
           ]
         },
-        "options": { "temperature": 0.3, "maxTokens": 300 }
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ values: [[ $json.doc_id, $json.received_at, $json.doc_type, $json.extracted_data.patient.full_name || '', $json.doc_urgency, $json.doc_confidence, $json.validation_errors.join(', '), 'n8n-ai-pipeline-v2' ]] }) }}"
       },
-      "id": "a1b2c3d4-0022-4000-8000-000000000022",
-      "name": "GPT-4o — Generate Clinical Summary",
-      "type": "n8n-nodes-base.openAi",
-      "typeVersion": 1.4,
-      "position": [3940, 320]
+      "id": "med-020",
+      "name": "HTTP — Google Sheets Audit Log",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [3540, 320]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.OPENAI_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ model: 'gpt-4o', temperature: 0.3, max_tokens: 300, messages: [{ role: 'system', content: 'Generate a concise clinical summary (max 120 words) for healthcare professionals. Include: patient identity, document type, key clinical data, urgency level, recommended action. Use professional medical language.' }, { role: 'user', content: 'Doc type: ' + $json.doc_type + '\\nPatient: ' + ($json.extracted_data.patient.full_name || 'Unknown') + '\\nUrgency: ' + $json.doc_urgency + '\\nData: ' + JSON.stringify($json.extracted_data).substring(0, 800) }] }) }}"
+      },
+      "id": "med-021",
+      "name": "HTTP — GPT-4o Clinical Summary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [3760, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst summary = item.choices?.[0]?.message?.content || 'Summary unavailable';\nreturn [{ json: { ...item, clinical_summary: summary } }];"
+      },
+      "id": "med-022",
+      "name": "Code — Extract Summary Text",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [3980, 320]
     },
     {
       "parameters": {
         "conditions": {
-          "conditions": [
-            { "leftValue": "={{ $json.doc_urgency }}", "rightValue": "STAT", "operator": { "type": "string", "operation": "equals" } },
-            { "leftValue": "={{ $json.has_critical }}", "rightValue": true, "operator": { "type": "boolean", "operation": "equals" } }
-          ],
-          "combinator": "or"
-        }
-      },
-      "id": "a1b2c3d4-0023-4000-8000-000000000023",
-      "name": "IF — Critical / STAT?",
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2,
-      "position": [4160, 320]
-    },
-    {
-      "parameters": {
-        "select": "channel",
-        "channelId": { "value": "C_MEDICAL_URGENT" },
-        "text": "🚨 *ALERTE STAT — Document Médical Critique*\n\n*Patient:* {{ $json.extracted_data.patient.full_name }}\n*Type:* {{ $json.doc_type }}\n*Urgence:* {{ $json.doc_urgency }}\n*Valeurs critiques:* {{ $json.extracted_data.critical_values?.join(', ') ?? 'Voir document' }}\n\n*Résumé clinique:*\n{{ $json.message?.content }}\n\n*Document archivé:* {{ $json.drive_file_url }}\n*Traité le:* {{ $now.format('DD/MM/YYYY HH:mm') }}",
-        "otherOptions": { "mrkdwn": true }
-      },
-      "id": "a1b2c3d4-0024-4000-8000-000000000024",
-      "name": "Slack — URGENT Alert Medical Team",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.2,
-      "position": [4380, 240]
-    },
-    {
-      "parameters": {
-        "fromEmail": "pipeline@clinic.fr",
-        "toEmail": "={{ $json.extracted_data.prescriber?.email ?? $json.extracted_data.ordering_doctor?.email ?? $env.DEFAULT_DOCTOR_EMAIL }}",
-        "subject": "[AI Pipeline] Document reçu — {{ $json.extracted_data.patient.full_name }} ({{ $json.doc_type }})",
-        "emailType": "html",
-        "message": "<h2>📋 Confirmation de réception — Pipeline IA Médical</h2><p><strong>Patient :</strong> {{ $json.extracted_data.patient.full_name }}</p><p><strong>Type de document :</strong> {{ $json.doc_type }}</p><p><strong>Date de traitement :</strong> {{ $now.format('DD/MM/YYYY à HH:mm') }}</p><p><strong>Niveau d'urgence :</strong> {{ $json.doc_urgency }}</p><hr><h3>Résumé clinique IA :</h3><p>{{ $json.message?.content }}</p><hr><p>Document archivé de façon sécurisée. <a href='{{ $json.drive_file_url }}'>Accéder au document</a></p><p style='color:gray;font-size:12px'>Traité automatiquement par le pipeline IA — Vérification humaine recommandée pour les cas STAT.</p>",
-        "options": {}
-      },
-      "id": "a1b2c3d4-0025-4000-8000-000000000025",
-      "name": "Gmail — Notify Treating Doctor",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [4380, 400]
-    },
-    {
-      "parameters": {
-        "resource": "databasePage",
-        "operation": "create",
-        "databaseId": { "value": "={{ $env.NOTION_FOLLOWUP_DB }}" },
-        "title": "Suivi — {{ $json.extracted_data.patient.full_name }} ({{ $json.doc_type }})",
-        "propertiesUi": {
-          "propertyValues": [
-            { "key": "Status", "type": "select", "selectValue": "A traiter" },
-            { "key": "Urgence", "type": "select", "selectValue": "={{ $json.doc_urgency }}" },
-            { "key": "Type document", "type": "select", "selectValue": "={{ $json.doc_type }}" },
-            { "key": "Patient", "type": "richText", "textContent": "={{ $json.extracted_data.patient.full_name }}" },
-            { "key": "Doc ID", "type": "richText", "textContent": "={{ $json.doc_id }}" },
-            { "key": "Drive Link", "type": "url", "urlValue": "={{ $json.drive_file_url }}" },
-            { "key": "Résumé IA", "type": "richText", "textContent": "={{ $json.message?.content }}" }
+          "string": [
+            {
+              "value1": "={{ $json.doc_urgency }}",
+              "operation": "equal",
+              "value2": "STAT"
+            }
           ]
         }
       },
-      "id": "a1b2c3d4-0026-4000-8000-000000000026",
-      "name": "Notion — Create Follow-up Task",
-      "type": "n8n-nodes-base.notion",
-      "typeVersion": 2.2,
-      "position": [4600, 320]
+      "id": "med-023",
+      "name": "IF — Critical or STAT?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [4200, 320]
     },
     {
       "parameters": {
-        "jsCode": "const item = $input.first().json;\n// Generate compliance report\nconst report = {\n  report_id: `COMP-${item.doc_id}`,\n  generated_at: new Date().toISOString(),\n  document_type: item.doc_type,\n  patient_id: item.patient_id || 'PENDING',\n  processing_pipeline: 'n8n-ai-medical-v2',\n  gdpr_compliant: true,\n  data_minimization: true,\n  retention_policy: '7_years',\n  encryption: 'AES-256',\n  ai_model_used: 'gpt-4o',\n  extraction_confidence: item.doc_confidence,\n  human_review_required: item.has_critical || item.doc_confidence < 0.85,\n  audit_trail_id: item.doc_id,\n  processed_fields: Object.keys(item.extracted_data || {}).length,\n  validation_errors: item.validation_errors\n};\n\nreturn [{ json: { ...item, compliance_report: report } }];"
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '🚨 *ALERTE STAT — Document Médical Critique*\\n\\n*Patient:* ' + ($json.extracted_data.patient.full_name || 'N/A') + '\\n*Type:* ' + $json.doc_type + '\\n*Urgence:* ' + $json.doc_urgency + '\\n*Doc ID:* ' + $json.doc_id + '\\n\\n*Résumé clinique:*\\n' + $json.clinical_summary }) }}"
       },
-      "id": "a1b2c3d4-0027-4000-8000-000000000027",
+      "id": "med-024",
+      "name": "HTTP — Slack STAT Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [4420, 240]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.sendgrid.com/v3/mail/send",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.SENDGRID_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ personalizations: [{ to: [{ email: $json.requester_email || $env.DEFAULT_DOCTOR_EMAIL }] }], from: { email: 'pipeline@clinic.fr', name: 'Pipeline IA Médical' }, subject: '[AI Pipeline] Document traité — ' + ($json.extracted_data.patient.full_name || 'N/A') + ' (' + $json.doc_type + ')', content: [{ type: 'text/html', value: '<h2>Document médical traité</h2><p><strong>Patient:</strong> ' + ($json.extracted_data.patient.full_name || 'N/A') + '</p><p><strong>Type:</strong> ' + $json.doc_type + '</p><p><strong>Urgence:</strong> ' + $json.doc_urgency + '</p><hr><h3>Résumé clinique IA :</h3><p>' + $json.clinical_summary + '</p><p style=\"color:gray;font-size:12px\">Traité automatiquement par Pipeline IA — Vérification humaine recommandée pour cas STAT.</p>' }] }) }}"
+      },
+      "id": "med-025",
+      "name": "HTTP — SendGrid Notify Doctor",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [4420, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.notion.com/v1/pages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "={{ 'Bearer ' + $env.NOTION_API_KEY }}" },
+            { "name": "Content-Type", "value": "application/json" },
+            { "name": "Notion-Version", "value": "2022-06-28" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ parent: { database_id: $env.NOTION_FOLLOWUP_DB }, properties: { Name: { title: [{ text: { content: 'Suivi — ' + ($json.extracted_data.patient.full_name || 'N/A') + ' (' + $json.doc_type + ')' } }] }, Status: { select: { name: 'À traiter' } }, Urgence: { select: { name: $json.doc_urgency } }, 'Type Document': { select: { name: $json.doc_type } }, 'Doc ID': { rich_text: [{ text: { content: $json.doc_id } }] }, 'Résumé IA': { rich_text: [{ text: { content: $json.clinical_summary.substring(0, 2000) } }] } } }) }}"
+      },
+      "id": "med-026",
+      "name": "HTTP — Notion Create Follow-up Task",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [4640, 320]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first().json;\nconst report = {\n  report_id: 'COMP-' + item.doc_id,\n  generated_at: new Date().toISOString(),\n  document_type: item.doc_type,\n  processing_pipeline: 'n8n-ai-medical-v2',\n  gdpr_compliant: true,\n  data_minimization: true,\n  retention_policy: '7_years',\n  encryption: 'AES-256',\n  ai_model_used: 'gpt-4o',\n  extraction_confidence: item.doc_confidence,\n  human_review_required: item.has_critical || item.doc_confidence < 0.85,\n  audit_trail_id: item.doc_id,\n  validation_errors: item.validation_errors\n};\nreturn [{ json: { ...item, compliance_report: report, processing_status: 'SUCCESS' } }];"
+      },
+      "id": "med-027",
       "name": "Code — Generate Compliance Report",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [4820, 320]
+      "position": [4860, 320]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={{ JSON.stringify({ success: true, doc_id: $json.doc_id, doc_type: $json.doc_type, patient: $json.extracted_data?.patient?.full_name, urgency: $json.doc_urgency, notion_task: $json.id, compliance_report_id: $json.compliance_report?.report_id, processed_at: $now.toISO() }) }}"
+        "responseBody": "={{ JSON.stringify({ success: true, doc_id: $json.doc_id, doc_type: $json.doc_type, patient: $json.extracted_data.patient.full_name, urgency: $json.doc_urgency, compliance_report_id: $json.compliance_report.report_id, processed_at: $now.toISO() }) }}"
       },
-      "id": "a1b2c3d4-0028-4000-8000-000000000028",
+      "id": "med-028",
       "name": "Respond — Success",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [5040, 320]
+      "position": [5080, 320]
     },
     {
       "parameters": {
-        "fromEmail": "pipeline-errors@clinic.fr",
-        "toEmail": "={{ $env.ADMIN_EMAIL }}",
-        "subject": "⚠️ [Pipeline IA] Erreur traitement document {{ $json.doc_id }}",
-        "emailType": "html",
-        "message": "<h2>⚠️ Erreur dans le Pipeline IA Médical</h2><p><strong>Document ID:</strong> {{ $json.doc_id }}</p><p><strong>Erreurs de validation:</strong> {{ $json.validation_errors?.join(', ') }}</p><p><strong>Type détecté:</strong> {{ $json.doc_type }}</p><p><strong>Confiance OCR:</strong> {{ $json.doc_confidence }}</p><p>Veuillez traiter ce document manuellement.</p>",
-        "options": {}
+        "method": "POST",
+        "url": "={{ $env.SLACK_WEBHOOK_URL }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ text: '❌ *Erreur Pipeline Médical*\\nDoc ID: ' + $json.doc_id + '\\nErreurs: ' + ($json.validation_errors || ['OCR_FAILED']).join(', ') + '\\nAction requise: traitement manuel' }) }}"
       },
-      "id": "a1b2c3d4-0029-4000-8000-000000000029",
-      "name": "Gmail — Error Notification",
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [2840, 520]
-    },
-    {
-      "parameters": {
-        "select": "channel",
-        "channelId": { "value": "C_PIPELINE_ERRORS" },
-        "text": "❌ *Erreur Pipeline Médical*\nDoc ID: `{{ $json.doc_id }}`\nErreurs: {{ $json.validation_errors?.join(', ') }}\nType: {{ $json.doc_type }} (conf: {{ $json.doc_confidence }})\nAction requise : traitement manuel",
-        "otherOptions": {}
-      },
-      "id": "a1b2c3d4-0030-4000-8000-000000000030",
-      "name": "Slack — Error Channel",
-      "type": "n8n-nodes-base.slack",
-      "typeVersion": 2.2,
-      "position": [2840, 640]
+      "id": "med-029",
+      "name": "HTTP — Slack Error Alert",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [1120, 500]
     },
     {
       "parameters": {
         "respondWith": "json",
-        "responseBody": "={ \"success\": false, \"doc_id\": \"{{ $json.doc_id }}\", \"errors\": {{ JSON.stringify($json.validation_errors) }}, \"message\": \"Document requires manual review\" }"
+        "responseBody": "={{ JSON.stringify({ success: false, doc_id: $json.doc_id, errors: $json.validation_errors, message: 'Document requires manual review' }) }}"
       },
-      "id": "a1b2c3d4-0031-4000-8000-000000000031",
+      "id": "med-030",
       "name": "Respond — Error",
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1,
-      "position": [3060, 580]
+      "position": [1340, 500]
     },
     {
       "parameters": {
-        "content": "## 🏥 AI Medical Document Intelligence Pipeline\n\n**Flux principal :**\n1. Réception webhook (PDF URL ou base64)\n2. OCR via PDF.co\n3. Classification GPT-4o (6 types de documents)\n4. Extraction structurée spécialisée par type\n5. Validation des données extraites\n6. Recherche/création patient dans le système\n7. Archivage Google Drive\n8. Log audit Google Sheets\n9. Résumé clinique GPT-4o\n10. Alertes STAT via Slack\n11. Notification médecin traitant\n12. Tâche de suivi Notion\n13. Rapport de conformité RGPD\n\n**Cas d'erreur :**\n- Email admin + alerte Slack si validation échoue\n\n**Variables d'environnement requises :**\n- PATIENT_API_BASE, PATIENT_API_TOKEN\n- GDRIVE_MEDICAL_FOLDER_ID\n- AUDIT_SHEET_ID\n- NOTION_FOLLOWUP_DB\n- ADMIN_EMAIL, DEFAULT_DOCTOR_EMAIL",
-        "height": 380,
-        "width": 500
+        "content": "## 🏥 AI Medical Document Intelligence Pipeline v2\n\n**Variables d'env requises (Settings > Variables) :**\n• OPENAI_API_KEY\n• PDFCO_API_KEY (pdf.co)\n• PATIENT_API_BASE (ex: https://your-api.com)\n• PATIENT_API_TOKEN\n• GDRIVE_ACCESS_TOKEN\n• AUDIT_SHEET_ID\n• NOTION_API_KEY\n• NOTION_FOLLOWUP_DB (DB ID Notion)\n• SLACK_WEBHOOK_URL\n• SENDGRID_API_KEY\n• DEFAULT_DOCTOR_EMAIL\n\n**Flux :**\n1. Webhook POST /medical-doc\n2. OCR PDF → texte brut\n3. GPT-4o → classification (6 types)\n4. GPT-4o → extraction structurée\n5. Validation des données\n6. Patient lookup/create\n7. Archive Drive + Audit Sheets\n8. Résumé clinique GPT-4o\n9. Alerte STAT Slack si urgence\n10. Email médecin + tâche Notion\n11. Rapport conformité RGPD",
+        "height": 420,
+        "width": 460,
+        "color": 5
       },
-      "id": "a1b2c3d4-0032-4000-8000-000000000032",
-      "name": "Sticky Note — Documentation",
+      "id": "med-031",
+      "name": "📋 Documentation",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
-      "position": [200, 700]
+      "position": [240, 660]
     }
   ],
   "connections": {
-    "Webhook — Receive Document": { "main": [[{ "node": "Set — Init Variables", "type": "main", "index": 0 }]] },
-    "Set — Init Variables": { "main": [[{ "node": "Switch — Source Type", "type": "main", "index": 0 }]] },
-    "Switch — Source Type": {
-      "main": [
-        [{ "node": "HTTP — Download PDF", "type": "main", "index": 0 }],
-        [{ "node": "HTTP — PDF.co Extract Text (OCR)", "type": "main", "index": 0 }],
-        [{ "node": "HTTP — PDF.co Extract Text (OCR)", "type": "main", "index": 0 }]
-      ]
+    "Webhook — Receive Document": {
+      "main": [[{ "node": "Set — Init Variables", "type": "main", "index": 0 }]]
     },
-    "HTTP — Download PDF": { "main": [[{ "node": "HTTP — PDF.co Extract Text (OCR)", "type": "main", "index": 0 }]] },
-    "HTTP — PDF.co Extract Text (OCR)": { "main": [[{ "node": "IF — Extraction OK?", "type": "main", "index": 0 }]] },
-    "IF — Extraction OK?": {
+    "Set — Init Variables": {
+      "main": [[{ "node": "HTTP — PDF.co OCR Extract", "type": "main", "index": 0 }]]
+    },
+    "HTTP — PDF.co OCR Extract": {
+      "main": [[{ "node": "IF — OCR Success?", "type": "main", "index": 0 }]]
+    },
+    "IF — OCR Success?": {
       "main": [
         [{ "node": "Code — Clean & Normalize Text", "type": "main", "index": 0 }],
-        [{ "node": "Gmail — Error Notification", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — Slack Error Alert", "type": "main", "index": 0 }]
       ]
     },
-    "Code — Clean & Normalize Text": { "main": [[{ "node": "GPT-4o — Classify Document Type", "type": "main", "index": 0 }]] },
-    "GPT-4o — Classify Document Type": { "main": [[{ "node": "Code — Parse Classification", "type": "main", "index": 0 }]] },
-    "Code — Parse Classification": { "main": [[{ "node": "Switch — Route by Doc Type", "type": "main", "index": 0 }]] },
+    "Code — Clean & Normalize Text": {
+      "main": [[{ "node": "HTTP — GPT-4o Classify Document", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Classify Document": {
+      "main": [[{ "node": "Code — Parse Classification", "type": "main", "index": 0 }]]
+    },
+    "Code — Parse Classification": {
+      "main": [[{ "node": "Switch — Route by Doc Type", "type": "main", "index": 0 }]]
+    },
     "Switch — Route by Doc Type": {
       "main": [
-        [{ "node": "GPT-4o — Extract Prescription Data", "type": "main", "index": 0 }],
-        [{ "node": "GPT-4o — Extract Lab Results", "type": "main", "index": 0 }],
-        [{ "node": "GPT-4o — Extract Imaging Report", "type": "main", "index": 0 }],
-        [{ "node": "Code — Validate Extracted Data", "type": "main", "index": 0 }],
-        [{ "node": "Code — Validate Extracted Data", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — GPT-4o Extract Prescription", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Extract Lab Results", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Extract Imaging", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Extract Other Doc", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Extract Other Doc", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — GPT-4o Extract Other Doc", "type": "main", "index": 0 }]
       ]
     },
-    "GPT-4o — Extract Prescription Data": { "main": [[{ "node": "Code — Validate Extracted Data", "type": "main", "index": 0 }]] },
-    "GPT-4o — Extract Lab Results": { "main": [[{ "node": "Code — Validate Extracted Data", "type": "main", "index": 0 }]] },
-    "GPT-4o — Extract Imaging Report": { "main": [[{ "node": "Code — Validate Extracted Data", "type": "main", "index": 0 }]] },
-    "Code — Validate Extracted Data": { "main": [[{ "node": "IF — Valid Data?", "type": "main", "index": 0 }]] },
+    "HTTP — GPT-4o Extract Prescription": {
+      "main": [[{ "node": "Code — Parse + Validate Extracted Data", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Extract Lab Results": {
+      "main": [[{ "node": "Code — Parse + Validate Extracted Data", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Extract Imaging": {
+      "main": [[{ "node": "Code — Parse + Validate Extracted Data", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Extract Other Doc": {
+      "main": [[{ "node": "Code — Parse + Validate Extracted Data", "type": "main", "index": 0 }]]
+    },
+    "Code — Parse + Validate Extracted Data": {
+      "main": [[{ "node": "IF — Valid Data?", "type": "main", "index": 0 }]]
+    },
     "IF — Valid Data?": {
       "main": [
         [{ "node": "HTTP — Search Patient in System", "type": "main", "index": 0 }],
-        [{ "node": "Gmail — Error Notification", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — Slack Error Alert", "type": "main", "index": 0 }]
       ]
     },
-    "HTTP — Search Patient in System": { "main": [[{ "node": "IF — Patient Exists?", "type": "main", "index": 0 }]] },
+    "HTTP — Search Patient in System": {
+      "main": [[{ "node": "IF — Patient Exists?", "type": "main", "index": 0 }]]
+    },
     "IF — Patient Exists?": {
       "main": [
-        [{ "node": "HTTP — Update Patient Record", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — Update Existing Patient", "type": "main", "index": 0 }],
         [{ "node": "HTTP — Create New Patient", "type": "main", "index": 0 }]
       ]
     },
-    "HTTP — Create New Patient": { "main": [[{ "node": "HTTP — Archive PDF to Google Drive", "type": "main", "index": 0 }]] },
-    "HTTP — Update Patient Record": { "main": [[{ "node": "HTTP — Archive PDF to Google Drive", "type": "main", "index": 0 }]] },
-    "HTTP — Archive PDF to Google Drive": { "main": [[{ "node": "Google Sheets — Audit Log", "type": "main", "index": 0 }]] },
-    "Google Sheets — Audit Log": { "main": [[{ "node": "GPT-4o — Generate Clinical Summary", "type": "main", "index": 0 }]] },
-    "GPT-4o — Generate Clinical Summary": { "main": [[{ "node": "IF — Critical / STAT?", "type": "main", "index": 0 }]] },
-    "IF — Critical / STAT?": {
+    "HTTP — Update Existing Patient": {
+      "main": [[{ "node": "HTTP — Archive PDF to Google Drive", "type": "main", "index": 0 }]]
+    },
+    "HTTP — Create New Patient": {
+      "main": [[{ "node": "HTTP — Archive PDF to Google Drive", "type": "main", "index": 0 }]]
+    },
+    "HTTP — Archive PDF to Google Drive": {
+      "main": [[{ "node": "HTTP — Google Sheets Audit Log", "type": "main", "index": 0 }]]
+    },
+    "HTTP — Google Sheets Audit Log": {
+      "main": [[{ "node": "HTTP — GPT-4o Clinical Summary", "type": "main", "index": 0 }]]
+    },
+    "HTTP — GPT-4o Clinical Summary": {
+      "main": [[{ "node": "Code — Extract Summary Text", "type": "main", "index": 0 }]]
+    },
+    "Code — Extract Summary Text": {
+      "main": [[{ "node": "IF — Critical or STAT?", "type": "main", "index": 0 }]]
+    },
+    "IF — Critical or STAT?": {
       "main": [
-        [{ "node": "Slack — URGENT Alert Medical Team", "type": "main", "index": 0 }, { "node": "Gmail — Notify Treating Doctor", "type": "main", "index": 0 }],
-        [{ "node": "Gmail — Notify Treating Doctor", "type": "main", "index": 0 }]
+        [{ "node": "HTTP — Slack STAT Alert", "type": "main", "index": 0 }, { "node": "HTTP — SendGrid Notify Doctor", "type": "main", "index": 0 }],
+        [{ "node": "HTTP — SendGrid Notify Doctor", "type": "main", "index": 0 }]
       ]
     },
-    "Slack — URGENT Alert Medical Team": { "main": [[{ "node": "Notion — Create Follow-up Task", "type": "main", "index": 0 }]] },
-    "Gmail — Notify Treating Doctor": { "main": [[{ "node": "Notion — Create Follow-up Task", "type": "main", "index": 0 }]] },
-    "Notion — Create Follow-up Task": { "main": [[{ "node": "Code — Generate Compliance Report", "type": "main", "index": 0 }]] },
-    "Code — Generate Compliance Report": { "main": [[{ "node": "Respond — Success", "type": "main", "index": 0 }]] },
-    "Gmail — Error Notification": { "main": [[{ "node": "Slack — Error Channel", "type": "main", "index": 0 }]] },
-    "Slack — Error Channel": { "main": [[{ "node": "Respond — Error", "type": "main", "index": 0 }]] }
+    "HTTP — Slack STAT Alert": {
+      "main": [[{ "node": "HTTP — Notion Create Follow-up Task", "type": "main", "index": 0 }]]
+    },
+    "HTTP — SendGrid Notify Doctor": {
+      "main": [[{ "node": "HTTP — Notion Create Follow-up Task", "type": "main", "index": 0 }]]
+    },
+    "HTTP — Notion Create Follow-up Task": {
+      "main": [[{ "node": "Code — Generate Compliance Report", "type": "main", "index": 0 }]]
+    },
+    "Code — Generate Compliance Report": {
+      "main": [[{ "node": "Respond — Success", "type": "main", "index": 0 }]]
+    },
+    "HTTP — Slack Error Alert": {
+      "main": [[{ "node": "Respond — Error", "type": "main", "index": 0 }]]
+    }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1",
-    "saveManualExecutions": true,
-    "callerPolicy": "workflowsFromSameOwner",
-    "errorWorkflow": ""
+    "saveManualExecutions": true
   },
-  "versionId": "a1b2c3d4-ffff-4000-8000-ffffffffffff",
-  "id": "wf-medical-doc-intelligence",
+  "id": "wf-medical-doc-intelligence-v2",
   "meta": {
-    "templateCredsSetupCompleted": false,
-    "description": "Pipeline IA complet pour le traitement automatique des documents médicaux (ordonnances, bilans, imagerie). OCR → classification → extraction structurée → validation → archivage → alertes."
-  },
-  "tags": [
-    { "id": "tag-medical", "name": "Medical" },
-    { "id": "tag-ai", "name": "AI/GPT-4o" },
-    { "id": "tag-ocr", "name": "OCR" },
-    { "id": "tag-automation", "name": "Automation" }
-  ]
+    "templateCredsSetupCompleted": false
+  }
 }
