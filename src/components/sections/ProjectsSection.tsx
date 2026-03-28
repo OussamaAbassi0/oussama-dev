@@ -4,7 +4,59 @@ import Image from "next/image";
 import Link from "next/link";
 import { useFadeIn } from "@/hooks/useFadeIn";
 import { useLang } from "@/lib/LangContext";
-import { Calendar, Rocket, Wrench, Star } from "lucide-react";
+import {
+  Calendar, Rocket, Wrench, Star, Clock, Package, Bot, Mail, Link2,
+  Zap, TrendingDown, ClipboardList, DollarSign, Brain, TrendingUp,
+  Target, Flame, Send, Users, Tag, ShoppingCart, Radio, BarChart3,
+  CreditCard, ShoppingBag, Activity, FileText, Lock, Smartphone,
+  CheckCircle2, Settings, X, Circle,
+} from "lucide-react";
+
+/* ── Emoji → Lucide maps ─────────────────────────────────── */
+const METRIC_ICON_MAP: Record<string, React.ReactNode> = {
+  "⏱":  <Clock size={12} />,
+  "📦":  <Package size={12} />,
+  "🆓":  <Star size={12} />,
+  "🤖":  <Bot size={12} />,
+  "📧":  <Mail size={12} />,
+  "🔗":  <Link2 size={12} />,
+  "⚡":  <Zap size={12} />,
+  "📉":  <TrendingDown size={12} />,
+  "📋":  <ClipboardList size={12} />,
+  "🛠":  <Wrench size={12} />,
+  "💰":  <DollarSign size={12} />,
+  "🧠":  <Brain size={12} />,
+  "📈":  <TrendingUp size={12} />,
+  "🎯":  <Target size={12} />,
+  "🔥":  <Flame size={12} />,
+  "📅":  <Calendar size={12} />,
+  "✅":  <CheckCircle2 size={12} />,
+  "📝":  <FileText size={12} />,
+  "🕐":  <Clock size={12} />,
+  "🔴":  <Circle size={12} />,
+  "⭐":  <Star size={12} />,
+  "📊":  <BarChart3 size={12} />,
+  "🔒":  <Lock size={12} />,
+  "🛒":  <ShoppingCart size={12} />,
+  "📱":  <Smartphone size={12} />,
+  "🤝":  <Users size={12} />,
+};
+
+const N8N_EMOJI_MAP: Record<string, React.ReactNode> = {
+  "🎯":  <Target size={20} />,
+  "🔥":  <Flame size={20} />,
+  "📨":  <Send size={20} />,
+  "👥":  <Users size={20} />,
+  "🚀":  <Rocket size={20} />,
+  "🎫":  <Tag size={20} />,
+  "🛒":  <ShoppingCart size={20} />,
+  "📡":  <Radio size={20} />,
+  "📊":  <BarChart3 size={20} />,
+  "💳":  <CreditCard size={20} />,
+  "🛍️": <ShoppingBag size={20} />,
+  "⚡":  <Zap size={20} />,
+  "🏥":  <Activity size={20} />,
+};
 import {
   SAAS_PROJECTS, N8N_PROJECTS, STACK_COLORS,
   SaasProject, N8nProject,
@@ -178,7 +230,7 @@ function BentoCard({
               background: `${project.color}0c`,
               border: `1px solid ${project.color}22`,
             }}>
-              <span style={{ fontSize: "12px" }}>{m.icon}</span>
+              <span style={{ display:"flex", alignItems:"center" }}>{METRIC_ICON_MAP[m.icon] ?? <Zap size={12} />}</span>
               <span style={{
                 fontFamily: "var(--mono)", fontWeight: 700,
                 fontSize: "12px", color: project.color,
@@ -320,7 +372,7 @@ function FullSaasCard({ project, lang, index }: { project: SaasProject; lang: st
               padding: "10px 8px", borderRadius: "10px", textAlign: "center",
               background: `${project.color}08`, border: `1px solid ${project.color}1a`,
             }}>
-              <div style={{ fontSize: "14px", marginBottom: "2px" }}>{m.icon}</div>
+              <div style={{ display:"flex", justifyContent:"center", marginBottom: "2px" }}>{METRIC_ICON_MAP[m.icon] ?? <Zap size={12} />}</div>
               <div style={{ fontFamily: "var(--mono)", fontWeight: 700, fontSize: "13px", color: project.color }}>{m.value}</div>
               <div style={{ fontFamily: "var(--sans)", fontSize: "9px", color: "rgba(255,255,255,.3)", marginTop: "2px", lineHeight: 1.3 }}>{m.label}</div>
             </div>
@@ -406,9 +458,10 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
         <div style={{
           width: "44px", height: "44px", flexShrink: 0,
           borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center",
-          background: `${wf.color}12`, border: `1px solid ${wf.color}22`, fontSize: "20px",
+          background: `${wf.color}12`, border: `1px solid ${wf.color}22`,
+          color: wf.color,
         }}>
-          {wf.emoji}
+          {N8N_EMOJI_MAP[wf.emoji] ?? <Zap size={20} />}
         </div>
 
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -467,13 +520,13 @@ function N8nCompactCard({ wf, lang, index }: { wf: N8nProject; lang: string; ind
       <div className={`n8n-detail ${open ? "open" : ""}`}>
         <div style={{ padding: "0 20px 20px", display: "flex", flexDirection: "column", gap: "10px" }}>
           {[
-            { icon: "❌", label: lang === "fr" ? "Problème" : "Problem", text: l(wf.problem), bg: "rgba(255,77,109,.06)", border: "rgba(255,77,109,.15)" },
-            { icon: "⚙️", label: lang === "fr" ? "Solution" : "Solution", text: l(wf.solution), bg: `${wf.color}06`, border: `${wf.color}18` },
-            { icon: "✅", label: lang === "fr" ? "Résultat" : "Result", text: l(wf.result), bg: "rgba(74,222,128,.06)", border: "rgba(74,222,128,.15)" },
+            { icon: <X size={11} style={{ color:"#ff4d6d" }} />, label: lang === "fr" ? "Problème" : "Problem", text: l(wf.problem), bg: "rgba(255,77,109,.06)", border: "rgba(255,77,109,.15)" },
+            { icon: <Settings size={11} style={{ color: wf.color }} />, label: lang === "fr" ? "Solution" : "Solution", text: l(wf.solution), bg: `${wf.color}06`, border: `${wf.color}18` },
+            { icon: <CheckCircle2 size={11} style={{ color:"#4ade80" }} />, label: lang === "fr" ? "Résultat" : "Result", text: l(wf.result), bg: "rgba(74,222,128,.06)", border: "rgba(74,222,128,.15)" },
           ].map((row) => (
             <div key={row.label} style={{ padding: "10px 14px", background: row.bg, border: `1px solid ${row.border}`, borderRadius: "8px" }}>
               <div style={{ display: "flex", gap: "6px", alignItems: "center", marginBottom: "4px" }}>
-                <span style={{ fontSize: "12px" }}>{row.icon}</span>
+                <span style={{ display:"flex" }}>{row.icon}</span>
                 <span style={{ fontFamily: "var(--mono)", fontSize: "9px", color: "rgba(255,255,255,.35)", letterSpacing: ".1em", textTransform: "uppercase" }}>{row.label}</span>
               </div>
               <p style={{ fontFamily: "var(--sans)", fontSize: "12px", color: "rgba(255,255,255,.55)", lineHeight: 1.6, margin: 0 }}>{row.text}</p>
