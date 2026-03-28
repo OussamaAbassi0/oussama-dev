@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Pas de config experimentale bloquante
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.simpleicons.org",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;
